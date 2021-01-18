@@ -42,7 +42,6 @@
 		526B34F525B6430700BAE8D9 = {
 			isa = PBXGroup;
 			children = (
-				526B351625B64C2000BAE8D9 /* API.swift */,
 				526B350025B6430700BAE8D9 /* Recipe and Calorie Manager */,
 				526B34FF25B6430700BAE8D9 /* Products */,
 			);
@@ -59,6 +58,7 @@
 		526B350025B6430700BAE8D9 /* Recipe and Calorie Manager */ = {
 			isa = PBXGroup;
 			children = (
+				526B351925B64D0A00BAE8D9 /* API */,
 				526B350125B6430700BAE8D9 /* AppDelegate.swift */,
 				526B350325B6430700BAE8D9 /* SceneDelegate.swift */,
 				526B350525B6430700BAE8D9 /* ViewController.swift */,
@@ -68,6 +68,14 @@
 				526B350F25B6430E00BAE8D9 /* Info.plist */,
 			);
 			path = "Recipe and Calorie Manager";
+			sourceTree = "<group>";
+		};
+		526B351925B64D0A00BAE8D9 /* API */ = {
+			isa = PBXGroup;
+			children = (
+				526B351625B64C2000BAE8D9 /* API.swift */,
+			);
+			path = API;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
