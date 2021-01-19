@@ -11,16 +11,17 @@ class MainTabBarController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        let recipeListVC = RecipeListViewController()
+        recipeListVC.tabBarItem = UITabBarItem(tabBarSystemItem: .bookmarks, tag: 0)
         // make a viewController for addRecipe screen
         let addRecipeVC = AddRecipeViewController()
-        addRecipeVC.tabBarItem = UITabBarItem(tabBarSystemItem: .bookmarks, tag: 0)
+        addRecipeVC.tabBarItem = UITabBarItem(tabBarSystemItem: .search, tag: 1)
         // make a viewController for profile screen
         let profileVC = ProfileViewController()
-        profileVC.tabBarItem = UITabBarItem(tabBarSystemItem: .search, tag: 1)
+        profileVC.tabBarItem = UITabBarItem(tabBarSystemItem: .contacts, tag: 2)
         // make a viewController for recipe list screen
-        let recipeListVC = RecipeListViewController()
-        recipeListVC.tabBarItem = UITabBarItem(tabBarSystemItem: .contacts, tag: 2)
-        self.viewControllers = [addRecipeVC,profileVC,recipeListVC]
+        let viewControllers = [recipeListVC, addRecipeVC, profileVC]
+        self.viewControllers = viewControllers.map { UINavigationController(rootViewController: $0) }
         self.selectedIndex = 1
     }
     
