@@ -7,19 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2E531E9E25B651FA0096246E /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E531E9D25B651FA0096246E /* API.swift */; };
 		526B350225B6430700BAE8D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 526B350125B6430700BAE8D9 /* AppDelegate.swift */; };
 		526B350425B6430700BAE8D9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 526B350325B6430700BAE8D9 /* SceneDelegate.swift */; };
 		526B350625B6430700BAE8D9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 526B350525B6430700BAE8D9 /* ViewController.swift */; };
 		526B350925B6430700BAE8D9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 526B350725B6430700BAE8D9 /* Main.storyboard */; };
 		526B350B25B6430E00BAE8D9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 526B350A25B6430E00BAE8D9 /* Assets.xcassets */; };
 		526B350E25B6430E00BAE8D9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 526B350C25B6430E00BAE8D9 /* LaunchScreen.storyboard */; };
-		526B351725B64C2000BAE8D9 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 526B351625B64C2000BAE8D9 /* API.swift */; };
 		526B351B25B64D6500BAE8D9 /* Nutrition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 526B351A25B64D6500BAE8D9 /* Nutrition.swift */; };
+		526B352225B6609100BAE8D9 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 526B352125B6609100BAE8D9 /* API.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		2E531E9D25B651FA0096246E /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 		526B34FE25B6430700BAE8D9 /* Recipe and Calorie Manager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Recipe and Calorie Manager.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		526B350125B6430700BAE8D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		526B350325B6430700BAE8D9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -28,8 +26,8 @@
 		526B350A25B6430E00BAE8D9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		526B350D25B6430E00BAE8D9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		526B350F25B6430E00BAE8D9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		526B351625B64C2000BAE8D9 /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 		526B351A25B64D6500BAE8D9 /* Nutrition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Nutrition.swift; sourceTree = "<group>"; };
+		526B352125B6609100BAE8D9 /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,9 +75,8 @@
 		526B351925B64D0A00BAE8D9 /* API */ = {
 			isa = PBXGroup;
 			children = (
-				526B351625B64C2000BAE8D9 /* API.swift */,
 				526B351A25B64D6500BAE8D9 /* Nutrition.swift */,
-				2E531E9D25B651FA0096246E /* API.swift */,
+				526B352125B6609100BAE8D9 /* API.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -157,9 +154,8 @@
 				526B350625B6430700BAE8D9 /* ViewController.swift in Sources */,
 				526B350225B6430700BAE8D9 /* AppDelegate.swift in Sources */,
 				526B351B25B64D6500BAE8D9 /* Nutrition.swift in Sources */,
-				526B351725B64C2000BAE8D9 /* API.swift in Sources */,
-				2E531E9E25B651FA0096246E /* API.swift in Sources */,
 				526B350425B6430700BAE8D9 /* SceneDelegate.swift in Sources */,
+				526B352225B6609100BAE8D9 /* API.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
