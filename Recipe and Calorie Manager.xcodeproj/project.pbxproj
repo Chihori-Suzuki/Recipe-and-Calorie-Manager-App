@@ -17,6 +17,7 @@
 		526B351B25B64D6500BAE8D9 /* Nutrition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 526B351A25B64D6500BAE8D9 /* Nutrition.swift */; };
 		526B352225B6609100BAE8D9 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 526B352125B6609100BAE8D9 /* API.swift */; };
 		52FF46BD25B6799600B3888F /* NutritionAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FF46BC25B6799600B3888F /* NutritionAPI.swift */; };
+		FA4C917225B68BD700AD76B8 /* B.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4C917125B68BD700AD76B8 /* B.swift */; };
 		52FF46C425B6860000B3888F /* A.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FF46C325B6860000B3888F /* A.swift */; };
 /* End PBXBuildFile section */
 
@@ -33,6 +34,7 @@
 		526B351A25B64D6500BAE8D9 /* Nutrition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Nutrition.swift; sourceTree = "<group>"; };
 		526B352125B6609100BAE8D9 /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 		52FF46BC25B6799600B3888F /* NutritionAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NutritionAPI.swift; sourceTree = "<group>"; };
+		FA4C917125B68BD700AD76B8 /* B.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = B.swift; sourceTree = "<group>"; };
 		52FF46C325B6860000B3888F /* A.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -85,6 +87,7 @@
 				52FF46BC25B6799600B3888F /* NutritionAPI.swift */,
 				52FF46C325B6860000B3888F /* A.swift */,
 				526B352125B6609100BAE8D9 /* API.swift */,
+				FA4C917125B68BD700AD76B8 /* B.swift */,
 				2E531EA325B685A20096246E /* C.swift */,
 			);
 			path = API;
@@ -162,6 +165,7 @@
 			files = (
 				526B350625B6430700BAE8D9 /* ViewController.swift in Sources */,
 				52FF46BD25B6799600B3888F /* NutritionAPI.swift in Sources */,
+				FA4C917225B68BD700AD76B8 /* B.swift in Sources */,
 				526B350225B6430700BAE8D9 /* AppDelegate.swift in Sources */,
 				526B351B25B64D6500BAE8D9 /* Nutrition.swift in Sources */,
 				526B350425B6430700BAE8D9 /* SceneDelegate.swift in Sources */,
