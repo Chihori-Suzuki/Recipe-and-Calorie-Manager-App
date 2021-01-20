@@ -21,10 +21,15 @@ class WelcomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.hidesBackButton = true
         view.backgroundColor = .yellow
 //        NutritionAPI.shared.fetchNutritionInfo(query: "1 cup of rice")
         view.addSubview(welcomeLabel)
         setupConstraint()
+        
+        if let items = tabBarController?.tabBar.items {
+            items.forEach { $0.isEnabled = false }
+        }
     }
     
     func setupConstraint() {
