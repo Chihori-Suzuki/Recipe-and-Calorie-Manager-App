@@ -1,17 +1,16 @@
 //
-//  RecipeListViewController.swift
+//  MenuTotalCalorieDetailListViewController.swift
 //  Recipe and Calorie Manager
 //
-//  Created by Kazunobu Someya on 2021-01-19.
+//  Created by Kazunobu Someya on 2021-01-20.
 //
 
 import UIKit
 
-
-class RecipeListViewController: UIViewController, UITableViewDelegate,UITableViewDataSource {
+class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    let meals: [String] = ["Breakfast","Lunch","Snacks","Dinner"]
-    let cellId = "RecipeListCell"
+    var mealTitle: String?
+    let cellId = "MenuTotalCalorie"
     
     lazy var myTable: UITableView = {
         let table = UITableView(frame: view.frame, style: .grouped)
@@ -24,8 +23,8 @@ class RecipeListViewController: UIViewController, UITableViewDelegate,UITableVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .green
-        title = "Recipe List"
+        view.backgroundColor = .white
+        title = mealTitle
         navigationController?.navigationBar.prefersLargeTitles = true
         setupTableView()
     }
@@ -43,22 +42,15 @@ class RecipeListViewController: UIViewController, UITableViewDelegate,UITableVie
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return meals.count
+        return 3
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
-        let meal = meals[indexPath.row]
-        cell.textLabel?.text = meal
+        cell.textLabel?.text = "new item"
         cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 30)
         cell.layer.cornerRadius = 10
-        cell.layer.borderWidth = 0.5
+        cell.layer.borderWidth = 1
         return cell
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let clickedMeal = MenuTotalCalorieDetailListViewController()
-        clickedMeal.mealTitle = meals[indexPath.row]
-        navigationController?.pushViewController(clickedMeal, animated: true)
     }
 }
