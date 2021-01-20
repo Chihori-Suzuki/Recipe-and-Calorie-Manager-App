@@ -13,43 +13,96 @@ class ProfileViewController: UIViewController {
 
     private let imageView = UIImageView()
     
+    // imageView
+    let profileImage: UIImageView = {
+        let iv = UIImageView()
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        return iv
+    }()
+    
     // Label Field
     let nameLabel: UILabel = {
-            let lb = UILabel()
-            lb.translatesAutoresizingMaskIntoConstraints = false
+        let lb = UILabel()
+        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.setContentHuggingPriority(.required, for: .horizontal)
         lb.text = "Name"
-            return lb
+        return lb
         }()
     let birthLabel: UILabel = {
-            let lb = UILabel()
-            lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.text = "Name"
-            return lb
+        let lb = UILabel()
+        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.setContentHuggingPriority(.required, for: .horizontal)
+        lb.text = "Birthday"
+        return lb
         }()
     let genderLabel: UILabel = {
         let lb = UILabel()
         lb.translatesAutoresizingMaskIntoConstraints = false
-    lb.text = "Gender"
+        lb.setContentHuggingPriority(.required, for: .horizontal)
+        lb.text = "Gender"
         return lb
     }()
     let weightLabel: UILabel = {
         let lb = UILabel()
         lb.translatesAutoresizingMaskIntoConstraints = false
-    lb.text = "Weight"
+        lb.setContentHuggingPriority(.required, for: .horizontal)
+        lb.text = "Weight"
         return lb
     }()
     let heightLabel: UILabel = {
         let lb = UILabel()
         lb.translatesAutoresizingMaskIntoConstraints = false
-    lb.text = "Height"
+        lb.setContentHuggingPriority(.required, for: .horizontal)
+        lb.text = "Height"
         return lb
     }()
-    let activityLabel: UILabel = {
+    let activeLabel: UILabel = {
         let lb = UILabel()
         lb.translatesAutoresizingMaskIntoConstraints = false
-    lb.text = "Activity Type"
+        lb.setContentHuggingPriority(.required, for: .horizontal)
+        lb.text = "Activity Type"
         return lb
     }()
+    
+    // Text,  Field
+    let nameTxt: UITextField = {
+        let tf = UITextField()
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        tf.borderStyle = .line
+        return tf
+    }()
+    
+    let birthPick: UIDatePicker = {
+       let dp = UIDatePicker()
+        dp.translatesAutoresizingMaskIntoConstraints = false
+        return dp
+    }()
+    let genderSeg: UISegmentedControl = {
+        let items = ["male", "female"]
+        let tf = UISegmentedControl(items: items)
+        tf.selectedSegmentIndex = 0
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        
+        return tf
+    }()
+    let weightTxt: UITextField = {
+        let tf = UITextField()
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        tf.borderStyle = .line
+        return tf
+    }()
+    let heightTxt: UITextField = {
+        let tf = UITextField()
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        tf.borderStyle = .line
+        return tf
+    }()
+    let activePick: UIPickerView = {
+        let items = ["item1", "item2", "item3"]
+        let dp = UIPickerView()
+         dp.translatesAutoresizingMaskIntoConstraints = false
+         return dp
+     }()
     
     // StackView Field
     let mainSV: UIStackView = {
@@ -67,6 +120,11 @@ class ProfileViewController: UIViewController {
         sv.translatesAutoresizingMaskIntoConstraints = false
         return sv
     }()
+    let genderSV: UIStackView = {
+        let sv = UIStackView()
+        sv.translatesAutoresizingMaskIntoConstraints = false
+        return sv
+    }()
     let weightSV: UIStackView = {
         let sv = UIStackView()
         sv.translatesAutoresizingMaskIntoConstraints = false
@@ -77,40 +135,11 @@ class ProfileViewController: UIViewController {
         sv.translatesAutoresizingMaskIntoConstraints = false
         return sv
     }()
-    let activitySV: UIStackView = {
+    let activeSV: UIStackView = {
         let sv = UIStackView()
         sv.translatesAutoresizingMaskIntoConstraints = false
         return sv
     }()
-    
-    // Text,  Field
-    let nameTxt: UITextField = {
-        let tf = UITextField()
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.borderStyle = .line
-        return tf
-    }()
-    
-    let birthPick: UIDatePicker = {
-       let dp = UIDatePicker()
-        dp.translatesAutoresizingMaskIntoConstraints = false
-        return dp
-    }()
-    let genderSeg: UISegmentedControl = {
-        let tf = UISegmentedControl()
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        return tf
-    }()
-    let weightPick: UIPickerView = {
-        let dp = UIPickerView()
-         dp.translatesAutoresizingMaskIntoConstraints = false
-         return dp
-     }()
-    let heightPick: UIPickerView = {
-        let dp = UIPickerView()
-         dp.translatesAutoresizingMaskIntoConstraints = false
-         return dp
-     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -120,6 +149,8 @@ class ProfileViewController: UIViewController {
         
         setSVConfig()
         
+        activePick.delegate = self
+        activePick.dataSource = self
         
         
         
@@ -128,51 +159,79 @@ class ProfileViewController: UIViewController {
     
     func setSVConfig() {
         /* mainSV **********/
-        mainSV.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
-        mainSV.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0).isActive = true
-        mainSV.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0).isActive = true
-        mainSV.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
+        mainSV.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30).isActive = true
+        mainSV.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -30).isActive = true
+        mainSV.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 30).isActive = true
+        mainSV.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 30).isActive = true
         
+        mainSV.addArrangedSubview(imageView)
+        mainSV.addArrangedSubview(nameSV)
+        mainSV.addArrangedSubview(birthSV)
+        mainSV.addArrangedSubview(genderSV)
+        mainSV.addArrangedSubview(weightSV)
+        mainSV.addArrangedSubview(heightSV)
+        mainSV.addArrangedSubview(activeSV)
         mainSV.axis = .vertical
         mainSV.alignment = .fill
         mainSV.distribution = .equalSpacing
+        mainSV.spacing = 30
         
-        mainSV.addArrangedSubview(nameSV)
-        mainSV.addArrangedSubview(birthSV)
-        mainSV.addArrangedSubview(weightSV)
-        mainSV.addArrangedSubview(heightSV)
-        mainSV.addArrangedSubview(activitySV)
         
         /* nameSV **********/
-        nameSV.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
-        nameSV.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0).isActive = true
-        nameSV.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0).isActive = true
-        nameSV.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
-        
-        nameSV.axis = .horizontal
-        nameSV.alignment = .fill
-        nameSV.distribution = .equalSpacing
         nameSV.addArrangedSubview(nameLabel)
         nameSV.addArrangedSubview(nameTxt)
-        
+        nameSV.axis = .horizontal
+        nameSV.alignment = .fill
+        nameSV.spacing = 10
         
         /* birthSV **********/
-//        birthSV.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
-//        birthSV.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0).isActive = true
-//        birthSV.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0).isActive = true
-//        birthSV.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
-//
-//        birthSV.axis = .horizontal
-//        birthSV.alignment = .fill
-//        birthSV.distribution = .equalSpacing
-//        birthSV.addArrangedSubview(genderLabel)
-//        birthSV.addArrangedSubview(genderPick)
+        birthSV.addArrangedSubview(birthLabel)
+        birthSV.addArrangedSubview(birthPick)
+        birthSV.axis = .horizontal
+        birthSV.alignment = .fill
+        birthSV.spacing = 10
         
-        /**/
+        /* genderSV **********/
+        genderSV.addArrangedSubview(genderLabel)
+        genderSV.addArrangedSubview(genderSeg)
+        genderSV.axis = .horizontal
+        genderSV.alignment = .fill
+        genderSV.spacing = 10
         
+        /* weightSV *********/
+        weightSV.addArrangedSubview(weightLabel)
+        weightSV.addArrangedSubview(weightTxt)
+        weightSV.axis = .horizontal
+        weightSV.alignment = .fill
+        weightSV.spacing = 10
         
+        /* heightSV *********/
+        heightSV.addArrangedSubview(heightLabel)
+        heightSV.addArrangedSubview(heightTxt)
+        heightSV.axis = .horizontal
+        heightSV.alignment = .fill
+        heightSV.spacing = 10
+        
+        /* activitySV *********/
+        activeSV.addArrangedSubview(activeLabel)
+        activeSV.addArrangedSubview(activePick)
+        activeSV.axis = .horizontal
+        activeSV.alignment = .fill
+        activeSV.spacing = 10
+        
+    }
+
+}
+
+extension ProfileViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 3
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return 1
         
     }
     
-
+    
 }
