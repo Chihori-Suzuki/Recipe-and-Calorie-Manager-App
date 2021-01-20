@@ -11,7 +11,7 @@ class AddIngredientsViewController: UIViewController {
 
     let cellId = "cellId"
     var recipeTitle: String?
-    var ingredients: [(serving: String, nutrition: Nutrition?)] = [("1 dosenang tinapang sampalok 1 dosenang tinapang sampalok", nil)]
+    var ingredients = [(serving: String, nutrition: Nutrition?)]()
     
     let ingredientTextField: UITextField = {
        let tf = UITextField()
@@ -49,6 +49,8 @@ class AddIngredientsViewController: UIViewController {
         return sv
     }()
     
+    var tableview = UITableView()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -66,8 +68,30 @@ class AddIngredientsViewController: UIViewController {
 
     }
 
+    fileprivate func updateTableView(with serving: String, and ingredient: (Ingredient)) {
+        
+        if ingredient.items.count > 0 {
+            ingredients.insert((serving: serving, nutrition: ingredient.items[0]), at: 0)
+            
+            DispatchQueue.main.async {
+                self.tableview.insertRows(at: [IndexPath.init(row: 0, section: 0)], with: .top)
+            }
+        } else {
+            print(ingredient)
+        }
+    }
+    
     @objc func addNewIngredient() {
-        NutritionAPI.shared.fetchNutritionInfo(query: ingredientTextField.text!)
+        
+        let serving = ingredientTextField.text!
+        NutritionAPI.shared.fetchNutritionInfo(query: serving) { (result) in
+            switch result {
+            case .success(let ingredient):
+                self.updateTableView(with: serving, and: ingredient)
+            case .failure(let error):
+                print(error)
+            }
+        }
     }
     
     @objc func textEditingChanged(_ sender: UITextField) {
@@ -81,7 +105,7 @@ class AddIngredientsViewController: UIViewController {
     }
     
     fileprivate func setupTableView() {
-        let tableview = UITableView(frame: view.frame, style: .insetGrouped)
+        tableview = UITableView(frame: view.frame, style: .insetGrouped)
         view.addSubview(tableview)
         
         tableview.register(IngredientTableViewCell.self, forCellReuseIdentifier: cellId)
@@ -89,10 +113,10 @@ class AddIngredientsViewController: UIViewController {
         tableview.dataSource = self
         tableview.contentInsetAdjustmentBehavior = .never
         tableview.translatesAutoresizingMaskIntoConstraints = false
-        tableview.topAnchor.constraint(equalTo: hStackView.bottomAnchor, constant: 10).isActive = true
+        tableview.topAnchor.constraint(equalTo: hStackView.bottomAnchor, constant: 12).isActive = true
         tableview.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
-        tableview.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 5).isActive = true
-        tableview.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 8).isActive = true
+        tableview.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0).isActive = true
+        tableview.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0).isActive = true
     }
 }
 
@@ -106,7 +130,10 @@ extension AddIngredientsViewController: UITableViewDelegate, UITableViewDataSour
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! IngredientTableViewCell
         
         cell.ingredientLabel.text = ingredient.serving
-//        cell.update(with: <#T##Nutrition#>)
+        cell.caloriesLabel.text = " Calories: \t \(ingredient.nutrition!.calories)"
+        cell.proteinLabel.text = " Protein: \t \(ingredient.nutrition!.protein) g"
+        cell.layer.borderColor = UIColor.gray.cgColor
+        cell.layer.borderWidth = 0.5
         return cell
     }
     

@@ -12,7 +12,6 @@ class IngredientTableViewCell: UITableViewCell {
     let ingredientLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 18)
-        label.widthAnchor.constraint(equalToConstant: 190).isActive = true
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -45,6 +44,7 @@ class IngredientTableViewCell: UITableViewCell {
         sv.distribution = .fillEqually
         sv.alignment = .fill
         sv.spacing = 0
+        sv.widthAnchor.constraint(equalToConstant: 150).isActive = true
         return sv
         
     }()
@@ -82,5 +82,6 @@ class IngredientTableViewCell: UITableViewCell {
     func update(with nutrition: Nutrition) {
         caloriesLabel.text = String(nutrition.calories)
     }
-
+    
+    
 }
