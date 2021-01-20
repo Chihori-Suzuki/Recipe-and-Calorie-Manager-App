@@ -11,7 +11,7 @@ class AddIngredientsViewController: UIViewController {
 
     let cellId = "cellId"
     var recipeTitle: String?
-    var ingredients: [String] = ["test"]
+    var ingredients: [(serving: String, nutrition: Nutrition?)] = [("1 dosenang tinapang sampalok 1 dosenang tinapang sampalok", nil)]
     
     let ingredientTextField: UITextField = {
        let tf = UITextField()
@@ -45,7 +45,7 @@ class AddIngredientsViewController: UIViewController {
         sv.translatesAutoresizingMaskIntoConstraints = false
         sv.axis = .horizontal
         sv.alignment = .fill
-        sv.spacing = 8
+        sv.spacing = 10
         return sv
     }()
     
@@ -67,7 +67,7 @@ class AddIngredientsViewController: UIViewController {
     }
 
     @objc func addNewIngredient() {
-
+        NutritionAPI.shared.fetchNutritionInfo(query: ingredientTextField.text!)
     }
     
     @objc func textEditingChanged(_ sender: UITextField) {
@@ -87,7 +87,6 @@ class AddIngredientsViewController: UIViewController {
         tableview.register(IngredientTableViewCell.self, forCellReuseIdentifier: cellId)
         tableview.delegate = self
         tableview.dataSource = self
-        tableview.rowHeight = 40
         tableview.contentInsetAdjustmentBehavior = .never
         tableview.translatesAutoresizingMaskIntoConstraints = false
         tableview.topAnchor.constraint(equalTo: hStackView.bottomAnchor, constant: 10).isActive = true
@@ -106,7 +105,8 @@ extension AddIngredientsViewController: UITableViewDelegate, UITableViewDataSour
         let ingredient = ingredients[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! IngredientTableViewCell
         
-        cell.ingredientLabel.text = ingredient
+        cell.ingredientLabel.text = ingredient.serving
+//        cell.update(with: <#T##Nutrition#>)
         return cell
     }
     
