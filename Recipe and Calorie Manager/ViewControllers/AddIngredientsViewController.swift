@@ -128,9 +128,7 @@ extension AddIngredientsViewController: UITableViewDelegate, UITableViewDataSour
         let ingredient = ingredients[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! IngredientTableViewCell
         
-        cell.ingredientLabel.text = ingredient.serving
-        cell.caloriesLabel.text = " Calories: \t \(ingredient.nutrition!.calories)"
-        cell.proteinLabel.text = " Protein: \t \(ingredient.nutrition!.protein) g"
+        cell.update(with: ingredient)
         cell.layer.borderColor = UIColor.gray.cgColor
         cell.layer.borderWidth = 0.5
         return cell

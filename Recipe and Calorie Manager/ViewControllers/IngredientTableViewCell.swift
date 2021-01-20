@@ -79,7 +79,9 @@ class IngredientTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func update(with nutrition: Nutrition) {
-        caloriesLabel.text = String(nutrition.calories)
+    func update(with ingredient: (serving: String, nutrition: Nutrition?)) {
+        ingredientLabel.text = ingredient.serving
+        caloriesLabel.text = " Calories: \t \(ingredient.nutrition!.calories)"
+        proteinLabel.text = " Protein: \t \(ingredient.nutrition!.protein) g"
     }
 }
