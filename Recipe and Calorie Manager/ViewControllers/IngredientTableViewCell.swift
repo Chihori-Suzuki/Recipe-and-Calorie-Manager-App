@@ -2,7 +2,7 @@
 //  IngredientTableViewCell.swift
 //  Recipe and Calorie Manager
 //
-//  Created by Macbook Pro on 2021-01-19.
+//  Created by Gil Jetomo on 2021-01-19.
 //
 
 import UIKit
@@ -21,8 +21,8 @@ class IngredientTableViewCell: UITableViewCell {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16)
         label.numberOfLines = 0
-        label.text = " Calories: "
         label.backgroundColor = #colorLiteral(red: 0.9250274271, green: 1, blue: 0.8999154439, alpha: 1)
+        label.heightAnchor.constraint(equalToConstant: 25).isActive = true
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -30,9 +30,9 @@ class IngredientTableViewCell: UITableViewCell {
     let proteinLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16)
-        label.text = " Protein: "
         label.numberOfLines = 0
         label.backgroundColor = #colorLiteral(red: 0.9250274271, green: 1, blue: 0.8999154439, alpha: 1)
+        label.heightAnchor.constraint(equalToConstant: 25).isActive = true
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -41,7 +41,7 @@ class IngredientTableViewCell: UITableViewCell {
         let sv = UIStackView()
         sv.translatesAutoresizingMaskIntoConstraints = false
         sv.axis = .vertical
-        sv.distribution = .fillEqually
+        sv.distribution = .equalCentering
         sv.alignment = .fill
         sv.spacing = 0
         sv.widthAnchor.constraint(equalToConstant: 150).isActive = true
@@ -82,6 +82,4 @@ class IngredientTableViewCell: UITableViewCell {
     func update(with nutrition: Nutrition) {
         caloriesLabel.text = String(nutrition.calories)
     }
-    
-    
 }

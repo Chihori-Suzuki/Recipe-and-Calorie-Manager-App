@@ -2,7 +2,7 @@
 //  NutritionAPI.swift
 //  Recipe and Calorie Manager
 //
-//  Created by Macbook Pro on 2021-01-18.
+//  Created by Gil Jetomo on 2021-01-18.
 //
 
 import Foundation
@@ -15,6 +15,7 @@ class NutritionAPI {
   private init() { }
    
     func fetchNutritionInfo(query: String, completion: @escaping (Result<Ingredient, Error>) -> Void) {
+        
         guard let query = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { return }
         
         let url = URL(string: "https://api.calorieninjas.com/v1/nutrition?query="+query)!
@@ -31,19 +32,7 @@ class NutritionAPI {
                     completion(.failure(error))
                 }
             }
-            
-            
-//            guard let data = data else { return }
-//
-//            let decoder = JSONDecoder()
-//            do {
-//                let ingredient = try decoder.decode(Ingredient.self, from: data)
-//                print(ingredient.items)
-//            } catch {
-//                print(error)
-//            }
         }
         task.resume()
     }
-
 }

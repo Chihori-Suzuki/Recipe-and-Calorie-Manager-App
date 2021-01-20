@@ -2,7 +2,7 @@
 //  AddIngredientsViewController.swift
 //  Recipe and Calorie Manager
 //
-//  Created by Macbook Pro on 2021-01-19.
+//  Created by Gil Jetomo on 2021-01-19.
 //
 
 import UIKit
@@ -65,9 +65,21 @@ class AddIngredientsViewController: UIViewController {
         hStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8).isActive = true
         
         setupTableView()
-
     }
-
+    
+    @objc func addNewIngredient() {
+        let serving = ingredientTextField.text!
+        
+        NutritionAPI.shared.fetchNutritionInfo(query: serving) { (result) in
+            switch result {
+            case .success(let ingredient):
+                self.updateTableView(with: serving, and: ingredient)
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    
     fileprivate func updateTableView(with serving: String, and ingredient: (Ingredient)) {
         
         if ingredient.items.count > 0 {
@@ -78,19 +90,6 @@ class AddIngredientsViewController: UIViewController {
             }
         } else {
             print(ingredient)
-        }
-    }
-    
-    @objc func addNewIngredient() {
-        
-        let serving = ingredientTextField.text!
-        NutritionAPI.shared.fetchNutritionInfo(query: serving) { (result) in
-            switch result {
-            case .success(let ingredient):
-                self.updateTableView(with: serving, and: ingredient)
-            case .failure(let error):
-                print(error)
-            }
         }
     }
     
