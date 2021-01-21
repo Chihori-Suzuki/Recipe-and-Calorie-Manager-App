@@ -25,16 +25,16 @@ class AddIngredientsViewController: UIViewController {
         didSet { caloriesTotalCountLabel.count(from: Float(oldValue ?? 0), to: Float(caloriesTotal ?? 0), duration: .brisk) }
     }
     var carbsTotal: Double? {
-        didSet { carbsTotalCountLabel.count(from: Float(oldValue ?? 0), to: Float(caloriesTotal ?? 0), duration: .brisk) }
+        didSet { carbsTotalCountLabel.count(from: Float(oldValue ?? 0), to: Float(carbsTotal ?? 0), duration: .brisk) }
     }
     var proteinTotal: Double? {
-        didSet { proteinTotalCountLabel.count(from: Float(oldValue ?? 0), to: Float(caloriesTotal ?? 0), duration: .brisk) }
+        didSet { proteinTotalCountLabel.count(from: Float(oldValue ?? 0), to: Float(proteinTotal ?? 0), duration: .brisk) }
     }
     var fatTotal: Double? {
-        didSet { fatTotalCountLabel.count(from: Float(oldValue ?? 0), to: Float(caloriesTotal ?? 0), duration: .brisk) }
+        didSet { fatTotalCountLabel.count(from: Float(oldValue ?? 0), to: Float(fatTotal ?? 0), duration: .brisk) }
     }
     var fiberTotal: Double? {
-        didSet { fiberTotalCountLabel.count(from: Float(oldValue ?? 0), to: Float(caloriesTotal ?? 0), duration: .brisk) }
+        didSet { fiberTotalCountLabel.count(from: Float(oldValue ?? 0), to: Float(fiberTotal ?? 0), duration: .brisk) }
     }
     
     let ingredientTextField: UITextField = {
@@ -203,12 +203,11 @@ class AddIngredientsViewController: UIViewController {
                 
                 validIngredient.toggle()
                 ingredients.insert((serving: serving, nutrition: ingredient.items[0]), at: 0)
-                
                 UIView.animate(withDuration: 0.9) {
                     totalsStackViews.isHidden ? totalsStackViews.isHidden = false : nil
                     tableview.insertRows(at: [IndexPath.init(row: 0, section: 0)], with: .top)
+                    tableview.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
                 }
-                
                 caloriesTotal = ingredients.map { $0.nutrition!.calories }.reduce(0){ $0 + $1 }
                 carbsTotal = ingredients.map { $0.nutrition!.carbohydrates }.reduce(0){ $0 + $1}
                 proteinTotal = ingredients.map { $0.nutrition!.protein }.reduce(0){ $0 + $1 }
