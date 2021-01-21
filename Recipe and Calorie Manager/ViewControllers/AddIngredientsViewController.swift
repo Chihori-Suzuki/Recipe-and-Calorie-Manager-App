@@ -9,24 +9,32 @@ import UIKit
 
 class AddIngredientsViewController: UIViewController {
 
+    var validIngredient = false
     let cellId = "cellId"
     var recipeTitle: String?
     var ingredients = [(serving: String, nutrition: Nutrition?)]()
-    
+    var tableview = UITableView()
+    var totalsStackViews = UIStackView()
+    var caloriesTotalCountLabel = AnimatedLabelTotals()
+    var carbsTotalCountLabel = AnimatedLabelTotals()
+    var proteinTotalCountLabel = AnimatedLabelTotals()
+    var fatTotalCountLabel = AnimatedLabelTotals()
+    var fiberTotalCountLabel = AnimatedLabelTotals()
+
     var caloriesTotal: Double? {
-        willSet(total) { caloriesTotalCountLabel.text = "\((total! * 100).rounded()/100) g" }
+        didSet { caloriesTotalCountLabel.count(from: Float(oldValue ?? 0), to: Float(caloriesTotal ?? 0), duration: .brisk) }
     }
     var carbsTotal: Double? {
-        willSet(total) { carbsTotalCountLabel.text = "\((total! * 100).rounded()/100) g" }
+        didSet { carbsTotalCountLabel.count(from: Float(oldValue ?? 0), to: Float(caloriesTotal ?? 0), duration: .brisk) }
     }
     var proteinTotal: Double? {
-        willSet(total) { proteinTotalCountLabel.text = "\((total! * 100).rounded()/100) g" }
+        didSet { proteinTotalCountLabel.count(from: Float(oldValue ?? 0), to: Float(caloriesTotal ?? 0), duration: .brisk) }
     }
     var fatTotal: Double? {
-        willSet(total) { fatTotalCountLabel.text = "\((total! * 100).rounded()/100) g" }
+        didSet { fatTotalCountLabel.count(from: Float(oldValue ?? 0), to: Float(caloriesTotal ?? 0), duration: .brisk) }
     }
     var fiberTotal: Double? {
-        willSet(total) { fiberTotalCountLabel.text = "\((total! * 100).rounded()/100) g" }
+        didSet { fiberTotalCountLabel.count(from: Float(oldValue ?? 0), to: Float(caloriesTotal ?? 0), duration: .brisk) }
     }
     
     let ingredientTextField: UITextField = {
@@ -76,40 +84,36 @@ class AddIngredientsViewController: UIViewController {
         return sv
     }()
     
-    var tableview = UITableView()
-    
-    var caloriesTotalCountLabel = UILabel()
-    var carbsTotalCountLabel = UILabel()
-    var proteinTotalCountLabel = UILabel()
-    var fatTotalCountLabel = UILabel()
-    var fiberTotalCountLabel = UILabel()
-    var alert: UIAlertController!
-    
-    func makeLabelTotals(with string: String, isHeader: Bool) -> UILabel {
+    func makeLabelTotals(with string: String) -> UILabel {
         let label = UILabel()
         label.text = string
         label.translatesAutoresizingMaskIntoConstraints = false
         label.widthAnchor.constraint(equalToConstant: 70).isActive = true
         label.textAlignment = .center
         label.adjustsFontSizeToFitWidth = true
-        
-        if isHeader {
-            label.font = UIFont.boldSystemFont(ofSize: 17)
-            label.layer.masksToBounds = true
-            label.backgroundColor = #colorLiteral(red: 0.7829411976, green: 0.9072662751, blue: 1, alpha: 1)
-            label.layer.cornerRadius = 6
-        } else {
-            label.font = UIFont.systemFont(ofSize: 17)
-        }
+        label.font = UIFont.boldSystemFont(ofSize: 17)
+        label.layer.masksToBounds = true
+        label.backgroundColor = #colorLiteral(red: 0.7829411976, green: 0.9072662751, blue: 1, alpha: 1)
+        label.layer.cornerRadius = 6
+        return label
+    }
+    
+    func makeLabelTotals() -> AnimatedLabelTotals {
+        let label = AnimatedLabelTotals()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.widthAnchor.constraint(equalToConstant: 70).isActive = true
+        label.textAlignment = .center
+        label.adjustsFontSizeToFitWidth = true
+        label.decimalPoints = .two
+        label.font = UIFont.systemFont(ofSize: 16)
         return label
     }
     
     func makeTotalsStackView(with labels: [(UILabel, UILabel)]) -> UIStackView {
-    
         let hStackView = UIStackView()
         for view in labels {
-            let (heading, total) = view
-            let vStackView = UIStackView(arrangedSubviews: [heading, total])
+            let (header, total) = view
+            let vStackView = UIStackView(arrangedSubviews: [header, total])
             vStackView.axis = .vertical
             vStackView.translatesAutoresizingMaskIntoConstraints = false
             vStackView.alignment = .center
@@ -118,30 +122,29 @@ class AddIngredientsViewController: UIViewController {
             vStackView.widthAnchor.constraint(equalToConstant: 70).isActive = true
             hStackView.addArrangedSubview(vStackView)
         }
-        
         hStackView.translatesAutoresizingMaskIntoConstraints = false
         hStackView.axis = .horizontal
         hStackView.alignment = .center
         hStackView.distribution = .equalCentering
         hStackView.spacing = 5
- 
+        hStackView.isHidden = true
         return hStackView
     }
     
     fileprivate func setupStackViews() {
-        //title labels, let is used as the 'titles' are constant
-        let caloriesTotalLabel = makeLabelTotals(with: "Calories", isHeader: true)
-        let carbsTotalLabel = makeLabelTotals(with: "Carbs", isHeader: true)
-        let proteinTotalLabel = makeLabelTotals(with: "Protein", isHeader: true)
-        let fatTotalLabel = makeLabelTotals(with: "Fat", isHeader: true)
-        let fiberTotalLabel = makeLabelTotals(with: "Fiber", isHeader: true)
-        //total labels are declared as variable so that their text property can be updated
-        caloriesTotalCountLabel = makeLabelTotals(with: "0 g", isHeader: false)
-        carbsTotalCountLabel = makeLabelTotals(with: "0 g", isHeader: false)
-        proteinTotalCountLabel = makeLabelTotals(with: "0 g", isHeader: false)
-        fatTotalCountLabel = makeLabelTotals(with: "0 g", isHeader: false)
-        fiberTotalCountLabel = makeLabelTotals(with: "0 g", isHeader: false)
-        
+        //title labels, let is used as the 'headers' are constant
+        let caloriesTotalLabel = makeLabelTotals(with: "Calories")
+        let carbsTotalLabel = makeLabelTotals(with: "Carbs")
+        let proteinTotalLabel = makeLabelTotals(with: "Protein")
+        let fatTotalLabel = makeLabelTotals(with: "Fat")
+        let fiberTotalLabel = makeLabelTotals(with: "Fiber")
+        //total labels are declared as variable so that their text property can be updated and animated
+        caloriesTotalCountLabel = makeLabelTotals()
+        carbsTotalCountLabel = makeLabelTotals()
+        proteinTotalCountLabel = makeLabelTotals()
+        fatTotalCountLabel = makeLabelTotals()
+        fiberTotalCountLabel = makeLabelTotals()
+        //title and total labels are added in a tuple so that they can be properly arranged in a stackview
         let totalLabels = [(caloriesTotalLabel, caloriesTotalCountLabel),
                            (carbsTotalLabel, carbsTotalCountLabel),
                            (proteinTotalLabel, proteinTotalCountLabel),
@@ -149,7 +152,7 @@ class AddIngredientsViewController: UIViewController {
                            (fiberTotalLabel, fiberTotalCountLabel)
         ]
         
-        let totalsStackViews = makeTotalsStackView(with: totalLabels)
+        totalsStackViews = makeTotalsStackView(with: totalLabels)
         
         hStackView.addArrangedSubview(ingredientTextField)
         hStackView.addArrangedSubview(addButton)
@@ -163,6 +166,7 @@ class AddIngredientsViewController: UIViewController {
         vStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8).isActive = true
     }
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -171,7 +175,7 @@ class AddIngredientsViewController: UIViewController {
         setupStackViews()
         setupTableView()
     }
-    
+   
     @objc func addNewIngredient() {
         UIView.animate(withDuration: 0.10) {
             self.addButton.transform = CGAffineTransform(scaleX: 0.6, y: 0.6)
@@ -193,8 +197,14 @@ class AddIngredientsViewController: UIViewController {
     }
     
     fileprivate func updateTableViewAndTotals(with serving: String, and ingredient: (Ingredient)) {
+        
         DispatchQueue.main.async { [self] in
             if ingredient.items.count > 0 {
+                
+                UIView.animate(withDuration: 0.9) {
+                    totalsStackViews.isHidden ? totalsStackViews.isHidden = false : nil
+                }
+                validIngredient.toggle()
                 ingredients.insert((serving: serving, nutrition: ingredient.items[0]), at: 0)
                 tableview.insertRows(at: [IndexPath.init(row: 0, section: 0)], with: .top)
                 
@@ -218,7 +228,7 @@ class AddIngredientsViewController: UIViewController {
     }
     
     @objc func textEditingChanged(_ sender: UITextField) {
-        guard let text = sender.text, text.count > 3 else {
+        guard let text = sender.text, text.count > 4 else {
             addButton.alpha = 0.5
             addButton.isEnabled = false
             return
