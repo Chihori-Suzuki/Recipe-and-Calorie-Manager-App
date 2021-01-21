@@ -15,7 +15,7 @@ class ProfileViewController: UIViewController {
     
     // imageView
     let profileImage: UIImageView = {
-        let iv = UIImageView()
+        let iv = UIImageView(image: UIImage(named: "Profile"))
         iv.translatesAutoresizingMaskIntoConstraints = false
         return iv
     }()
@@ -98,11 +98,12 @@ class ProfileViewController: UIViewController {
         return tf
     }()
     let activePick: UIPickerView = {
-        let items = ["item1", "item2", "item3"]
         let dp = UIPickerView()
          dp.translatesAutoresizingMaskIntoConstraints = false
          return dp
      }()
+    
+    let activityItems = ["item1", "item2", "item3"]
     
     // StackView Field
     let mainSV: UIStackView = {
@@ -225,13 +226,18 @@ class ProfileViewController: UIViewController {
 
 extension ProfileViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 3
+        return 1
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return 1
-        
+        return activityItems.count
     }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return activityItems[row]
+    }
+    
+    
     
     
 }
