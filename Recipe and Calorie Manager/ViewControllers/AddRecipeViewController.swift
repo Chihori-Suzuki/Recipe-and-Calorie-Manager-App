@@ -16,6 +16,7 @@ class AddRecipeViewController: UIViewController {
         tf.font = .systemFont(ofSize: 25)
         tf.heightAnchor.constraint(equalToConstant: 50).isActive = true
         tf.translatesAutoresizingMaskIntoConstraints = false
+        tf.becomeFirstResponder()
         tf.addTarget(self, action: #selector(textEditingChanged(_:)), for: .editingChanged)
         return tf
     }()
