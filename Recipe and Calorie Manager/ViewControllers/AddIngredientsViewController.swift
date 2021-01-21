@@ -201,12 +201,13 @@ class AddIngredientsViewController: UIViewController {
         DispatchQueue.main.async { [self] in
             if ingredient.items.count > 0 {
                 
-                UIView.animate(withDuration: 0.9) {
-                    totalsStackViews.isHidden ? totalsStackViews.isHidden = false : nil
-                }
                 validIngredient.toggle()
                 ingredients.insert((serving: serving, nutrition: ingredient.items[0]), at: 0)
-                tableview.insertRows(at: [IndexPath.init(row: 0, section: 0)], with: .top)
+                
+                UIView.animate(withDuration: 0.9) {
+                    totalsStackViews.isHidden ? totalsStackViews.isHidden = false : nil
+                    tableview.insertRows(at: [IndexPath.init(row: 0, section: 0)], with: .top)
+                }
                 
                 caloriesTotal = ingredients.map { $0.nutrition!.calories }.reduce(0){ $0 + $1 }
                 carbsTotal = ingredients.map { $0.nutrition!.carbohydrates }.reduce(0){ $0 + $1}
@@ -239,6 +240,7 @@ class AddIngredientsViewController: UIViewController {
     
     fileprivate func setupTableView() {
         tableview = UITableView(frame: view.frame, style: .insetGrouped)
+        tableview.backgroundColor = .white
         view.addSubview(tableview)
         
         tableview.register(IngredientTableViewCell.self, forCellReuseIdentifier: cellId)
