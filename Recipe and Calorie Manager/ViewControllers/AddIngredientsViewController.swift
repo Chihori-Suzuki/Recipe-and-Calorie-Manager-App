@@ -83,6 +83,7 @@ class AddIngredientsViewController: UIViewController {
     var proteinTotalCountLabel = UILabel()
     var fatTotalCountLabel = UILabel()
     var fiberTotalCountLabel = UILabel()
+    var alert: UIAlertController!
     
     func makeLabelTotals(with string: String, isHeader: Bool) -> UILabel {
         let label = UILabel()
@@ -100,7 +101,6 @@ class AddIngredientsViewController: UIViewController {
         } else {
             label.font = UIFont.systemFont(ofSize: 17)
         }
-        
         return label
     }
     
@@ -173,8 +173,15 @@ class AddIngredientsViewController: UIViewController {
     }
     
     @objc func addNewIngredient() {
-        let serving = ingredientTextField.text!
+        UIView.animate(withDuration: 0.10) {
+            self.addButton.transform = CGAffineTransform(scaleX: 0.6, y: 0.6)
+        } completion: { (_) in
+            UIView.animate(withDuration: 0.10) {
+                self.addButton.transform = CGAffineTransform.identity
+            }
+        }
         
+        let serving = ingredientTextField.text!
         NutritionAPI.shared.fetchNutritionInfo(query: serving) { (result) in
             switch result {
             case .success(let ingredient):
@@ -186,11 +193,9 @@ class AddIngredientsViewController: UIViewController {
     }
     
     fileprivate func updateTableViewAndTotals(with serving: String, and ingredient: (Ingredient)) {
-        
-        if ingredient.items.count > 0 {
-            ingredients.insert((serving: serving, nutrition: ingredient.items[0]), at: 0)
-            
-            DispatchQueue.main.async { [self] in
+        DispatchQueue.main.async { [self] in
+            if ingredient.items.count > 0 {
+                ingredients.insert((serving: serving, nutrition: ingredient.items[0]), at: 0)
                 tableview.insertRows(at: [IndexPath.init(row: 0, section: 0)], with: .top)
                 
                 caloriesTotal = ingredients.map { $0.nutrition!.calories }.reduce(0){ $0 + $1 }
@@ -198,9 +203,17 @@ class AddIngredientsViewController: UIViewController {
                 proteinTotal = ingredients.map { $0.nutrition!.protein }.reduce(0){ $0 + $1 }
                 fatTotal = ingredients.map { $0.nutrition!.totalFat }.reduce(0){ $0 + $1 }
                 fiberTotal = ingredients.map { $0.nutrition!.fiber }.reduce(0){ $0 + $1}
+                
+            } else {
+                //addButton vibrates to indicate invalid ingredient
+                let animation = CABasicAnimation(keyPath: "position")
+                animation.duration = 0.05
+                animation.repeatCount = 4
+                animation.autoreverses = true
+                animation.fromValue = NSValue(cgPoint: CGPoint(x: addButton.center.x - 12, y: addButton.center.y))
+                animation.toValue = NSValue(cgPoint: CGPoint(x: addButton.center.x + 12, y: addButton.center.y))
+                addButton.layer.add(animation, forKey: "position")
             }
-        } else {
-            print(ingredient)
         }
     }
     
