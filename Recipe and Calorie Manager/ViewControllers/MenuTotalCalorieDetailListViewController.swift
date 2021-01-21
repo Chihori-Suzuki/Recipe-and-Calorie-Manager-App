@@ -9,8 +9,13 @@ import UIKit
 
 class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
+    let addIngredients = AddIngredientsViewController()
     var mealTitle: String?
     let cellId = "MenuTotalCalorie"
+    
+    var categories: [String] = []
+    var breakfasts = [(serving: String, nutrition: Nutrition?)]()
+    
     
     lazy var myTable: UITableView = {
         let table = UITableView(frame: view.frame, style: .grouped)
@@ -42,12 +47,13 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return addIngredients.ingredients.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
-        cell.textLabel?.text = "new item"
+//        let abi = addIngredients.ingredients
+        cell.textLabel?.text = "\(addIngredients.caloriesTotal)"
         cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 30)
         cell.layer.cornerRadius = 10
         cell.layer.borderWidth = 1
