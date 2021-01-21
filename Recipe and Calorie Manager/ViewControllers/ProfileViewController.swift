@@ -13,10 +13,13 @@ class ProfileViewController: UIViewController {
 
     private let imageView = UIImageView()
     
+    let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))
+    
     // imageView
     let profileImage: UIImageView = {
-        let iv = UIImageView(image: UIImage(named: "Profile"))
+        let iv = UIImageView(image: UIImage(named: "profile.png"))
         iv.translatesAutoresizingMaskIntoConstraints = false
+        
         return iv
     }()
     
@@ -97,11 +100,19 @@ class ProfileViewController: UIViewController {
         tf.borderStyle = .line
         return tf
     }()
+    let activeText: UITextField = {
+        let tf = UITextField()
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        tf.borderStyle = .line
+        tf.addTarget(self, action: #selector(textFieldDidBeginEditing), for: .touchDown)
+        return tf
+    }()
     let activePick: UIPickerView = {
         let dp = UIPickerView()
          dp.translatesAutoresizingMaskIntoConstraints = false
+        dp.isHidden = true
          return dp
-     }()
+    }()
     
     let activityItems = ["item1", "item2", "item3"]
     
@@ -147,14 +158,13 @@ class ProfileViewController: UIViewController {
         view.backgroundColor = .white
         
         view.addSubview(mainSV)
-        
         setSVConfig()
         
         activePick.delegate = self
         activePick.dataSource = self
         
         
-        
+        profileImage.addGestureRecognizer(tapGestureRecognizer)
         // Do any additional setup after loading the view.
     }
     
@@ -163,19 +173,20 @@ class ProfileViewController: UIViewController {
         mainSV.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30).isActive = true
         mainSV.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -30).isActive = true
         mainSV.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 30).isActive = true
-        mainSV.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 30).isActive = true
+        mainSV.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive = true
         
-        mainSV.addArrangedSubview(imageView)
+        mainSV.addArrangedSubview(profileImage)
         mainSV.addArrangedSubview(nameSV)
         mainSV.addArrangedSubview(birthSV)
         mainSV.addArrangedSubview(genderSV)
         mainSV.addArrangedSubview(weightSV)
         mainSV.addArrangedSubview(heightSV)
         mainSV.addArrangedSubview(activeSV)
+        mainSV.addArrangedSubview(activePick)
         mainSV.axis = .vertical
         mainSV.alignment = .fill
         mainSV.distribution = .equalSpacing
-        mainSV.spacing = 30
+        mainSV.spacing = 20
         
         
         /* nameSV **********/
@@ -215,14 +226,25 @@ class ProfileViewController: UIViewController {
         
         /* activitySV *********/
         activeSV.addArrangedSubview(activeLabel)
-        activeSV.addArrangedSubview(activePick)
+        activeSV.addArrangedSubview(activeText)
         activeSV.axis = .horizontal
         activeSV.alignment = .fill
         activeSV.spacing = 10
         
     }
+    
+    @objc func textFieldDidBeginEditing(textField: UITextField) {
+        activePick.isHidden = false
+    }
+    
+    @objc func imageTapped(tapGestureRecognizer: UITapGestureRecognizer)
+    {
+        print("image tapped")
+    }
 
+    
 }
+
 
 extension ProfileViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -237,7 +259,10 @@ extension ProfileViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         return activityItems[row]
     }
     
-    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        activeText.text = activityItems[row]
+        activeText.isHidden = true
+    }
     
     
 }
