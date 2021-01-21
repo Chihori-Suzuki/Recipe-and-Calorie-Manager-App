@@ -13,6 +13,22 @@ class AddIngredientsViewController: UIViewController {
     var recipeTitle: String?
     var ingredients = [(serving: String, nutrition: Nutrition?)]()
     
+    var caloriesTotal: Double? {
+        willSet(total) { caloriesTotalCountLabel.text = "\((total! * 100).rounded()/100) g" }
+    }
+    var carbsTotal: Double? {
+        willSet(total) { carbsTotalCountLabel.text = "\((total! * 100).rounded()/100) g" }
+    }
+    var proteinTotal: Double? {
+        willSet(total) { proteinTotalCountLabel.text = "\((total! * 100).rounded()/100) g" }
+    }
+    var fatTotal: Double? {
+        willSet(total) { fatTotalCountLabel.text = "\((total! * 100).rounded()/100) g" }
+    }
+    var fiberTotal: Double? {
+        willSet(total) { fiberTotalCountLabel.text = "\((total! * 100).rounded()/100) g" }
+    }
+    
     let ingredientTextField: UITextField = {
        let tf = UITextField()
         tf.borderStyle = .roundedRect
@@ -113,11 +129,13 @@ class AddIngredientsViewController: UIViewController {
     }
     
     fileprivate func setupStackViews() {
+        //title labels, let is used as the 'titles' are constant
         let caloriesTotalLabel = makeLabelTotals(with: "Calories", isHeader: true)
         let carbsTotalLabel = makeLabelTotals(with: "Carbs", isHeader: true)
         let proteinTotalLabel = makeLabelTotals(with: "Protein", isHeader: true)
         let fatTotalLabel = makeLabelTotals(with: "Fat", isHeader: true)
         let fiberTotalLabel = makeLabelTotals(with: "Fiber", isHeader: true)
+        //total labels are declared as variable so that their text property can be updated
         caloriesTotalCountLabel = makeLabelTotals(with: "0 g", isHeader: false)
         carbsTotalCountLabel = makeLabelTotals(with: "0 g", isHeader: false)
         proteinTotalCountLabel = makeLabelTotals(with: "0 g", isHeader: false)
@@ -172,22 +190,15 @@ class AddIngredientsViewController: UIViewController {
         if ingredient.items.count > 0 {
             ingredients.insert((serving: serving, nutrition: ingredient.items[0]), at: 0)
             
-            DispatchQueue.main.async {
-                self.tableview.insertRows(at: [IndexPath.init(row: 0, section: 0)], with: .top)
+            DispatchQueue.main.async { [self] in
+                tableview.insertRows(at: [IndexPath.init(row: 0, section: 0)], with: .top)
                 
-                let caloriesTotal = self.ingredients.map { $0.nutrition!.calories }.reduce(0){ $0 + $1 }
-                let carbsTotal = self.ingredients.map { $0.nutrition!.carbohydrates }.reduce(0){ $0 + $1}
-                let proteinTotal = self.ingredients.map { $0.nutrition!.protein }.reduce(0){ $0 + $1 }
-                let fatTotal = self.ingredients.map { $0.nutrition!.totalFat }.reduce(0){ $0 + $1 }
-                let fiberTotal = self.ingredients.map { $0.nutrition!.fiber }.reduce(0){ $0 + $1}
-                
-                self.caloriesTotalCountLabel.text = String((caloriesTotal * 100).rounded()/100)
-                self.carbsTotalCountLabel.text = String((carbsTotal * 100).rounded()/100)
-                self.proteinTotalCountLabel.text = String((proteinTotal * 100).rounded()/100)
-                self.fatTotalCountLabel.text = String((fatTotal * 100).rounded()/100)
-                self.fiberTotalCountLabel.text = String((fiberTotal * 100).rounded()/100)
+                caloriesTotal = ingredients.map { $0.nutrition!.calories }.reduce(0){ $0 + $1 }
+                carbsTotal = ingredients.map { $0.nutrition!.carbohydrates }.reduce(0){ $0 + $1}
+                proteinTotal = ingredients.map { $0.nutrition!.protein }.reduce(0){ $0 + $1 }
+                fatTotal = ingredients.map { $0.nutrition!.totalFat }.reduce(0){ $0 + $1 }
+                fiberTotal = ingredients.map { $0.nutrition!.fiber }.reduce(0){ $0 + $1}
             }
-            
         } else {
             print(ingredient)
         }
