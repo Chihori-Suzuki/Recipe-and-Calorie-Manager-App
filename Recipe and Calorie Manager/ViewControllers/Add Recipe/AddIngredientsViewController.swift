@@ -9,8 +9,9 @@ import UIKit
 
 class AddIngredientsViewController: UIViewController {
 
-    var validIngredient = false
-    let cellId = "cellId"
+    let sectionTitles = ["Ingredients", "Nutrition Facts"]
+    let ingredientsCell = "ingredientCell"
+    let nutritionCell = "nutritionCell"
     var tableview = UITableView()
     var totalsStackViews = UIStackView()
     var caloriesTotalCountLabel = AnimatedLabelTotals()
@@ -199,6 +200,7 @@ class AddIngredientsViewController: UIViewController {
         title = recipeTitle
         setupStackViews()
         setupTableView()
+        
     }
    
     @objc func addNewIngredient() {
@@ -225,11 +227,11 @@ class AddIngredientsViewController: UIViewController {
         
         DispatchQueue.main.async { [self] in
             if ingredient.items.count > 0 {
-                
-                validIngredient.toggle()
+            
                 ingredients.insert((serving: serving, nutrition: ingredient.items[0]), at: 0)
                 UIView.animate(withDuration: 0.9) {
-                    totalsStackViews.isHidden ? totalsStackViews.isHidden = false : nil
+                    totalsStackViews.isHidden ? totalsStackViews.isHidden.toggle() : nil
+                    tableview.isHidden ? tableview.isHidden.toggle() : nil
                     tableview.insertRows(at: [IndexPath.init(row: 0, section: 0)], with: .top)
                     tableview.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
                 }
@@ -269,7 +271,8 @@ class AddIngredientsViewController: UIViewController {
         tableview.backgroundColor = .white
         view.addSubview(tableview)
         
-        tableview.register(IngredientTableViewCell.self, forCellReuseIdentifier: cellId)
+        tableview.register(IngredientTableViewCell.self, forCellReuseIdentifier: ingredientsCell)
+        tableview.register(NutritionFactsTableViewCell.self, forCellReuseIdentifier: nutritionCell)
         tableview.delegate = self
         tableview.dataSource = self
         tableview.contentInsetAdjustmentBehavior = .never
@@ -278,22 +281,38 @@ class AddIngredientsViewController: UIViewController {
         tableview.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
         tableview.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0).isActive = true
         tableview.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0).isActive = true
+        tableview.isHidden = true
     }
 }
 
 extension AddIngredientsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return ingredients.count
+        switch  section {
+        case 0:
+            return ingredients.count
+        case 1:
+            return 1
+        default:
+            fatalError()
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let ingredient = ingredients[indexPath.row]
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! IngredientTableViewCell
-        
-        cell.update(with: ingredient)
-        cell.layer.borderColor = UIColor.gray.cgColor
-        cell.layer.borderWidth = 0.5
-        return cell
+        switch indexPath.section {
+        case 0:
+            let ingredient = ingredients[indexPath.row]
+            let cell = tableView.dequeueReusableCell(withIdentifier: ingredientsCell, for: indexPath) as! IngredientTableViewCell
+            cell.update(with: ingredient)
+            cell.layer.borderColor = UIColor.gray.cgColor
+            cell.layer.borderWidth = 0.5
+            return cell
+        case 1:
+            let cell = tableView.dequeueReusableCell(withIdentifier: nutritionCell, for: indexPath) as! NutritionFactsTableViewCell
+            cell.ingredientLabel.text = "Sample"
+            return cell
+        default:
+            fatalError()
+        }
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -313,9 +332,10 @@ extension AddIngredientsViewController: UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        switch section {
-        case 0: return "Ingredients"
-        default: fatalError()
-        }
+        return sectionTitles[section]
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return sectionTitles.count
     }
 }

@@ -16,7 +16,6 @@ struct RecipeList {
 }
 struct Recipe {
     var title: String
-    var meal: Meal
     var ingredients: [(serving: String, nutrition: Nutrition?)]
 }
 enum Meal: String {
