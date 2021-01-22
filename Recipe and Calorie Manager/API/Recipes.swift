@@ -7,11 +7,18 @@
 
 import Foundation
 
-struct Recipes {
+struct Catalog {
+    var catalog: [RecipeList]
+}
+struct RecipeList {
+    var category: Meal
+    var recipes: [Recipe]
+}
+struct Recipe {
+    var title: String
     var meal: Meal
     var ingredients: [(serving: String, nutrition: Nutrition?)]
 }
-
 enum Meal: String {
     case breakfast = "breakfast"
     case lunch = "lunch"
