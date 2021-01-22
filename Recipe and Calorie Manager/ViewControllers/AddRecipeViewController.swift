@@ -59,8 +59,9 @@ class AddRecipeViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .center
         label.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
-        label.font = UIFont.boldSystemFont(ofSize: 25)
+        label.font = UIFont.boldSystemFont(ofSize: 22)
         label.layer.cornerRadius = 6
+        label.alpha = 0.80
         return label
     }
     
@@ -74,7 +75,7 @@ class AddRecipeViewController: UIViewController {
             sv.distribution = .fill
             sv.widthAnchor.constraint(equalToConstant: 110).isActive = true
             sv.alignment = .center
-            sv.spacing = 8
+            sv.spacing = 2
             sv.translatesAutoresizingMaskIntoConstraints = false
             index > 1 ? hSVButtonLabels2.addArrangedSubview(sv) : hSVButtonLabels1.addArrangedSubview(sv)
         }
@@ -101,6 +102,7 @@ class AddRecipeViewController: UIViewController {
     }
     
     @objc func mealSelected(_ sender: UIButton) {
+       
         UIView.animate(withDuration: 0.10) {
             sender.transform = CGAffineTransform(scaleX: 0.6, y: 0.6)
         } completion: { (_) in
@@ -108,26 +110,22 @@ class AddRecipeViewController: UIViewController {
                 sender.transform = CGAffineTransform.identity
             }
         }
-        
         guard let image = sender.currentImage else { return }
-        
         var selectedMeal: Meal?
-        
         for meal in meals {
             if image == UIImage(named: meal) {
                 selectedMeal = Meal(rawValue: meal)
             }
         }
         
-        let newRecipeVC = AddIngredientsViewController()
-        newRecipeVC.recipeTitle = recipeTextField.text
-        newRecipeVC.meal = selectedMeal
-        navigationController?.pushViewController(newRecipeVC, animated: true)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            let newRecipeVC = AddIngredientsViewController()
+            newRecipeVC.recipeTitle = self.recipeTextField.text
+            newRecipeVC.meal = selectedMeal
+            self.navigationController?.pushViewController(newRecipeVC, animated: true)
+        }
     }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-//        self.navigationController?.popViewController(animated: false)
-    }
+
     
     override func viewDidLoad() {
         super.viewDidLoad()

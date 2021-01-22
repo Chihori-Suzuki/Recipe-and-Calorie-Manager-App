@@ -55,10 +55,8 @@ class AddIngredientsViewController: UIViewController {
     let addButton: UIButton = {
        let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Add", for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 25)
-        button.contentMode = .scaleAspectFit
-        button.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        button.widthAnchor.constraint(equalToConstant: 60).isActive = true
         button.heightAnchor.constraint(equalToConstant: 50).isActive = true
         button.layer.cornerRadius = 8
         button.addTarget(self, action: #selector(addNewIngredient), for: .touchUpInside)
@@ -71,8 +69,9 @@ class AddIngredientsViewController: UIViewController {
         let sv = UIStackView()
         sv.translatesAutoresizingMaskIntoConstraints = false
         sv.axis = .horizontal
-        sv.alignment = .fill
-        sv.spacing = 10
+        sv.distribution = .fill
+        sv.alignment = .center
+        sv.spacing = 15
         return sv
     }()
     
@@ -86,6 +85,18 @@ class AddIngredientsViewController: UIViewController {
         return sv
     }()
     
+    let addLabel: UILabel = {
+        let label = UILabel()
+        label.text = "add"
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.widthAnchor.constraint(equalToConstant: 60).isActive = true
+        label.textAlignment = .center
+        label.textColor = #colorLiteral(red: 0.4527973475, green: 0.2011018268, blue: 0.03813635361, alpha: 1)
+        label.alpha = 0.8
+        label.font = UIFont.boldSystemFont(ofSize: 20)
+        return label
+    }()
+    
     func makeLabelTotals(with string: String) -> UILabel {
         let label = UILabel()
         label.text = string
@@ -93,6 +104,7 @@ class AddIngredientsViewController: UIViewController {
         label.widthAnchor.constraint(equalToConstant: 70).isActive = true
         label.textAlignment = .center
         label.adjustsFontSizeToFitWidth = true
+        label.alpha = 0.8
         label.font = UIFont.boldSystemFont(ofSize: 17)
         label.layer.masksToBounds = true
         label.backgroundColor = #colorLiteral(red: 0.7829411976, green: 0.9072662751, blue: 1, alpha: 1)
@@ -156,8 +168,14 @@ class AddIngredientsViewController: UIViewController {
         
         totalsStackViews = makeTotalsStackView(with: totalLabels)
         
+        let vSV = UIStackView(arrangedSubviews: [addButton, addLabel])
+        vSV.axis = .vertical
+        vSV.alignment = .center
+        vSV.distribution = .fill
+        vSV.spacing = 0
+    
         hStackView.addArrangedSubview(ingredientTextField)
-        hStackView.addArrangedSubview(addButton)
+        hStackView.addArrangedSubview(vSV)
    
         vStackView.addArrangedSubview(hStackView)
         vStackView.addArrangedSubview(totalsStackViews)
@@ -166,6 +184,7 @@ class AddIngredientsViewController: UIViewController {
         
         vStackView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
         vStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8).isActive = true
+
     }
     
     
