@@ -18,7 +18,6 @@ class AddIngredientsViewController: UIViewController {
     var proteinTotalCountLabel = AnimatedLabelTotals()
     var fatTotalCountLabel = AnimatedLabelTotals()
     var fiberTotalCountLabel = AnimatedLabelTotals()
-    var recipe: Recipes?
     var meal: Meal?
     var recipeTitle: String?
     var ingredients = [(serving: String, nutrition: Nutrition?)]()
