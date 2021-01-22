@@ -13,8 +13,10 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
     var mealTitle: String?
     let cellId = "MenuTotalCalorie"
     
-    var categories: [String] = []
-    var breakfasts = [(serving: String, nutrition: Nutrition?)]()
+//    var categories: [String] = []
+//    var breakfasts = [(serving: String, nutrition: Nutrition?)]()
+    var lists: [(serving: String, Nutrition: Nutrition?)]? = []
+    
     
     
     lazy var myTable: UITableView = {
@@ -32,6 +34,7 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
         title = mealTitle
         navigationController?.navigationBar.prefersLargeTitles = true
         setupTableView()
+        print(addIngredients.ingredients.count)
     }
     
     func setupTableView() {
@@ -47,13 +50,14 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
         return addIngredients.ingredients.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
-//        let abi = addIngredients.ingredients
-        cell.textLabel?.text = "\(addIngredients.caloriesTotal)"
+//        list
+        cell.textLabel?.text = "\(addIngredients.ingredients[indexPath.row])"
         cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 30)
         cell.layer.cornerRadius = 10
         cell.layer.borderWidth = 1
