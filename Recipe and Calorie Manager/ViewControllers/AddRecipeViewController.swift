@@ -21,7 +21,7 @@ class AddRecipeViewController: UIViewController {
         return tf
     }()
     
-    private var meals = ["breakfast", "lunch", "dinner", "snacks"]
+    private var meals = ["breakfast", "lunch", "dinner", "snack"]
     private var breakfastButton = UIButton()
     private var snacksButton = UIButton()
     private var lunchButton = UIButton()
@@ -108,6 +108,25 @@ class AddRecipeViewController: UIViewController {
                 sender.transform = CGAffineTransform.identity
             }
         }
+        
+        guard let image = sender.currentImage else { return }
+        
+        var selectedMeal: Meal?
+        
+        for meal in meals {
+            if image == UIImage(named: meal) {
+                selectedMeal = Meal(rawValue: meal)
+            }
+        }
+        
+        let newRecipeVC = AddIngredientsViewController()
+        newRecipeVC.recipeTitle = recipeTextField.text
+        newRecipeVC.meal = selectedMeal
+        navigationController?.pushViewController(newRecipeVC, animated: true)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+//        self.navigationController?.popViewController(animated: false)
     }
     
     override func viewDidLoad() {

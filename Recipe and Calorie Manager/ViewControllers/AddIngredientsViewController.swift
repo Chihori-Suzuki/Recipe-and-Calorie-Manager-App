@@ -11,8 +11,6 @@ class AddIngredientsViewController: UIViewController {
 
     var validIngredient = false
     let cellId = "cellId"
-    var recipeTitle: String?
-    var ingredients = [(serving: String, nutrition: Nutrition?)]()
     var tableview = UITableView()
     var totalsStackViews = UIStackView()
     var caloriesTotalCountLabel = AnimatedLabelTotals()
@@ -20,6 +18,10 @@ class AddIngredientsViewController: UIViewController {
     var proteinTotalCountLabel = AnimatedLabelTotals()
     var fatTotalCountLabel = AnimatedLabelTotals()
     var fiberTotalCountLabel = AnimatedLabelTotals()
+    var recipe: Recipes?
+    var meal: Meal?
+    var recipeTitle: String?
+    var ingredients = [(serving: String, nutrition: Nutrition?)]()
 
     var caloriesTotal: Double? {
         didSet { caloriesTotalCountLabel.count(from: Float(oldValue ?? 0), to: Float(caloriesTotal ?? 0), duration: .brisk) }
@@ -54,9 +56,9 @@ class AddIngredientsViewController: UIViewController {
        let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Add", for: .normal)
-        button.backgroundColor = .systemBlue
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 25)
-        button.widthAnchor.constraint(equalToConstant: 80).isActive = true
+        button.contentMode = .scaleAspectFit
+        button.widthAnchor.constraint(equalToConstant: 50).isActive = true
         button.heightAnchor.constraint(equalToConstant: 50).isActive = true
         button.layer.cornerRadius = 8
         button.addTarget(self, action: #selector(addNewIngredient), for: .touchUpInside)
@@ -169,6 +171,11 @@ class AddIngredientsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if let meal = meal?.rawValue {
+            addButton.setImage(UIImage(named: meal), for: .normal)
+        }
+    
         view.backgroundColor = .white
         navigationItem.hidesBackButton = true
         title = recipeTitle
@@ -213,6 +220,8 @@ class AddIngredientsViewController: UIViewController {
                 proteinTotal = ingredients.map { $0.nutrition!.protein }.reduce(0){ $0 + $1 }
                 fatTotal = ingredients.map { $0.nutrition!.totalFat }.reduce(0){ $0 + $1 }
                 fiberTotal = ingredients.map { $0.nutrition!.fiber }.reduce(0){ $0 + $1}
+                
+                //update the recipe list
                 
             } else {
                 //addButton vibrates to indicate invalid ingredient
