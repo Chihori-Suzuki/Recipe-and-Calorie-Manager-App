@@ -9,18 +9,29 @@
 
 import UIKit
 
-class ProfileViewController: UIViewController {
-
-    private let imageView = UIImageView()
-    
-    let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))
-    
-    // imageView
+class ProfileViewController: UIViewController, UITextFieldDelegate {
+   
+    // profileimage
+    let imageView: UIView = {
+        let view = UIView()
+        return view
+    }()
     let profileImage: UIImageView = {
         let iv = UIImageView(image: UIImage(named: "profile.png"))
         iv.translatesAutoresizingMaskIntoConstraints = false
-        
+        iv.contentMode = .scaleAspectFit
+        iv.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        iv.heightAnchor.constraint(equalToConstant: 100).isActive = true
         return iv
+    }()
+    let pencilBtn: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setImage(UIImage(systemName: "pencil"), for: .normal)
+        button.backgroundColor = .white
+        button.layer.borderWidth = 0.5
+        button.addTarget(self, action: #selector(setActivityView), for: .touchUpInside)
+        return button
     }()
     
     // Label Field
@@ -30,14 +41,14 @@ class ProfileViewController: UIViewController {
         lb.setContentHuggingPriority(.required, for: .horizontal)
         lb.text = "Name"
         return lb
-        }()
+    }()
     let birthLabel: UILabel = {
         let lb = UILabel()
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.setContentHuggingPriority(.required, for: .horizontal)
         lb.text = "Birthday"
         return lb
-        }()
+    }()
     let genderLabel: UILabel = {
         let lb = UILabel()
         lb.translatesAutoresizingMaskIntoConstraints = false
@@ -76,7 +87,7 @@ class ProfileViewController: UIViewController {
     }()
     
     let birthPick: UIDatePicker = {
-       let dp = UIDatePicker()
+        let dp = UIDatePicker()
         dp.translatesAutoresizingMaskIntoConstraints = false
         return dp
     }()
@@ -94,10 +105,24 @@ class ProfileViewController: UIViewController {
         tf.borderStyle = .line
         return tf
     }()
+    let weightSeg: UISegmentedControl = {
+        let items = ["kg", "lb"]
+        let tf = UISegmentedControl(items: items)
+        tf.selectedSegmentIndex = 0
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        return tf
+    }()
     let heightTxt: UITextField = {
         let tf = UITextField()
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.borderStyle = .line
+        return tf
+    }()
+    let heightSeg: UISegmentedControl = {
+        let items = ["cm"]
+        let tf = UISegmentedControl(items: items)
+        tf.selectedSegmentIndex = 0
+        tf.translatesAutoresizingMaskIntoConstraints = false
         return tf
     }()
     let activeText: UITextField = {
@@ -109,12 +134,13 @@ class ProfileViewController: UIViewController {
     }()
     let activePick: UIPickerView = {
         let dp = UIPickerView()
-         dp.translatesAutoresizingMaskIntoConstraints = false
+        dp.translatesAutoresizingMaskIntoConstraints = false
         dp.isHidden = true
-         return dp
+        return dp
     }()
     
     let activityItems = ["item1", "item2", "item3"]
+
     
     // StackView Field
     let mainSV: UIStackView = {
@@ -153,6 +179,22 @@ class ProfileViewController: UIViewController {
         return sv
     }()
     
+    // submitButton
+    let submitBtn: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("Submit", for: .normal)
+        button.backgroundColor = .systemBlue
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 25)
+        button.widthAnchor.constraint(equalToConstant: 80).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        button.layer.cornerRadius = 8
+        //         button.addTarget(self, action: #selector(addNewIngredient), for: .touchUpInside)
+        button.isEnabled = false
+        button.alpha = 0.5
+        return button
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -163,19 +205,18 @@ class ProfileViewController: UIViewController {
         activePick.delegate = self
         activePick.dataSource = self
         
+        activeText.delegate = self
         
-        profileImage.addGestureRecognizer(tapGestureRecognizer)
-        // Do any additional setup after loading the view.
     }
     
     func setSVConfig() {
         /* mainSV **********/
         mainSV.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30).isActive = true
-        mainSV.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -30).isActive = true
-        mainSV.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 30).isActive = true
+        mainSV.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -50).isActive = true
+        mainSV.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 50).isActive = true
         mainSV.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive = true
         
-        mainSV.addArrangedSubview(profileImage)
+        mainSV.addArrangedSubview(imageView)
         mainSV.addArrangedSubview(nameSV)
         mainSV.addArrangedSubview(birthSV)
         mainSV.addArrangedSubview(genderSV)
@@ -183,11 +224,20 @@ class ProfileViewController: UIViewController {
         mainSV.addArrangedSubview(heightSV)
         mainSV.addArrangedSubview(activeSV)
         mainSV.addArrangedSubview(activePick)
+        mainSV.addArrangedSubview(submitBtn)
         mainSV.axis = .vertical
         mainSV.alignment = .fill
         mainSV.distribution = .equalSpacing
-        mainSV.spacing = 20
+        mainSV.spacing = 5
         
+        /* imageView ********/
+        imageView.addSubview(profileImage)
+        imageView.addSubview(pencilBtn)
+        profileImage.topAnchor.constraint(equalTo: imageView.topAnchor, constant: 0).isActive = true
+        profileImage.bottomAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 0).isActive = true
+        profileImage.centerXAnchor.constraint(equalTo: imageView.centerXAnchor).isActive = true
+        pencilBtn.bottomAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: 5).isActive = true
+        pencilBtn.trailingAnchor.constraint(equalTo: profileImage.trailingAnchor, constant: 5).isActive = true
         
         /* nameSV **********/
         nameSV.addArrangedSubview(nameLabel)
@@ -213,6 +263,7 @@ class ProfileViewController: UIViewController {
         /* weightSV *********/
         weightSV.addArrangedSubview(weightLabel)
         weightSV.addArrangedSubview(weightTxt)
+        weightSV.addArrangedSubview(weightSeg)
         weightSV.axis = .horizontal
         weightSV.alignment = .fill
         weightSV.spacing = 10
@@ -220,6 +271,7 @@ class ProfileViewController: UIViewController {
         /* heightSV *********/
         heightSV.addArrangedSubview(heightLabel)
         heightSV.addArrangedSubview(heightTxt)
+        heightSV.addArrangedSubview(heightSeg)
         heightSV.axis = .horizontal
         heightSV.alignment = .fill
         heightSV.spacing = 10
@@ -233,15 +285,15 @@ class ProfileViewController: UIViewController {
         
     }
     
-    @objc func textFieldDidBeginEditing(textField: UITextField) {
+    @objc func textFieldDidBeginEditing(_ textField: UITextField) {
         activePick.isHidden = false
     }
     
-    @objc func imageTapped(tapGestureRecognizer: UITapGestureRecognizer)
-    {
-        print("image tapped")
+    @objc func setActivityView() {
+        guard let image = profileImage.image else { return }
+        let activitiController = UIActivityViewController(activityItems: [image], applicationActivities: nil)
+        present(activitiController, animated: true, completion: nil)
     }
-
     
 }
 
@@ -261,7 +313,9 @@ extension ProfileViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         activeText.text = activityItems[row]
-        activeText.isHidden = true
+        UIView.animate(withDuration: 0.3) {
+            pickerView.isHidden = true
+        }
     }
     
     
