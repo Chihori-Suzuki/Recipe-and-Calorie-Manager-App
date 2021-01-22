@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2E792C0325BA4A4A00515D76 /* showProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E792C0225BA4A4A00515D76 /* showProfileViewController.swift */; };
 		526B350225B6430700BAE8D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 526B350125B6430700BAE8D9 /* AppDelegate.swift */; };
 		526B350425B6430700BAE8D9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 526B350325B6430700BAE8D9 /* SceneDelegate.swift */; };
 		526B350625B6430700BAE8D9 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 526B350525B6430700BAE8D9 /* WelcomeViewController.swift */; };
@@ -27,6 +28,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2E792C0225BA4A4A00515D76 /* showProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = showProfileViewController.swift; sourceTree = "<group>"; };
 		526B34FE25B6430700BAE8D9 /* Recipe and Calorie Manager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Recipe and Calorie Manager.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		526B350125B6430700BAE8D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		526B350325B6430700BAE8D9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -111,6 +113,7 @@
 				FA0EB5DB25B75F5C0085BCE7 /* AddRecipeViewController.swift */,
 				52FF46DF25B940D600B3888F /* AnimateLabelTotals.swift */,
 				52FF46D425B79F2D00B3888F /* AddIngredientsViewController.swift */,
+				2E792C0225BA4A4A00515D76 /* showProfileViewController.swift */,
 				52FF46D725B7B3B900B3888F /* IngredientTableViewCell.swift */,
 			);
 			path = ViewControllers;
@@ -187,6 +190,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				526B350625B6430700BAE8D9 /* WelcomeViewController.swift in Sources */,
+				2E792C0325BA4A4A00515D76 /* showProfileViewController.swift in Sources */,
 				52FF46BD25B6799600B3888F /* NutritionAPI.swift in Sources */,
 				FA0EB5DC25B75F5C0085BCE7 /* AddRecipeViewController.swift in Sources */,
 				526B350225B6430700BAE8D9 /* AppDelegate.swift in Sources */,
