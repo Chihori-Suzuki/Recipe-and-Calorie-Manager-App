@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		2E792C0325BA4A4A00515D76 /* showProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E792C0225BA4A4A00515D76 /* showProfileViewController.swift */; };
+		2E792C5125BB7DB100515D76 /* RecipeAndCalorieManagerModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2E792C4F25BB7DB100515D76 /* RecipeAndCalorieManagerModel.xcdatamodeld */; };
+		2E792C5525BB848400515D76 /* Person+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E792C5325BB848400515D76 /* Person+CoreDataClass.swift */; };
+		2E792C5625BB848400515D76 /* Person+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E792C5425BB848400515D76 /* Person+CoreDataProperties.swift */; };
 		526B350225B6430700BAE8D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 526B350125B6430700BAE8D9 /* AppDelegate.swift */; };
 		526B350425B6430700BAE8D9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 526B350325B6430700BAE8D9 /* SceneDelegate.swift */; };
 		526B350625B6430700BAE8D9 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 526B350525B6430700BAE8D9 /* WelcomeViewController.swift */; };
@@ -30,6 +33,9 @@
 
 /* Begin PBXFileReference section */
 		2E792C0225BA4A4A00515D76 /* showProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = showProfileViewController.swift; sourceTree = "<group>"; };
+		2E792C5025BB7DB100515D76 /* RecipeAndCalorieManagerModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = RecipeAndCalorieManagerModel.xcdatamodel; sourceTree = "<group>"; };
+		2E792C5325BB848400515D76 /* Person+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Person+CoreDataClass.swift"; sourceTree = "<group>"; };
+		2E792C5425BB848400515D76 /* Person+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Person+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		526B34FE25B6430700BAE8D9 /* Recipe and Calorie Manager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Recipe and Calorie Manager.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		526B350125B6430700BAE8D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		526B350325B6430700BAE8D9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -82,6 +88,9 @@
 		526B350025B6430700BAE8D9 /* Recipe and Calorie Manager */ = {
 			isa = PBXGroup;
 			children = (
+				2E792C5325BB848400515D76 /* Person+CoreDataClass.swift */,
+				2E792C5425BB848400515D76 /* Person+CoreDataProperties.swift */,
+				2E792C4F25BB7DB100515D76 /* RecipeAndCalorieManagerModel.xcdatamodeld */,
 				FA0EB5DF25B75FE00085BCE7 /* ViewControllers */,
 				526B351925B64D0A00BAE8D9 /* API */,
 				526B350125B6430700BAE8D9 /* AppDelegate.swift */,
@@ -148,6 +157,9 @@
 		526B34F625B6430700BAE8D9 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				KnownAssetTags = (
+					New,
+				);
 				LastSwiftUpdateCheck = 1230;
 				LastUpgradeCheck = 1230;
 				TargetAttributes = {
@@ -192,6 +204,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2E792C5125BB7DB100515D76 /* RecipeAndCalorieManagerModel.xcdatamodeld in Sources */,
 				526B350625B6430700BAE8D9 /* WelcomeViewController.swift in Sources */,
 				2E792C0325BA4A4A00515D76 /* showProfileViewController.swift in Sources */,
 				52FF46BD25B6799600B3888F /* NutritionAPI.swift in Sources */,
@@ -203,8 +216,10 @@
 				52FF46E025B940D600B3888F /* AnimateLabelTotals.swift in Sources */,
 				52FF46D525B79F2D00B3888F /* AddIngredientsViewController.swift in Sources */,
 				52FF46D825B7B3B900B3888F /* IngredientTableViewCell.swift in Sources */,
+				2E792C5625BB848400515D76 /* Person+CoreDataProperties.swift in Sources */,
 				52FF46E925BA446400B3888F /* Recipes.swift in Sources */,
 				FAC0910B25B8D7A300A7F5E2 /* MenuTotalCalorieDetailListViewController.swift in Sources */,
+				2E792C5525BB848400515D76 /* Person+CoreDataClass.swift in Sources */,
 				FA0EB5D925B75F360085BCE7 /* ProfileViewController.swift in Sources */,
 				526B350425B6430700BAE8D9 /* SceneDelegate.swift in Sources */,
 				526B352225B6609100BAE8D9 /* API.swift in Sources */,
@@ -355,7 +370,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = AYHFX5HL8Z;
+				DEVELOPMENT_TEAM = JN53LP5Q35;
 				INFOPLIST_FILE = "Recipe and Calorie Manager/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -374,7 +389,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = AYHFX5HL8Z;
+				DEVELOPMENT_TEAM = JN53LP5Q35;
 				INFOPLIST_FILE = "Recipe and Calorie Manager/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -409,6 +424,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		2E792C4F25BB7DB100515D76 /* RecipeAndCalorieManagerModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				2E792C5025BB7DB100515D76 /* RecipeAndCalorieManagerModel.xcdatamodel */,
+			);
+			currentVersion = 2E792C5025BB7DB100515D76 /* RecipeAndCalorieManagerModel.xcdatamodel */;
+			path = RecipeAndCalorieManagerModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 526B34F625B6430700BAE8D9 /* Project object */;
 }
