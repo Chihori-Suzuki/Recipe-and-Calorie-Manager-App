@@ -4,8 +4,11 @@
 //
 //  Created by Macbook Pro on 2021-01-18.
 //
+//  Committed by Chiori on 2021-01-22
+
 
 import UIKit
+import CoreData  // Added by Chiori on 2021-01-22
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -30,7 +33,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
+    // MARK: - Core Data stack  // Added by Chiori on 2021-01-22
+
+    lazy var persistentContainer: NSPersistentCloudKitContainer = {
+        let container = NSPersistentCloudKitContainer(name: "LeaningCoreData")
+        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+            if let error = error as NSError? {
+                fatalError("Unresolved error \(error), \(error.userInfo)")
+            }
+        })
+        return container
+    }()
+
+    // MARK: - Core Data Saving support  // Added by Chiori on 2021-01-22
 
 
+}
+
+extension NSPersistentCloudKitContainer {
+    
+    func saveContext() {
+        saveContext(context: viewContext)
+    }
+
+    func saveContext(context: NSManagedObjectContext) {
+        
+        guard context.hasChanges else {
+            return
+        }
+        do {
+            try context.save()
+        }
+        catch let error as NSError {
+            print("Error: \(error), \(error.userInfo)")
+        }
+    }
 }
 
