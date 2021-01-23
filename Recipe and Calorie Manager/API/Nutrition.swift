@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Ingredient: Codable {
+struct Dataset: Codable {
     var items: [Nutrition]
 }
 

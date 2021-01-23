@@ -14,7 +14,7 @@ class NutritionAPI {
   
   private init() { }
    
-    func fetchNutritionInfo(query: String, completion: @escaping (Result<Ingredient, Error>) -> Void) {
+    func fetchNutritionInfo(query: String, completion: @escaping (Result<Dataset, Error>) -> Void) {
         
         guard let query = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { return }
         
@@ -26,7 +26,7 @@ class NutritionAPI {
             if let data = data {
                 do {
                     let decoder = JSONDecoder()
-                    let ingredient = try decoder.decode(Ingredient.self, from: data)
+                    let ingredient = try decoder.decode(Dataset.self, from: data)
                     completion(.success(ingredient))
                 } catch {
                     completion(.failure(error))

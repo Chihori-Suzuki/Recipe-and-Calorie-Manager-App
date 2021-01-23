@@ -85,7 +85,7 @@ class NutritionFactsTableViewCell: UITableViewCell {
         vStackView.alignment = .fill
         vStackView.distribution = .fill
         vStackView.spacing = 3
-        //this autolayout boolean is only needed to display the elements
+        //this autolayout boolean is only needed to display all elements
         vStackView.translatesAutoresizingMaskIntoConstraints = false
         
         for label in labels {
@@ -107,7 +107,8 @@ class NutritionFactsTableViewCell: UITableViewCell {
     func makeLabels(with name: String, isBold: Bool, total: UILabel, dv: UILabel) -> UIStackView {
         
         let nameLabel = UILabel()
-        isBold ? (nameLabel.text = name) : (nameLabel.text = "  \(name)")
+        nameLabel.text = name
+        !isBold ? nameLabel.setMargins() : nil
         isBold ? (nameLabel.font = UIFont.boldSystemFont(ofSize: 19)) : (nameLabel.font = UIFont.systemFont(ofSize: 18))
         
         let hStackView = UIStackView(arrangedSubviews: [nameLabel, total, UIView(), dv])
@@ -123,7 +124,6 @@ class NutritionFactsTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupLayout()
-
     }
     
     required init?(coder: NSCoder) {

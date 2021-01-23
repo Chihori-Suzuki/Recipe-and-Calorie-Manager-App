@@ -242,7 +242,7 @@ class AddIngredientsViewController: UIViewController {
         fiberTotal = ingredients.map { $0.nutrition!.fiber }.reduce(0){ $0 + $1}
     }
     
-    fileprivate func updateTableView(with serving: String, and ingredient: (Ingredient)) {
+    fileprivate func updateTableView(with serving: String, and ingredient: Dataset) {
         DispatchQueue.main.async { [self] in
             if ingredient.items.count > 0 {
             
@@ -251,7 +251,7 @@ class AddIngredientsViewController: UIViewController {
                     totalsStackViews.isHidden ? totalsStackViews.isHidden.toggle() : nil
                     tableview.isHidden ? tableview.isHidden.toggle() : nil
                     tableview.insertRows(at: [IndexPath.init(row: 0, section: 0)], with: .top)
-                    tableview.scrollToRow(at: IndexPath(row: 0, section: 0), at: .bottom, animated: true)
+                    tableview.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
                 
                 }
                 calculateTotals()
@@ -405,8 +405,9 @@ extension AddIngredientsViewController: UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
-        print(ingredients[indexPath.row])
-        present(WelcomeViewController(), animated: true, completion: nil)
+        let selectedIngredient = Ingredient(serving: ingredients[indexPath.row].serving, nutrition: ingredients[indexPath.row].nutrition!)
+        print(selectedIngredient)
+//        present(WelcomeViewController(), animated: true, completion: nil)
     }
     //function needed to enable swipe delete
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {

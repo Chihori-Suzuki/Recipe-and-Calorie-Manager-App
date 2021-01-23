@@ -9,28 +9,12 @@ import UIKit
 
 class AddRecipeViewController: UIViewController {
     
-    //sample data, to be removed later
-    var ingredientNutrition = Nutrition(sugar: 1, fiber: 1, serving: 1, sodium: 1, name: "onion", potassium: 1, fat: 1, totalFat: 1, calories: 1, cholesterol: 1, protein: 1, carbohydrates: 1)
-    lazy var recipe1 = Recipe(title: "Breakfast Meal 1", ingredients: [(serving: "ingredient 1", nutrition: ingredientNutrition),
-                                                                                         (serving: "ingredient 2", nutrition: ingredientNutrition)])
-    lazy var recipe5 = Recipe(title: "Breakfast Meal 2", ingredients: [(serving: "ingredient 10", nutrition: ingredientNutrition)])
-    lazy var recipe2 = Recipe(title: "Lunch Meal 1", ingredients: [(serving: "ingredient 2", nutrition: ingredientNutrition)])
-    lazy var recipe3 = Recipe(title: "Dinner Meal 1", ingredients: [(serving: "ingredient 3", nutrition: ingredientNutrition)])
-    lazy var recipe4 = Recipe(title: "Snack Meal 1", ingredients: [(serving: "ingredient 4", nutrition: ingredientNutrition)])
-
-    lazy var breakfastMeals = RecipeList(category: .breakfast, recipes: [recipe1, recipe5])
-    lazy var lunchMeals = RecipeList(category: .lunch, recipes: [recipe2])
-    lazy var dinnerMeals = RecipeList(category: .dinner, recipes: [recipe3])
-    lazy var snackMeals = RecipeList(category: .snack, recipes: [recipe4])
-    lazy var catalog = Catalog(catalog: [breakfastMeals, lunchMeals, dinnerMeals, snackMeals])
-    
     let recipeTextField: UITextField = {
        let tf = UITextField()
         tf.borderStyle = .roundedRect
         tf.placeholder = "Chicken Parmigiano"
         tf.font = .systemFont(ofSize: 25)
         tf.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        tf.translatesAutoresizingMaskIntoConstraints = false
         tf.becomeFirstResponder()
         tf.layer.borderWidth = 0.8
         tf.layer.borderColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
@@ -64,7 +48,6 @@ class AddRecipeViewController: UIViewController {
         let btn = UIButton()
         btn.setImage(UIImage(named: image), for: .normal)
         btn.imageView?.contentMode = .scaleAspectFit
-        btn.translatesAutoresizingMaskIntoConstraints = false
         btn.isEnabled = false
         btn.alpha = 0.5
         btn.addTarget(self, action: #selector(mealSelected(_:)), for: .touchUpInside)
@@ -74,7 +57,6 @@ class AddRecipeViewController: UIViewController {
     func makeMealLabel(with string: String) -> UILabel {
         let label = UILabel()
         label.text = string
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .center
         label.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
         label.font = UIFont.boldSystemFont(ofSize: 22)
@@ -84,7 +66,6 @@ class AddRecipeViewController: UIViewController {
     }
     
     fileprivate func arrangeHStackViews(with buttons: [UIButton], and labels: [UILabel]) -> UIStackView {
-       
         let hSVButtonLabels1 = UIStackView()
         let hSVButtonLabels2 = UIStackView()
         for (index, _) in buttons.enumerated(){
@@ -94,33 +75,28 @@ class AddRecipeViewController: UIViewController {
             sv.widthAnchor.constraint(equalToConstant: 110).isActive = true
             sv.alignment = .center
             sv.spacing = 2
-            sv.translatesAutoresizingMaskIntoConstraints = false
             index > 1 ? hSVButtonLabels2.addArrangedSubview(sv) : hSVButtonLabels1.addArrangedSubview(sv)
         }
         
         hSVButtonLabels1.axis = .horizontal
         hSVButtonLabels1.alignment = .center
         hSVButtonLabels1.distribution = .fill
-        hSVButtonLabels1.translatesAutoresizingMaskIntoConstraints = false
         hSVButtonLabels1.spacing = 30
         
         hSVButtonLabels2.axis = .horizontal
         hSVButtonLabels2.alignment = .center
         hSVButtonLabels2.distribution = .fill
-        hSVButtonLabels2.translatesAutoresizingMaskIntoConstraints = false
         hSVButtonLabels2.spacing = 30
         
         let sv = UIStackView(arrangedSubviews: [hSVButtonLabels1, hSVButtonLabels2])
         sv.axis = .vertical
         sv.distribution = .fill
-        sv.translatesAutoresizingMaskIntoConstraints = false
         sv.alignment = .center
         sv.spacing = 25
         return sv
     }
     
     @objc func mealSelected(_ sender: UIButton) {
-       
         UIView.animate(withDuration: 0.10) {
             sender.transform = CGAffineTransform(scaleX: 0.6, y: 0.6)
         } completion: { (_) in
@@ -135,7 +111,6 @@ class AddRecipeViewController: UIViewController {
                 selectedMeal = Meal(rawValue: meal)
             }
         }
-        
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             let newRecipeVC = AddIngredientsViewController()
             newRecipeVC.recipeTitle = self.recipeTextField.text
@@ -144,29 +119,7 @@ class AddRecipeViewController: UIViewController {
         }
     }
 
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        //test data
-        for type in catalog.catalog {
-            print("\(type.category.rawValue.uppercased())") //first tableVC (Catalog)
-            for recipe in type.recipes {
-                print("_________________")
-                print(recipe.title.uppercased()) //second tableVC (Recipe List)
-                print("_________________")
-                for ingredients in recipe.ingredients {
-                    print("\(ingredients.serving)") //third tableVC (Ingredient List)
-                    print("\(ingredients.nutrition) \n")
-                }
-            }
-            print("-----------------------------")
-        }
-        
-        title = "Add New Recipe"
-        navigationController?.navigationBar.prefersLargeTitles = true
-        view.backgroundColor = .white
-        
+    fileprivate func setupLayout() {
         breakfastButton = makeButtons(with: "breakfast")
         lunchButton = makeButtons(with: "lunch")
         snacksButton = makeButtons(with: "snack")
@@ -177,16 +130,20 @@ class AddRecipeViewController: UIViewController {
             let label = makeMealLabel(with: meal)
             mealLabels.append(label)
         }
-        
         let vMealStackView = arrangeHStackViews(with: [breakfastButton, lunchButton, dinnerButton, snacksButton], and: mealLabels)
-        
         vStackView.addArrangedSubview(recipeTextField)
         vStackView.addArrangedSubview(vMealStackView)
-        
         view.addSubview(vStackView)
-        
         vStackView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor).isActive = true
         vStackView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        title = "Add New Recipe"
+        navigationController?.navigationBar.prefersLargeTitles = true
+        view.backgroundColor = .white
+        setupLayout()
     }
     
     @objc func addNewRecipe() {
