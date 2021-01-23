@@ -18,6 +18,10 @@ struct Recipe {
     var title: String
     var ingredients: [(serving: String, nutrition: Nutrition?)]
 }
+struct Ingredient {
+    var serving: String
+    var nutrition: Nutrition
+}
 enum Meal: String {
     case breakfast = "breakfast"
     case lunch = "lunch"
