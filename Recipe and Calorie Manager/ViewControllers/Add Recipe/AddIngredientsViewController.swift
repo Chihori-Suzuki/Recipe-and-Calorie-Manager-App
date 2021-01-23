@@ -214,15 +214,22 @@ class AddIngredientsViewController: UIViewController {
         NutritionAPI.shared.fetchNutritionInfo(query: serving) { (result) in
             switch result {
             case .success(let ingredient):
-                self.updateTableViewAndTotals(with: serving, and: ingredient)
+                self.updateTableView(with: serving, and: ingredient)
             case .failure(let error):
                 print(error)
             }
         }
     }
     
-    fileprivate func updateTableViewAndTotals(with serving: String, and ingredient: (Ingredient)) {
-        
+    fileprivate func calculateTotals() {
+        caloriesTotal = ingredients.map { $0.nutrition!.calories }.reduce(0){ $0 + $1 }
+        carbsTotal = ingredients.map { $0.nutrition!.carbohydrates }.reduce(0){ $0 + $1}
+        proteinTotal = ingredients.map { $0.nutrition!.protein }.reduce(0){ $0 + $1 }
+        fatTotal = ingredients.map { $0.nutrition!.totalFat }.reduce(0){ $0 + $1 }
+        fiberTotal = ingredients.map { $0.nutrition!.fiber }.reduce(0){ $0 + $1}
+    }
+    
+    fileprivate func updateTableView(with serving: String, and ingredient: (Ingredient)) {
         DispatchQueue.main.async { [self] in
             if ingredient.items.count > 0 {
             
@@ -233,12 +240,7 @@ class AddIngredientsViewController: UIViewController {
                     tableview.insertRows(at: [IndexPath.init(row: 0, section: 0)], with: .top)
                     tableview.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
                 }
-                caloriesTotal = ingredients.map { $0.nutrition!.calories }.reduce(0){ $0 + $1 }
-                carbsTotal = ingredients.map { $0.nutrition!.carbohydrates }.reduce(0){ $0 + $1}
-                proteinTotal = ingredients.map { $0.nutrition!.protein }.reduce(0){ $0 + $1 }
-                fatTotal = ingredients.map { $0.nutrition!.totalFat }.reduce(0){ $0 + $1 }
-                fiberTotal = ingredients.map { $0.nutrition!.fiber }.reduce(0){ $0 + $1}
-                
+                calculateTotals()
                 //need to reload the section of saveRecipe button to pass the updated contents of ingredients
                 UIView.animate(withDuration: 2) {
                     tableview.reloadSections([2], with: .automatic)
@@ -277,8 +279,6 @@ class AddIngredientsViewController: UIViewController {
         tableview.register(SaveRecipeTableViewCell.self, forCellReuseIdentifier: SaveRecipeTableViewCell.identifier)
         tableview.delegate = self
         tableview.dataSource = self
-//        tableview.contentInsetAdjustmentBehavior = .never
-        tableview.rowHeight = UITableView.automaticDimension
         tableview.translatesAutoresizingMaskIntoConstraints = false
         tableview.topAnchor.constraint(equalTo: vStackView.bottomAnchor, constant: 12).isActive = true
         tableview.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
@@ -308,11 +308,14 @@ extension AddIngredientsViewController: UITableViewDelegate, UITableViewDataSour
             cell.update(with: ingredient)
             cell.layer.borderColor = UIColor.gray.cgColor
             cell.layer.borderWidth = 0.5
+            cell.accessoryType = .disclosureIndicator
+            cell.selectionStyle = .none
             return cell
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: NutritionFactsTableViewCell.identifier, for: indexPath) as! NutritionFactsTableViewCell
             cell.ingredientLabel.text = "Sample"
             cell.isUserInteractionEnabled = false
+   
             return cell
         case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: SaveRecipeTableViewCell.identifier, for: indexPath) as! SaveRecipeTableViewCell
@@ -350,4 +353,21 @@ extension AddIngredientsViewController: UITableViewDelegate, UITableViewDataSour
         return sectionTitles.count
     }
     
+    func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
+        print(ingredients[indexPath.row])
+        navigationController?.pushViewController(WelcomeViewController(), animated: true)
+    }
+    //function needed to enable swipe delete
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        ingredients.remove(at: indexPath.row)
+        tableview.deleteRows(at: [indexPath], with: .automatic)
+        calculateTotals()
+        //need to reload the section of saveRecipe button to pass the updated contents of ingredients
+        tableview.reloadSections([2], with: .none)
+    }
+    //function needed to enable swipe delete
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+
 }

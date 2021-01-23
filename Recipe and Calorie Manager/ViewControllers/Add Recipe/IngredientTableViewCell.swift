@@ -43,7 +43,7 @@ class IngredientTableViewCell: UITableViewCell {
         let sv = UIStackView()
         sv.translatesAutoresizingMaskIntoConstraints = false
         sv.axis = .vertical
-        sv.distribution = .equalCentering
+        sv.distribution = .fill
         sv.alignment = .fill
         sv.spacing = 0
         sv.widthAnchor.constraint(equalToConstant: 150).isActive = true
