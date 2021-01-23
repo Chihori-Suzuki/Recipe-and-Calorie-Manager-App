@@ -9,6 +9,8 @@ import UIKit
 
 class IngredientTableViewCell: UITableViewCell {
 
+    static let identifier = "ingredientCell"
+    
     let ingredientLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 18)
@@ -41,7 +43,7 @@ class IngredientTableViewCell: UITableViewCell {
         let sv = UIStackView()
         sv.translatesAutoresizingMaskIntoConstraints = false
         sv.axis = .vertical
-        sv.distribution = .equalCentering
+        sv.distribution = .fill
         sv.alignment = .fill
         sv.spacing = 0
         sv.widthAnchor.constraint(equalToConstant: 150).isActive = true
