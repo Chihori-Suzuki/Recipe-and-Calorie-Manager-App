@@ -9,8 +9,8 @@ import UIKit
 
 class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
+    let addIngredients = AddIngredientsViewController()
     var selectedCategory: Int?
-    
     
     // sample data
     var ingredientNutrition = Nutrition(sugar: 1, fiber: 1, serving: 1, sodium: 1, name: "onion", potassium: 1, fat: 1, totalFat: 1, calories: 1, cholesterol: 1, protein: 1, carbohydrates: 1)
@@ -26,17 +26,14 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
     lazy var dinnerMeals = RecipeList(category: .dinner, recipes: [recipe3])
     lazy var snackMeals = RecipeList(category: .snack, recipes: [recipe4])
     lazy var catalog = Catalog(catalog: [breakfastMeals, lunchMeals, dinnerMeals, snackMeals])
-    
-    
-    
-    let addIngredients = AddIngredientsViewController()
+
     var mealTitle: String?
+
+    lazy var totalCalorie: Double? = addIngredients.caloriesTotal
+    
+
+
     let cellId = "MenuTotalCalorie"
-    
-//    var categories: [String] = []
-//    var breakfasts = [(serving: String, nutrition: Nutrition?)]()
-    var lists: [(serving: String, Nutrition: Nutrition?)]? = []
-    
     
     
     lazy var myTable: UITableView = {
@@ -78,7 +75,9 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
             
         guard let selectCategory = selectedCategory else { return UITableViewCell()}
         let cellTitle = catalog.catalog[selectCategory].recipes[indexPath.row].title
-        cell.textLabel?.text = cellTitle
+        let cellTotalCalories = catalog.catalog[selectCategory].recipes[indexPath.row].ingredients[indexPath.row].nutrition!.calories
+        
+        cell.textLabel?.text = "\(cellTitle) : \(cellTotalCalories ?? 0)"
         
         cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 30)
         cell.layer.cornerRadius = 10
