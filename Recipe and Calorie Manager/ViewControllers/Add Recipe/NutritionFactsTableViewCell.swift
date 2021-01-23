@@ -8,7 +8,9 @@
 import UIKit
 
 class NutritionFactsTableViewCell: UITableViewCell {
-
+    
+    static let identifier = "nutritionCell"
+    
     let ingredientLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 18)
@@ -20,6 +22,7 @@ class NutritionFactsTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(ingredientLabel)
+        ingredientLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
     }
     
     required init?(coder: NSCoder) {

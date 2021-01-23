@@ -9,6 +9,8 @@ import UIKit
 
 class IngredientTableViewCell: UITableViewCell {
 
+    static let identifier = "ingredientCell"
+    
     let ingredientLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 18)

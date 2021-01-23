@@ -9,9 +9,7 @@ import UIKit
 
 class AddIngredientsViewController: UIViewController {
 
-    let sectionTitles = ["Ingredients", "Nutrition Facts"]
-    let ingredientsCell = "ingredientCell"
-    let nutritionCell = "nutritionCell"
+    let sectionTitles = ["Ingredients", "Nutrition Facts", ""]
     var tableview = UITableView()
     var totalsStackViews = UIStackView()
     var caloriesTotalCountLabel = AnimatedLabelTotals()
@@ -241,7 +239,10 @@ class AddIngredientsViewController: UIViewController {
                 fatTotal = ingredients.map { $0.nutrition!.totalFat }.reduce(0){ $0 + $1 }
                 fiberTotal = ingredients.map { $0.nutrition!.fiber }.reduce(0){ $0 + $1}
                 
-                //update the recipe list
+                //need to reload the section of saveRecipe button to pass the updated contents of ingredients
+                UIView.animate(withDuration: 2) {
+                    tableview.reloadSections([2], with: .automatic)
+                }
                 
             } else {
                 //addButton vibrates to indicate invalid ingredient
@@ -271,11 +272,13 @@ class AddIngredientsViewController: UIViewController {
         tableview.backgroundColor = .white
         view.addSubview(tableview)
         
-        tableview.register(IngredientTableViewCell.self, forCellReuseIdentifier: ingredientsCell)
-        tableview.register(NutritionFactsTableViewCell.self, forCellReuseIdentifier: nutritionCell)
+        tableview.register(IngredientTableViewCell.self, forCellReuseIdentifier: IngredientTableViewCell.identifier)
+        tableview.register(NutritionFactsTableViewCell.self, forCellReuseIdentifier: NutritionFactsTableViewCell.identifier)
+        tableview.register(SaveRecipeTableViewCell.self, forCellReuseIdentifier: SaveRecipeTableViewCell.identifier)
         tableview.delegate = self
         tableview.dataSource = self
-        tableview.contentInsetAdjustmentBehavior = .never
+//        tableview.contentInsetAdjustmentBehavior = .never
+        tableview.rowHeight = UITableView.automaticDimension
         tableview.translatesAutoresizingMaskIntoConstraints = false
         tableview.topAnchor.constraint(equalTo: vStackView.bottomAnchor, constant: 12).isActive = true
         tableview.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
@@ -290,7 +293,7 @@ extension AddIngredientsViewController: UITableViewDelegate, UITableViewDataSour
         switch  section {
         case 0:
             return ingredients.count
-        case 1:
+        case 1...2:
             return 1
         default:
             fatalError()
@@ -301,14 +304,22 @@ extension AddIngredientsViewController: UITableViewDelegate, UITableViewDataSour
         switch indexPath.section {
         case 0:
             let ingredient = ingredients[indexPath.row]
-            let cell = tableView.dequeueReusableCell(withIdentifier: ingredientsCell, for: indexPath) as! IngredientTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: IngredientTableViewCell.identifier, for: indexPath) as! IngredientTableViewCell
             cell.update(with: ingredient)
             cell.layer.borderColor = UIColor.gray.cgColor
             cell.layer.borderWidth = 0.5
             return cell
         case 1:
-            let cell = tableView.dequeueReusableCell(withIdentifier: nutritionCell, for: indexPath) as! NutritionFactsTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: NutritionFactsTableViewCell.identifier, for: indexPath) as! NutritionFactsTableViewCell
             cell.ingredientLabel.text = "Sample"
+            cell.isUserInteractionEnabled = false
+            return cell
+        case 2:
+            let cell = tableView.dequeueReusableCell(withIdentifier: SaveRecipeTableViewCell.identifier, for: indexPath) as! SaveRecipeTableViewCell
+            cell.mealType = meal
+            cell.newRecipe = Recipe(title: recipeTitle!, ingredients: ingredients)
+            ingredients.count > 1 ? (cell.saveButton.isHidden ? cell.saveButton.isHidden.toggle() : nil) : nil
+            cell.selectionStyle = .none
             return cell
         default:
             fatalError()
@@ -338,4 +349,5 @@ extension AddIngredientsViewController: UITableViewDelegate, UITableViewDataSour
     func numberOfSections(in tableView: UITableView) -> Int {
         return sectionTitles.count
     }
+    
 }
