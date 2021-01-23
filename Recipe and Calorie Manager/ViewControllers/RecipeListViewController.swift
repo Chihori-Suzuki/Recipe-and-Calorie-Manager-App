@@ -12,12 +12,12 @@ class RecipeListViewController: UIViewController, UITableViewDelegate,UITableVie
     
     // sample data
     var ingredientNutrition = Nutrition(sugar: 1, fiber: 1, serving: 1, sodium: 1, name: "onion", potassium: 1, fat: 1, totalFat: 1, calories: 1, cholesterol: 1, protein: 1, carbohydrates: 1)
-    lazy var recipe1 = Recipe(title: "Breakfast Meal 1", meal: .breakfast, ingredients: [(serving: "ingredient 1", nutrition: ingredientNutrition),
+    lazy var recipe1 = Recipe(title: "Breakfast Meal 1", ingredients: [(serving: "ingredient 1", nutrition: ingredientNutrition),
                                                                                          (serving: "ingredient 2", nutrition: ingredientNutrition)])
-    lazy var recipe5 = Recipe(title: "Breakfast Meal 2", meal: .breakfast, ingredients: [(serving: "ingredient 10", nutrition: ingredientNutrition)])
-    lazy var recipe2 = Recipe(title: "Lunch Meal 1", meal: .lunch, ingredients: [(serving: "ingredient 2", nutrition: ingredientNutrition)])
-    lazy var recipe3 = Recipe(title: "Dinner Meal 1", meal: .dinner, ingredients: [(serving: "ingredient 3", nutrition: ingredientNutrition)])
-    lazy var recipe4 = Recipe(title: "Snack Meal 1", meal: .snack, ingredients: [(serving: "ingredient 4", nutrition: ingredientNutrition)])
+    lazy var recipe5 = Recipe(title: "Breakfast Meal 2", ingredients: [(serving: "ingredient 10", nutrition: ingredientNutrition)])
+    lazy var recipe2 = Recipe(title: "Lunch Meal 1", ingredients: [(serving: "ingredient 2", nutrition: ingredientNutrition)])
+    lazy var recipe3 = Recipe(title: "Dinner Meal 1", ingredients: [(serving: "ingredient 3", nutrition: ingredientNutrition)])
+    lazy var recipe4 = Recipe(title: "Snack Meal 1", ingredients: [(serving: "ingredient 4", nutrition: ingredientNutrition)])
 
     lazy var breakfastMeals = RecipeList(category: .breakfast, recipes: [recipe1, recipe5])
     lazy var lunchMeals = RecipeList(category: .lunch, recipes: [recipe2])
