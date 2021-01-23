@@ -15,7 +15,6 @@ class IngredientTableViewCell: UITableViewCell {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 18)
         label.numberOfLines = 0
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -25,7 +24,6 @@ class IngredientTableViewCell: UITableViewCell {
         label.numberOfLines = 0
         label.backgroundColor = #colorLiteral(red: 0.9250274271, green: 1, blue: 0.8999154439, alpha: 1)
         label.heightAnchor.constraint(equalToConstant: 25).isActive = true
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -35,13 +33,11 @@ class IngredientTableViewCell: UITableViewCell {
         label.numberOfLines = 0
         label.backgroundColor = #colorLiteral(red: 0.9250274271, green: 1, blue: 0.8999154439, alpha: 1)
         label.heightAnchor.constraint(equalToConstant: 25).isActive = true
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     let vStackView: UIStackView = {
         let sv = UIStackView()
-        sv.translatesAutoresizingMaskIntoConstraints = false
         sv.axis = .vertical
         sv.distribution = .fill
         sv.alignment = .fill

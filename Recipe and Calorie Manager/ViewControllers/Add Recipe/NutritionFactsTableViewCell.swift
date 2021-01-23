@@ -20,25 +20,31 @@ class NutritionFactsTableViewCell: UITableViewCell {
     var totalPotassium = UILabel()
     var totalProtein = UILabel()
     var totalCalories = UILabel()
-    lazy var labels: [(name: String, isBold: Bool, total: UILabel)] = [("Total Fat", true, totalFat), ("Saturated Fat", false, totalSatFat),
-                                                          ("Cholesterol", true, totalCholesterol), ("Sodium", true, totalSodium),
-                                                          ("Total Carbohydrates", true, totalCarbs), ("Total Sugars", false, totalSugar),
-                                                          ("Fiber", false, totalFiber), ("Protein", true, totalProtein),
-                                                          ("Potassium", false, totalPotassium)]
+    lazy var labels: [(name: String, isBold: Bool, total: UILabel)] =
+         [("Total Fat", true, totalFat),
+          ("Saturated Fat", false, totalSatFat),
+          ("Cholesterol", true, totalCholesterol),
+          ("Sodium", true, totalSodium),
+          ("Total Carbohydrates", true, totalCarbs),
+          ("Total Sugars", false, totalSugar),
+          ("Fiber", false, totalFiber),
+          ("Protein", true, totalProtein),
+          ("Potassium", false, totalPotassium)]
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-
-        
-
-        
+    fileprivate func setupLayout() {
         let amountPerServingLabel = UILabel()
         amountPerServingLabel.text = "Amount Per Serving"
         amountPerServingLabel.heightAnchor.constraint(equalToConstant: 32).isActive = true
         amountPerServingLabel.textAlignment = .left
         amountPerServingLabel.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
         amountPerServingLabel.backgroundColor = #colorLiteral(red: 1, green: 0.9697935916, blue: 0.7963718291, alpha: 1)
+            
+        let disclaimerLabel = UILabel()
+        disclaimerLabel.text = " * The % Daily Value (DV) tells you how much a nutrient in a serving of food contributes to a daily diet. 2,000 calories a day is used for general nutrition advice."
+        disclaimerLabel.textAlignment = .justified
+        disclaimerLabel.numberOfLines = 0
+        disclaimerLabel.font = UIFont.systemFont(ofSize: 13, weight: .light)
+        disclaimerLabel.backgroundColor = #colorLiteral(red: 1, green: 0.9697935916, blue: 0.7963718291, alpha: 1)
         
         let caloriesLabel = UILabel()
         caloriesLabel.text = "Calories"
@@ -63,7 +69,7 @@ class NutritionFactsTableViewCell: UITableViewCell {
         hSV2.alignment = .bottom
         hSV2.distribution = .fill
         hSV2.backgroundColor = #colorLiteral(red: 1, green: 0.9697935916, blue: 0.7963718291, alpha: 1)
-
+        
         let vStackView = UIStackView(arrangedSubviews: [amountPerServingLabel, hSV1, hSV2])
         vStackView.axis = .vertical
         vStackView.alignment = .fill
@@ -76,17 +82,18 @@ class NutritionFactsTableViewCell: UITableViewCell {
             let hStackView = makeLabels(with: label.name, isBold: label.isBold, total: label.total)
             vStackView.addArrangedSubview(hStackView)
         }
-        
+        vStackView.addArrangedSubview(UIView())
+        vStackView.addArrangedSubview(UIView())
+        vStackView.addArrangedSubview(disclaimerLabel)
         contentView.addSubview(vStackView)
+        contentView.heightAnchor.constraint(equalTo: vStackView.heightAnchor, multiplier: 1).isActive = true
         
         vStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0).isActive = true
         vStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 0).isActive = true
         vStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 0).isActive = true
         vStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 0).isActive = true
-        
-        contentView.heightAnchor.constraint(equalTo: vStackView.heightAnchor, multiplier: 1).isActive = true
-        
     }
+    
     func makeLabels(with name: String, isBold: Bool, total: UILabel) -> UIStackView {
         
         let nameLabel = UILabel()
@@ -107,8 +114,12 @@ class NutritionFactsTableViewCell: UITableViewCell {
         return hStackView
     }
     
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupLayout()
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
 }
