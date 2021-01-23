@@ -420,7 +420,10 @@ extension AddIngredientsViewController: UITableViewDelegate, UITableViewDataSour
     }
     //function needed to enable swipe delete
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return true
+        switch indexPath.section {
+        case 0: return true
+        default: return false
+        }
     }
 
 }
