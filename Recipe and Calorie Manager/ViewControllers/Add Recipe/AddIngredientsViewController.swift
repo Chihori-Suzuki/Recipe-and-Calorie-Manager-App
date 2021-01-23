@@ -12,7 +12,7 @@ class AddIngredientsViewController: UIViewController {
     let sectionTitles = ["Ingredients", "Nutrition Facts", ""]
     var tableview = UITableView()
     var totalsStackViews = UIStackView()
-    var caloriesTotalCountLabel = AnimatedLabelTotals()
+    var caloriesTotalCountLabel = AnimatedLabelTotalsCal()
     var carbsTotalCountLabel = AnimatedLabelTotals()
     var proteinTotalCountLabel = AnimatedLabelTotals()
     var fatTotalCountLabel = AnimatedLabelTotals()
@@ -124,7 +124,18 @@ class AddIngredientsViewController: UIViewController {
         return label
     }
     
-    func makeTotalsStackView(with labels: [(UILabel, UILabel)]) -> UIStackView {
+    func makeLabelTotalsCal() -> AnimatedLabelTotalsCal {
+        let label = AnimatedLabelTotalsCal()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.widthAnchor.constraint(equalToConstant: 70).isActive = true
+        label.textAlignment = .center
+        label.adjustsFontSizeToFitWidth = true
+        label.decimalPoints = .two
+        label.font = UIFont.systemFont(ofSize: 16)
+        return label
+    }
+    
+    func makeTotalsStackView(with labels: [(UIView, UIView)]) -> UIStackView {
         let hStackView = UIStackView()
         for view in labels {
             let (header, total) = view
@@ -154,18 +165,17 @@ class AddIngredientsViewController: UIViewController {
         let fatTotalLabel = makeLabelTotals(with: "Fat")
         let fiberTotalLabel = makeLabelTotals(with: "Fiber")
         //total labels are declared as variable so that their text property can be updated and animated
-        caloriesTotalCountLabel = makeLabelTotals()
+        caloriesTotalCountLabel = makeLabelTotalsCal()
         carbsTotalCountLabel = makeLabelTotals()
         proteinTotalCountLabel = makeLabelTotals()
         fatTotalCountLabel = makeLabelTotals()
         fiberTotalCountLabel = makeLabelTotals()
         //title and total labels are added in a tuple so that they can be properly arranged in a stackview
-        let totalLabels = [(caloriesTotalLabel, caloriesTotalCountLabel),
+        let totalLabels: [(UIView, UIView)] = [(caloriesTotalLabel, caloriesTotalCountLabel),
                            (carbsTotalLabel, carbsTotalCountLabel),
                            (proteinTotalLabel, proteinTotalCountLabel),
                            (fatTotalLabel, fatTotalCountLabel),
-                           (fiberTotalLabel, fiberTotalCountLabel)
-        ]
+                           (fiberTotalLabel, fiberTotalCountLabel)]
         
         totalsStackViews = makeTotalsStackView(with: totalLabels)
         
@@ -328,6 +338,7 @@ extension AddIngredientsViewController: UITableViewDelegate, UITableViewDataSour
             cell.totalCarbs.text = String(format: "%.2f g", ingredients.map { $0.nutrition!.carbohydrates }.reduce(0){ $0 + $1 })
             cell.totalSatFat.text = String(format: "%.2f g", ingredients.map { $0.nutrition!.fat }.reduce(0){ $0 + $1 })
             cell.totalSodium.text = String(format: "%.2f mg", ingredients.map { $0.nutrition!.sodium }.reduce(0){ $0 + $1 })
+            cell.totalCalories.text = String(format: "%.2f", ingredients.map { $0.nutrition!.calories }.reduce(0){ $0 + $1 })
             cell.isUserInteractionEnabled = false
 
             return cell
@@ -380,7 +391,7 @@ extension AddIngredientsViewController: UITableViewDelegate, UITableViewDataSour
             self.tableview.deleteRows(at: [indexPath], with: .left)
             self.calculateTotals()
             //need to reload the section of saveRecipe button to pass the updated contents of ingredients
-            self.tableview.reloadSections([2], with: .none)
+            self.tableview.reloadSections([1, 2], with: .none)
         }
     }
     //function needed to enable swipe delete
