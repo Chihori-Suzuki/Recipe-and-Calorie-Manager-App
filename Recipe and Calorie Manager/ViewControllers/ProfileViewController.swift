@@ -8,9 +8,14 @@
 
 
 import UIKit
+import CoreData
 
 class ProfileViewController: UIViewController, UITextFieldDelegate {
-   
+    
+    // persistantContainer
+    private static var persistentContainer: NSPersistentCloudKitContainer! = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
+
+    
     // profileimage
     let imageView: UIView = {
         let view = UIView()
@@ -88,6 +93,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     
     let birthPick: UIDatePicker = {
         let dp = UIDatePicker()
+        
         dp.translatesAutoresizingMaskIntoConstraints = false
         return dp
     }()
@@ -189,8 +195,8 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         button.widthAnchor.constraint(equalToConstant: 80).isActive = true
         button.heightAnchor.constraint(equalToConstant: 50).isActive = true
         button.layer.cornerRadius = 8
-        //         button.addTarget(self, action: #selector(addNewIngredient), for: .touchUpInside)
-        button.isEnabled = false
+        button.addTarget(self, action: #selector(addNewPerson), for: .touchUpInside)
+//        button.isEnabled = false
         button.alpha = 0.5
         return button
     }()
@@ -293,6 +299,29 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         guard let image = profileImage.image else { return }
         let activitiController = UIActivityViewController(activityItems: [image], applicationActivities: nil)
         present(activitiController, animated: true, completion: nil)
+    }
+    
+
+    static func newPersion() -> Person {
+        let context = persistentContainer.viewContext
+        let person = NSEntityDescription.insertNewObject(forEntityName: "Person", into: context) as! Person
+        return person
+    }
+    @objc func addNewPerson() {
+        let person = ProfileViewController.newPersion()
+        person.name = nameTxt.text
+//        person.birthday = DateFormatter.date()
+        person.gender = genderSeg.titleForSegment(at: genderSeg.selectedSegmentIndex)
+        guard let weight = Double(weightTxt.text!), let height = Double(heightTxt.text!) else { return }
+        person.weight = weight
+        person.height = height
+        person.activityType = activeText.text
+        
+        
+    }
+    
+    static func save() {
+        ProfileViewController.persistentContainer.saveContext()
     }
     
 }
