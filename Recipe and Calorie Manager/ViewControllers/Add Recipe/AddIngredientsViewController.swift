@@ -329,17 +329,41 @@ extension AddIngredientsViewController: UITableViewDelegate, UITableViewDataSour
             return cell
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: NutritionFactsTableViewCell.identifier, for: indexPath) as! NutritionFactsTableViewCell
-            cell.totalFat.text = String(format: "%.2f g", ingredients.map { $0.nutrition!.totalFat }.reduce(0){ $0 + $1 })
-            cell.totalCholesterol.text = String(format: "%.2f mg", ingredients.map { $0.nutrition!.cholesterol }.reduce(0){ $0 + $1 })
-            cell.totalFiber.text = String(format: "%.2f g", ingredients.map { $0.nutrition!.fiber }.reduce(0){ $0 + $1 })
-            cell.totalProtein.text = String(format: "%.2f g", ingredients.map { $0.nutrition!.protein }.reduce(0){ $0 + $1 })
-            cell.totalSugar.text = String(format: "%.2f g", ingredients.map { $0.nutrition!.sugar }.reduce(0){ $0 + $1 })
-            cell.totalPotassium.text = String(format: "%.2f mg", ingredients.map { $0.nutrition!.potassium }.reduce(0){ $0 + $1 })
-            cell.totalCarbs.text = String(format: "%.2f g", ingredients.map { $0.nutrition!.carbohydrates }.reduce(0){ $0 + $1 })
-            cell.totalSatFat.text = String(format: "%.2f g", ingredients.map { $0.nutrition!.fat }.reduce(0){ $0 + $1 })
-            cell.totalSodium.text = String(format: "%.2f mg", ingredients.map { $0.nutrition!.sodium }.reduce(0){ $0 + $1 })
-            cell.totalCalories.text = String(format: "%.2f", ingredients.map { $0.nutrition!.calories }.reduce(0){ $0 + $1 })
+            
+            let totalFat = ingredients.map { $0.nutrition!.totalFat }.reduce(0){ $0 + $1 }
+            cell.totalFatLabel.text = String(format: "%.2f g", totalFat)
+            cell.totalFatDV.text = (String(format: "%.2f", (totalFat/DailyValue.totalFat.rawValue)*100)+" %")
+            
+            let totalCholesterol = ingredients.map { $0.nutrition!.cholesterol }.reduce(0){ $0 + $1 }
+            cell.totalCholesterolLabel.text = String(format: "%.2f g", totalCholesterol)
+            cell.totalCholesterolDV.text = (String(format: "%.2f", (totalFat/DailyValue.cholesterol.rawValue)*100)+" %")
+            
+            let totalSodium = ingredients.map { $0.nutrition!.sodium }.reduce(0){ $0 + $1 }
+            cell.totalSodiumLabel.text = String(format: "%.2f g", totalSodium)
+            cell.totalSodiumDV.text = (String(format: "%.2f", (totalFat/DailyValue.sodium.rawValue)*100)+" %")
+            
+            let totalCarbs = ingredients.map { $0.nutrition!.carbohydrates }.reduce(0){ $0 + $1 }
+            cell.totalCarbsLabel.text = String(format: "%.2f g", totalCarbs)
+            cell.totalCarbsDV.text = (String(format: "%.2f", (totalFat/DailyValue.totalCarbs.rawValue)*100)+" %")
+            
+            let totalProtein = ingredients.map { $0.nutrition!.protein }.reduce(0){ $0 + $1 }
+            cell.totalProteinLabel.text = String(format: "%.2f g", totalProtein)
+            cell.totalProteinDV.text = (String(format: "%.2f", (totalFat/DailyValue.protein.rawValue)*100)+" %")
+
+            let totalPotassium = ingredients.map { $0.nutrition!.potassium }.reduce(0){ $0 + $1 }
+            cell.totalPotassiumLabel.text = String(format: "%.2f g", totalPotassium)
+            cell.totalPotassiumDV.text = (String(format: "%.2f", (totalFat/DailyValue.potassium.rawValue)*100)+" %")
+            
+            let totalSatFat = ingredients.map { $0.nutrition!.fat }.reduce(0){ $0 + $1 }
+            cell.totalSatFatLabel.text = String(format: "%.2f g", totalSatFat)
+            cell.totalSatFatDV.text = (String(format: "%.2f", (totalFat/DailyValue.satFat.rawValue)*100)+" %")
+            
+            cell.totalCaloriesLabel.text = String(format: "%.2f", ingredients.map { $0.nutrition!.calories }.reduce(0){ $0 + $1 })
             cell.isUserInteractionEnabled = false
+            
+            cell.totalFiberLabel.text = String(format: "%.2f g", ingredients.map { $0.nutrition!.fiber }.reduce(0){ $0 + $1 })
+            cell.totalSugarLabel.text = String(format: "%.2f g", ingredients.map { $0.nutrition!.sugar }.reduce(0){ $0 + $1 })
+
 
             return cell
         case 2:

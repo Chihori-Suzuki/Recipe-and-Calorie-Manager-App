@@ -41,4 +41,12 @@ struct Nutrition: Codable {
     }
 }
 
-
+enum DailyValue: Double {
+    case totalFat = 78.0
+    case satFat = 20.0
+    case cholesterol = 300.0
+    case sodium = 2300.0
+    case totalCarbs = 275.0
+    case protein = 50.0
+    case potassium = 4700.0
+}
