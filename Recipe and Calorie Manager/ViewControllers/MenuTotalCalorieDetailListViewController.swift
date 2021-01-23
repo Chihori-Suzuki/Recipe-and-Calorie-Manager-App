@@ -13,7 +13,7 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
     var selectedCategory: Int?
     
     // sample data
-    var ingredientNutrition = Nutrition(sugar: 1, fiber: 1, serving: 1, sodium: 1, name: "onion", potassium: 1, fat: 1, totalFat: 1, calories: 1, cholesterol: 1, protein: 1, carbohydrates: 1)
+    var ingredientNutrition = Nutrition(sugar: 1.0, fiber: 1, serving: 1, sodium: 1, name: "onion", potassium: 1, fat: 1, totalFat: 1, calories: 1.0, cholesterol: 1, protein: 1, carbohydrates: 1)
     lazy var recipe1 = Recipe(title: "Breakfast Meal 1", ingredients: [(serving: "ingredient 1", nutrition: ingredientNutrition),
                                                                                          (serving: "ingredient 2", nutrition: ingredientNutrition)])
     lazy var recipe5 = Recipe(title: "Breakfast Meal 2", ingredients: [(serving: "ingredient 10", nutrition: ingredientNutrition)])
@@ -75,7 +75,12 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
             
         guard let selectCategory = selectedCategory else { return UITableViewCell()}
         let cellTitle = catalog.catalog[selectCategory].recipes[indexPath.row].title
-        let cellTotalCalories = catalog.catalog[selectCategory].recipes[indexPath.row].ingredients[indexPath.row].nutrition!.calories
+        
+//        var ingredients = [(serving: String, nutrition: Nutrition?)]()
+//        caloriesTotal = ingredients.map { $0.nutrition!.calories }.reduce(0){ $0 + $1 }
+        
+        let cellTotalCalories = catalog.catalog[selectCategory].recipes[indexPath.row].ingredients.map { $0.nutrition!.calories }.reduce(0){ $0 + $1 }
+        print(cellTotalCalories)
         
         cell.textLabel?.text = "\(cellTitle) : \(cellTotalCalories ?? 0)"
         
