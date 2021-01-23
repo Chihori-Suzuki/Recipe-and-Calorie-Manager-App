@@ -9,6 +9,26 @@ import UIKit
 
 class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
+    var selectedCategory: Int?
+    
+    
+    // sample data
+    var ingredientNutrition = Nutrition(sugar: 1, fiber: 1, serving: 1, sodium: 1, name: "onion", potassium: 1, fat: 1, totalFat: 1, calories: 1, cholesterol: 1, protein: 1, carbohydrates: 1)
+    lazy var recipe1 = Recipe(title: "Breakfast Meal 1", meal: .breakfast, ingredients: [(serving: "ingredient 1", nutrition: ingredientNutrition),
+                                                                                         (serving: "ingredient 2", nutrition: ingredientNutrition)])
+    lazy var recipe5 = Recipe(title: "Breakfast Meal 2", meal: .breakfast, ingredients: [(serving: "ingredient 10", nutrition: ingredientNutrition)])
+    lazy var recipe2 = Recipe(title: "Lunch Meal 1", meal: .lunch, ingredients: [(serving: "ingredient 2", nutrition: ingredientNutrition)])
+    lazy var recipe3 = Recipe(title: "Dinner Meal 1", meal: .dinner, ingredients: [(serving: "ingredient 3", nutrition: ingredientNutrition)])
+    lazy var recipe4 = Recipe(title: "Snack Meal 1", meal: .snack, ingredients: [(serving: "ingredient 4", nutrition: ingredientNutrition)])
+
+    lazy var breakfastMeals = RecipeList(category: .breakfast, recipes: [recipe1, recipe5])
+    lazy var lunchMeals = RecipeList(category: .lunch, recipes: [recipe2])
+    lazy var dinnerMeals = RecipeList(category: .dinner, recipes: [recipe3])
+    lazy var snackMeals = RecipeList(category: .snack, recipes: [recipe4])
+    lazy var catalog = Catalog(catalog: [breakfastMeals, lunchMeals, dinnerMeals, snackMeals])
+    
+    
+    
     let addIngredients = AddIngredientsViewController()
     var mealTitle: String?
     let cellId = "MenuTotalCalorie"
@@ -34,7 +54,6 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
         title = mealTitle
         navigationController?.navigationBar.prefersLargeTitles = true
         setupTableView()
-        print(addIngredients.ingredients.count)
     }
     
     func setupTableView() {
@@ -50,14 +69,17 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        return addIngredients.ingredients.count
+        guard let selectCategory = selectedCategory else { return 0}
+        return catalog.catalog[selectCategory].recipes.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
-//        list
-        cell.textLabel?.text = "\(addIngredients.ingredients[indexPath.row])"
+        
+        guard let selectCategory = selectedCategory else { return UITableViewCell()}
+        let cellTitle = catalog.catalog[selectCategory].recipes[indexPath.row].title
+        cell.textLabel?.text = cellTitle
+        
         cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 30)
         cell.layer.cornerRadius = 10
         cell.layer.borderWidth = 1
