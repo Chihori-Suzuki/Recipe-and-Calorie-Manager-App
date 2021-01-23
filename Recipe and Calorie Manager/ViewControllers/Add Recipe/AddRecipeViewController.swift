@@ -32,6 +32,9 @@ class AddRecipeViewController: UIViewController {
         tf.heightAnchor.constraint(equalToConstant: 50).isActive = true
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.becomeFirstResponder()
+        tf.layer.borderWidth = 0.8
+        tf.layer.borderColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
+        tf.layer.cornerRadius = 8
         tf.addTarget(self, action: #selector(textEditingChanged(_:)), for: .editingChanged)
         return tf
     }()

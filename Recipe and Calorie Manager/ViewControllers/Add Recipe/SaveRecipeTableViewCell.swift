@@ -22,7 +22,7 @@ class SaveRecipeTableViewCell: UITableViewCell {
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 25)
         button.widthAnchor.constraint(equalToConstant: 80).isActive = true
         button.heightAnchor.constraint(equalToConstant: 60).isActive = true
-        button.backgroundColor = #colorLiteral(red: 0.5465891185, green: 0.7480565775, blue: 1, alpha: 1)
+        button.backgroundColor = #colorLiteral(red: 0.6553853061, green: 0.8888800762, blue: 0.3222138089, alpha: 1)
         button.layer.cornerRadius = 8
         button.addTarget(self, action: #selector(saveRecipe(_:)), for: .touchUpInside)
         button.isHidden = true
@@ -31,6 +31,7 @@ class SaveRecipeTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
         contentView.addSubview(saveButton)
         contentView.heightAnchor.constraint(equalTo: saveButton.heightAnchor, multiplier: 1).isActive = true
         saveButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
@@ -53,3 +54,4 @@ class SaveRecipeTableViewCell: UITableViewCell {
         print(recipe)
     }
 }
+
