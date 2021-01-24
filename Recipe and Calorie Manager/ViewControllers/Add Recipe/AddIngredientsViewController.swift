@@ -7,8 +7,17 @@
 
 import UIKit
 
-class AddIngredientsViewController: UIViewController {
-
+class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate {
+    
+    var selectedRowForEdit: IndexPath?
+    
+    func edit(_ ingredient: Ingredient) {
+        guard let indexPath = selectedRowForEdit else { return }
+        ingredients.remove(at: indexPath.row)
+        ingredients.insert((serving: ingredient.serving, nutrition: ingredient.nutrition), at: indexPath.row)
+        tableview.reloadRows(at: [indexPath], with: .automatic)
+    }
+    
     let sectionTitles = ["Ingredients", "Nutrition Facts", ""]
     var tableview = UITableView()
     var totalsStackViews = UIStackView()
@@ -406,8 +415,10 @@ extension AddIngredientsViewController: UITableViewDelegate, UITableViewDataSour
     
     func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
         let selectedIngredient = Ingredient(serving: ingredients[indexPath.row].serving, nutrition: ingredients[indexPath.row].nutrition!)
+        selectedRowForEdit = indexPath
         let editVC = EditIngredientViewController()
         editVC.meal = meal
+        editVC.delegate = self
         editVC.ingredient = selectedIngredient
         present(editVC, animated: true, completion: nil)
     }

@@ -7,9 +7,20 @@
 
 import UIKit
 
-class EditIngredientViewController: UIViewController {
+protocol EditIngredientVCDelegate: class {
+    func edit(_ ingredient: Ingredient)
+}
+
+class EditIngredientViewController: UIViewController, saveIngredientButtonTapped {
+    
+    func saveButtonTapped() {
+        delegate?.edit(ingredient!)
+        dismiss(animated: true, completion: nil)
+    }
+    
     var meal: Meal?
     var ingredient: Ingredient?
+    weak var delegate: EditIngredientVCDelegate?
     
     let ingredientTextField: UITextField = {
        let tf = UITextField()
@@ -34,7 +45,7 @@ class EditIngredientViewController: UIViewController {
         button.heightAnchor.constraint(equalToConstant: 50).isActive = true
         button.layer.cornerRadius = 8
         button.isEnabled = true
-//        button.addTarget(self, action: #selector(addNewIngredient), for: .touchUpInside)
+        button.addTarget(self, action: #selector(updateIngredient), for: .touchUpInside)
         button.alpha = 0.5
     return button
     }()
@@ -91,6 +102,7 @@ class EditIngredientViewController: UIViewController {
         
         view.addSubview(tableView)
         tableView.register(NutritionFactsTableViewCell.self, forCellReuseIdentifier: NutritionFactsTableViewCell.identifier)
+        tableView.register(SaveIngredientTableViewCell.self, forCellReuseIdentifier: SaveIngredientTableViewCell.identifier)
         tableView.delegate = self
         tableView.dataSource = self
         tableView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
@@ -100,6 +112,41 @@ class EditIngredientViewController: UIViewController {
         tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
     }
     
+    @objc func updateIngredient(_ sender: UIButton) {
+        UIView.animate(withDuration: 0.10) {
+            self.updateButton.transform = CGAffineTransform(scaleX: 0.6, y: 0.6)
+        } completion: { (_) in
+            UIView.animate(withDuration: 0.10) {
+                self.updateButton.transform = CGAffineTransform.identity
+            }
+        }
+        let serving = ingredientTextField.text!
+        NutritionAPI.shared.fetchNutritionInfo(query: serving) { (result) in
+            switch result {
+            case .success(let newIngredient):
+                self.updateNutritionFacts(with: serving, and: newIngredient)
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    fileprivate func updateNutritionFacts(with serving: String, and ingredient: Dataset) {
+        DispatchQueue.main.async { [self] in
+            if ingredient.items.count > 0 {
+                print("UPDATE SECTION")
+            } else {
+                //UPDATE SECTION to ZEROS
+                //addButton vibrates to indicate invalid ingredient
+                let animation = CABasicAnimation(keyPath: "position")
+                animation.duration = 0.05
+                animation.repeatCount = 4
+                animation.autoreverses = true
+                animation.fromValue = NSValue(cgPoint: CGPoint(x: updateButton.center.x - 12, y: updateButton.center.y))
+                animation.toValue = NSValue(cgPoint: CGPoint(x: updateButton.center.x + 12, y: updateButton.center.y))
+                updateButton.layer.add(animation, forKey: "position")
+            }
+        }
+    }
     @objc func textEditingChanged(_ sender: UITextField) {
         guard let text = sender.text, text.count > 4 else {
             updateButton.alpha = 0.5
@@ -109,57 +156,63 @@ class EditIngredientViewController: UIViewController {
         updateButton.alpha = 1.0
         updateButton.isEnabled = true
     }
-
 }
 
 extension EditIngredientViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         guard let ingredient = ingredient else { return UITableViewCell() }
-        
-        let cell = tableView.dequeueReusableCell(withIdentifier: NutritionFactsTableViewCell.identifier, for: indexPath) as! NutritionFactsTableViewCell
-        
-        let totalFat = ingredient.nutrition.totalFat
-        cell.totalFatLabel.text = String(format: "%.2f g", totalFat)
-        cell.totalFatDV.text = (String(format: "%.2f", (totalFat/DailyValue.totalFat.rawValue)*100)+" %")
-        
-        let totalCholesterol = ingredient.nutrition.cholesterol
-        cell.totalCholesterolLabel.text = String(format: "%.2f g", totalCholesterol)
-        cell.totalCholesterolDV.text = (String(format: "%.2f", (totalFat/DailyValue.cholesterol.rawValue)*100)+" %")
-        
-        let totalSodium = ingredient.nutrition.sodium
-        cell.totalSodiumLabel.text = String(format: "%.2f g", totalSodium)
-        cell.totalSodiumDV.text = (String(format: "%.2f", (totalSodium/DailyValue.sodium.rawValue)*100)+" %")
-        
-        let totalCarbs = ingredient.nutrition.carbohydrates
-        cell.totalCarbsLabel.text = String(format: "%.2f g", totalCarbs)
-        cell.totalCarbsDV.text = (String(format: "%.2f", (totalCarbs/DailyValue.totalCarbs.rawValue)*100)+" %")
-        
-        let totalProtein = ingredient.nutrition.protein
-        cell.totalProteinLabel.text = String(format: "%.2f g", totalProtein)
-        cell.totalProteinDV.text = (String(format: "%.2f", (totalProtein/DailyValue.protein.rawValue)*100)+" %")
+        switch indexPath.section {
+        case 0:
+            let cell = tableView.dequeueReusableCell(withIdentifier: NutritionFactsTableViewCell.identifier, for: indexPath) as! NutritionFactsTableViewCell
+            
+            let totalFat = ingredient.nutrition.totalFat
+            cell.totalFatLabel.text = String(format: "%.2f g", totalFat)
+            cell.totalFatDV.text = (String(format: "%.2f", (totalFat/DailyValue.totalFat.rawValue)*100)+" %")
+            
+            let totalCholesterol = ingredient.nutrition.cholesterol
+            cell.totalCholesterolLabel.text = String(format: "%.2f g", totalCholesterol)
+            cell.totalCholesterolDV.text = (String(format: "%.2f", (totalFat/DailyValue.cholesterol.rawValue)*100)+" %")
+            
+            let totalSodium = ingredient.nutrition.sodium
+            cell.totalSodiumLabel.text = String(format: "%.2f g", totalSodium)
+            cell.totalSodiumDV.text = (String(format: "%.2f", (totalSodium/DailyValue.sodium.rawValue)*100)+" %")
+            
+            let totalCarbs = ingredient.nutrition.carbohydrates
+            cell.totalCarbsLabel.text = String(format: "%.2f g", totalCarbs)
+            cell.totalCarbsDV.text = (String(format: "%.2f", (totalCarbs/DailyValue.totalCarbs.rawValue)*100)+" %")
+            
+            let totalProtein = ingredient.nutrition.protein
+            cell.totalProteinLabel.text = String(format: "%.2f g", totalProtein)
+            cell.totalProteinDV.text = (String(format: "%.2f", (totalProtein/DailyValue.protein.rawValue)*100)+" %")
 
-        let totalPotassium = ingredient.nutrition.potassium
-        cell.totalPotassiumLabel.text = String(format: "%.2f g", totalPotassium)
-        cell.totalPotassiumDV.text = (String(format: "%.2f", (totalPotassium/DailyValue.potassium.rawValue)*100)+" %")
-        
-        let totalSatFat = ingredient.nutrition.fat
-        cell.totalSatFatLabel.text = String(format: "%.2f g", totalSatFat)
-        cell.totalSatFatDV.text = (String(format: "%.2f", (totalSatFat/DailyValue.satFat.rawValue)*100)+" %")
-        
-        cell.totalCaloriesLabel.text = String(format: "%.2f", ingredient.nutrition.calories)
-        cell.isUserInteractionEnabled = false
-        
-        cell.totalFiberLabel.text = String(format: "%.2f g", ingredient.nutrition.fiber)
-        cell.totalSugarLabel.text = String(format: "%.2f g", ingredient.nutrition.sugar)
-        
-        return cell
+            let totalPotassium = ingredient.nutrition.potassium
+            cell.totalPotassiumLabel.text = String(format: "%.2f g", totalPotassium)
+            cell.totalPotassiumDV.text = (String(format: "%.2f", (totalPotassium/DailyValue.potassium.rawValue)*100)+" %")
+            
+            let totalSatFat = ingredient.nutrition.fat
+            cell.totalSatFatLabel.text = String(format: "%.2f g", totalSatFat)
+            cell.totalSatFatDV.text = (String(format: "%.2f", (totalSatFat/DailyValue.satFat.rawValue)*100)+" %")
+            
+            cell.totalCaloriesLabel.text = String(format: "%.2f", ingredient.nutrition.calories)
+            cell.isUserInteractionEnabled = false
+            
+            cell.totalFiberLabel.text = String(format: "%.2f g", ingredient.nutrition.fiber)
+            cell.totalSugarLabel.text = String(format: "%.2f g", ingredient.nutrition.sugar)
+            
+            return cell
+        case 1:
+            let cell = tableView.dequeueReusableCell(withIdentifier: SaveIngredientTableViewCell.identifier, for: indexPath) as! SaveIngredientTableViewCell
+            cell.ingredient = ingredient
+            cell.delegate = self
+            cell.selectionStyle = .none
+            return cell
+        default:
+            fatalError()
+        }
     }
-    
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let myLabel = UILabel()
         myLabel.frame = CGRect(x: .zero, y: .zero, width: tableView.frame.width, height: 35)
@@ -171,12 +224,16 @@ extension EditIngredientViewController: UITableViewDelegate, UITableViewDataSour
 
         return headerView
     }
-    
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 38
     }
-    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
+    }
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "Nutrition Facts"
+        switch section {
+        case 0: return "Nutrition Facts"
+        default: return ""
+        }
     }
 }
