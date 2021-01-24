@@ -49,11 +49,11 @@ class NutritionFactsTableViewCell: UITableViewCell {
         amountPerServingLabel.backgroundColor = #colorLiteral(red: 1, green: 0.9697935916, blue: 0.7963718291, alpha: 1)
             
         let disclaimerLabel = UILabel()
-        disclaimerLabel.text = " * The % Daily Value (DV) tells you how much a nutrient in a serving of food contributes to a daily diet. 2,000 calories a day is used for general nutrition advice."
+        disclaimerLabel.text = " * The % Daily Value (DV) tells you how much a nutrient in a serving of food contributes to a daily diet. 2,000 calories a day is used for general nutrition advice. (FDA.gov)"
         disclaimerLabel.setMargins()
         disclaimerLabel.textAlignment = .justified
         disclaimerLabel.numberOfLines = 0
-        disclaimerLabel.font = UIFont.systemFont(ofSize: 13, weight: .light)
+        disclaimerLabel.font = UIFont.systemFont(ofSize: 14, weight: .light)
         disclaimerLabel.backgroundColor = #colorLiteral(red: 1, green: 0.9697935916, blue: 0.7963718291, alpha: 1)
         
         let caloriesLabel = UILabel()
@@ -70,7 +70,7 @@ class NutritionFactsTableViewCell: UITableViewCell {
         hSV1.backgroundColor = #colorLiteral(red: 1, green: 0.9697935916, blue: 0.7963718291, alpha: 1)
         
         let percentDailyValue = UILabel()
-        percentDailyValue.text = "% Daily Value"
+        percentDailyValue.text = "% Daily Value*"
         percentDailyValue.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
         percentDailyValue.textAlignment = .right
         

@@ -406,8 +406,10 @@ extension AddIngredientsViewController: UITableViewDelegate, UITableViewDataSour
     
     func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
         let selectedIngredient = Ingredient(serving: ingredients[indexPath.row].serving, nutrition: ingredients[indexPath.row].nutrition!)
-        print(selectedIngredient)
-//        present(WelcomeViewController(), animated: true, completion: nil)
+        let editVC = EditIngredientViewController()
+        editVC.meal = meal
+        editVC.ingredient = selectedIngredient
+        present(editVC, animated: true, completion: nil)
     }
     //function needed to enable swipe delete
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
