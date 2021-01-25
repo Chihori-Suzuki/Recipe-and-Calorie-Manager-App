@@ -7,11 +7,16 @@
 
 import UIKit
 
+protocol SaveRecipeTableViewCellDelegate: class {
+    func save(_ mealType: Meal, _ recipe: Recipe)
+}
+
 class SaveRecipeTableViewCell: UITableViewCell {
     
     static let identifier = "saveRecipe"
     var newRecipe: Recipe?
     var mealType: Meal?
+    weak var delegate: SaveRecipeTableViewCellDelegate?
     
     lazy var saveButton: UIButton = {
         let button = UIButton()
@@ -53,8 +58,7 @@ class SaveRecipeTableViewCell: UITableViewCell {
         
         //temporary code for testing
         guard let meal = mealType, let recipe = newRecipe else { return }
-        print(meal.rawValue)
-        print(recipe)
+        delegate?.save(meal, recipe)
     }
 }
 

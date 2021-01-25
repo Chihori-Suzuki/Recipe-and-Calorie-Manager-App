@@ -7,7 +7,23 @@
 
 import UIKit
 
-class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SaveRecipeTableViewCellDelegate {
+    
+    func save(_ mealType: Meal, _ recipe: Recipe) {
+        switch mealType {
+        case .breakfast:
+            breakfastMeals.recipes.insert(recipe, at: 0)
+        case .lunch:
+            lunchMeals.recipes.insert(recipe, at: 0)
+        case .snack:
+            snackMeals.recipes.insert(recipe, at: 0)
+        case .dinner:
+            dinnerMeals.recipes.insert(recipe, at: 0)
+        }
+        myTable.insertRows(at: [IndexPath(row: 0, section: 0)], with: .none)
+    }
+    
+    
     
     let addIngredients = AddIngredientsViewController()
     var selectedCategory: Int?
