@@ -23,8 +23,6 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
         myTable.insertRows(at: [IndexPath(row: 0, section: 0)], with: .none)
     }
     
-    
-    
     let addIngredients = AddIngredientsViewController()
     var selectedCategory: Int?
     
@@ -46,9 +44,6 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
     var mealTitle: String?
 
     lazy var totalCalorie: Double? = addIngredients.caloriesTotal
-    
-
-
     let cellId = "MenuTotalCalorie"
     
     
@@ -93,6 +88,8 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
         let cellTitle = catalog.catalog[selectCategory].recipes[indexPath.row].title
         let cellTotalCalories = catalog.catalog[selectCategory].recipes[indexPath.row].ingredients.map { $0.nutrition!.calories }.reduce(0){ $0 + $1 }
         cell.update(cellTitle, cellTotalCalories)
+        cell.accessoryType = .detailDisclosureButton
+        
         return cell
     }
     

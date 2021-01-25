@@ -77,6 +77,7 @@ class RecipeListViewController: UIViewController, UITableViewDelegate,UITableVie
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         let clickedMeal = MenuTotalCalorieDetailListViewController()
         clickedMeal.mealTitle = catalog.catalog[indexPath.row].category.rawValue
         clickedMeal.selectedCategory = indexPath.row

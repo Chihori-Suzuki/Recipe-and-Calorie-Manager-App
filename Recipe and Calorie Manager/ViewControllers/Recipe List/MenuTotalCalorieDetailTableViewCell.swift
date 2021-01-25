@@ -16,7 +16,7 @@ class MenuTotalCalorieDetailTableViewCell: UITableViewCell {
         recipeTitle.clipsToBounds = true
         recipeTitle.textAlignment = .center
         recipeTitle.font = UIFont.boldSystemFont(ofSize: 20)
-        recipeTitle.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        recipeTitle.widthAnchor.constraint(equalToConstant: 150).isActive = true
         return recipeTitle
     }()
     
@@ -27,7 +27,7 @@ class MenuTotalCalorieDetailTableViewCell: UITableViewCell {
         totalCalorie.clipsToBounds = true
         totalCalorie.textAlignment = .center
         totalCalorie.font = UIFont.boldSystemFont(ofSize: 20)
-        totalCalorie.widthAnchor.constraint(equalToConstant: 150).isActive = true
+        totalCalorie.widthAnchor.constraint(equalToConstant: 100).isActive = true
         return totalCalorie
     }()
     
@@ -75,6 +75,8 @@ class MenuTotalCalorieDetailTableViewCell: UITableViewCell {
 
 //    override func setSelected(_ selected: Bool, animated: Bool) {
 //        super.setSelected(selected, animated: animated)
-//        // Configure the view for the selected state
+//
+//
+//
 //    }
 }
