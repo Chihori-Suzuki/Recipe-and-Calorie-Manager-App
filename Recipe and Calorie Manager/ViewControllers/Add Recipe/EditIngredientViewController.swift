@@ -83,14 +83,14 @@ class EditIngredientViewController: UIViewController, saveIngredientButtonTapped
     
     lazy var tableView: UITableView = {
         let tv = UITableView(frame: view.frame, style: .insetGrouped)
-        tv.backgroundColor = .white
+        tv.backgroundColor = UIColor.Theme1.white
         tv.translatesAutoresizingMaskIntoConstraints = false
         return tv
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor.Theme1.white
         
         ingredientTextField.text = ingredient?.serving
         if let meal = meal?.rawValue {
@@ -206,6 +206,7 @@ extension EditIngredientViewController: UITableViewDelegate, UITableViewDataSour
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: SaveIngredientTableViewCell.identifier, for: indexPath) as! SaveIngredientTableViewCell
             cell.ingredient = ingredient
+            cell.backgroundColor = UIColor.Theme1.white
             cell.delegate = self
             cell.selectionStyle = .none
             return cell

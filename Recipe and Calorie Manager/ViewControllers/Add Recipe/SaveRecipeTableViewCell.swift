@@ -33,6 +33,7 @@ class SaveRecipeTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         contentView.addSubview(saveButton)
+        contentView.backgroundColor = UIColor.Theme1.white
         contentView.heightAnchor.constraint(equalTo: saveButton.heightAnchor, multiplier: 1).isActive = true
         saveButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
     }
@@ -49,6 +50,8 @@ class SaveRecipeTableViewCell: UITableViewCell {
                 sender.transform = CGAffineTransform.identity
             }
         }
+        
+        //temporary code for testing
         guard let meal = mealType, let recipe = newRecipe else { return }
         print(meal.rawValue)
         print(recipe)
