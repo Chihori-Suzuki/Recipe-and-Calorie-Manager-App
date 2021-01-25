@@ -36,7 +36,7 @@ class EditProfileViewController: UIViewController {
         button.setImage(UIImage(systemName: "pencil"), for: .normal)
         button.backgroundColor = .white
         button.layer.borderWidth = 0.5
-        button.addTarget(self, action: #selector(setActivityView), for: .touchUpInside)
+//        button.addTarget(self, action: #selector(setActivityView), for: .touchUpInside)
         return button
     }()
     
@@ -143,7 +143,7 @@ class EditProfileViewController: UIViewController {
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.layer.borderWidth = 0.8
         tf.layer.cornerRadius = 5
-        tf.addTarget(self, action: #selector(textFieldDidBeginEditing), for: .touchDown)
+//        tf.addTarget(self, action: #selector(textFieldDidBeginEditing), for: .touchDown)
         tf.backgroundColor = .white
         return tf
     }()
@@ -204,7 +204,7 @@ class EditProfileViewController: UIViewController {
         button.widthAnchor.constraint(equalToConstant: 80).isActive = true
         button.heightAnchor.constraint(equalToConstant: 50).isActive = true
         button.layer.cornerRadius = 8
-        button.addTarget(self, action: #selector(addNewPerson), for: .touchUpInside)
+//        button.addTarget(self, action: #selector(addNewPerson), for: .touchUpInside)
 //        button.isEnabled = false
         button.alpha = 0.5
         return button
@@ -221,17 +221,17 @@ class EditProfileViewController: UIViewController {
         view.addSubview(scrollView)
         scrollView.addSubview(mainSV)
         setSVConfig()
-        
-        activePick.delegate = self
-        activePick.dataSource = self
-        
-        activeText.delegate = self
-        
-        registerForKeyboardNotification()
-        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard(_:)))
-        view.addGestureRecognizer(gestureRecognizer)
-        
-        scrollView.delegate = self
+//        
+//        activePick.delegate = self
+//        activePick.dataSource = self
+//        
+//        activeText.delegate = self
+//        
+//        registerForKeyboardNotification()
+//        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard(_:)))
+//        view.addGestureRecognizer(gestureRecognizer)
+//        
+//        scrollView.delegate = self
         
     }
     

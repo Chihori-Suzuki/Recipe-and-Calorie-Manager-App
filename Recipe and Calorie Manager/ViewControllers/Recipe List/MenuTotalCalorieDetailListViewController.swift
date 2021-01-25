@@ -8,6 +8,10 @@
 import UIKit
 
 class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SaveRecipeTableViewCellDelegate {
+    func discardRecipe() {
+        
+    }
+    
     
     func save(_ mealType: Meal, _ recipe: Recipe) {
         switch mealType {
