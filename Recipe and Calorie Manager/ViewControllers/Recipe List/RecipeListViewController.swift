@@ -9,6 +9,9 @@ import UIKit
 
 
 class RecipeListViewController: UIViewController, UITableViewDelegate,UITableViewDataSource {
+    
+    
+    
 
     // sample data
     var ingredientNutrition = Nutrition(sugar: 1, fiber: 1, serving: 1, sodium: 1, name: "onion", potassium: 1, fat: 1, totalFat: 1, calories: 1, cholesterol: 1, protein: 1, carbohydrates: 1)
