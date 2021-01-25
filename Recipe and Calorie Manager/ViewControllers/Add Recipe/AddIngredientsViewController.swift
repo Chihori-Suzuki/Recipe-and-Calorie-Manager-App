@@ -7,8 +7,17 @@
 
 import UIKit
 
-class AddIngredientsViewController: UIViewController {
-
+class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate {
+    
+    var selectedRowForEdit: IndexPath?
+    
+    func edit(_ ingredient: Ingredient) {
+        guard let indexPath = selectedRowForEdit else { return }
+        ingredients.remove(at: indexPath.row)
+        ingredients.insert((serving: ingredient.serving, nutrition: ingredient.nutrition), at: indexPath.row)
+        tableview.reloadRows(at: [indexPath], with: .automatic)
+    }
+    
     let sectionTitles = ["Ingredients", "Nutrition Facts", ""]
     var tableview = UITableView()
     var totalsStackViews = UIStackView()
@@ -46,16 +55,15 @@ class AddIngredientsViewController: UIViewController {
         tf.heightAnchor.constraint(equalToConstant: 50).isActive = true
         tf.becomeFirstResponder()
         tf.layer.borderWidth = 0.8
-        tf.layer.borderColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
+        tf.layer.borderColor = CGColor.Theme1.black
+        tf.backgroundColor = .white
         tf.layer.cornerRadius = 8
-        tf.translatesAutoresizingMaskIntoConstraints = false
         tf.addTarget(self, action: #selector(textEditingChanged(_:)), for: .editingChanged)
         return tf
     }()
     
     let addButton: UIButton = {
        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 25)
         button.widthAnchor.constraint(equalToConstant: 60).isActive = true
         button.heightAnchor.constraint(equalToConstant: 50).isActive = true
@@ -68,7 +76,6 @@ class AddIngredientsViewController: UIViewController {
     
     let hStackView: UIStackView = {
         let sv = UIStackView()
-        sv.translatesAutoresizingMaskIntoConstraints = false
         sv.axis = .horizontal
         sv.distribution = .fill
         sv.alignment = .center
@@ -82,6 +89,7 @@ class AddIngredientsViewController: UIViewController {
         sv.distribution = .fill
         sv.alignment = .center
         sv.spacing = 10
+        sv.backgroundColor = UIColor.Theme1.white
         sv.translatesAutoresizingMaskIntoConstraints = false
         return sv
     }()
@@ -89,10 +97,9 @@ class AddIngredientsViewController: UIViewController {
     let addLabel: UILabel = {
         let label = UILabel()
         label.text = "add"
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.widthAnchor.constraint(equalToConstant: 60).isActive = true
         label.textAlignment = .center
-        label.textColor = #colorLiteral(red: 0.4527973475, green: 0.2011018268, blue: 0.03813635361, alpha: 1)
+        label.textColor = UIColor.Theme1.brown
         label.alpha = 0.8
         label.font = UIFont.boldSystemFont(ofSize: 20)
         return label
@@ -101,36 +108,36 @@ class AddIngredientsViewController: UIViewController {
     func makeLabelTotals(with string: String) -> UILabel {
         let label = UILabel()
         label.text = string
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.widthAnchor.constraint(equalToConstant: 70).isActive = true
         label.textAlignment = .center
         label.adjustsFontSizeToFitWidth = true
         label.alpha = 0.8
         label.font = UIFont.boldSystemFont(ofSize: 17)
         label.layer.masksToBounds = true
-        label.backgroundColor = #colorLiteral(red: 0.7829411976, green: 0.9072662751, blue: 1, alpha: 1)
+        label.backgroundColor = UIColor.Theme1.green
+        label.textColor = .white
         label.layer.cornerRadius = 6
         return label
     }
     
     func makeLabelTotals() -> AnimatedLabelTotals {
         let label = AnimatedLabelTotals()
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.widthAnchor.constraint(equalToConstant: 70).isActive = true
         label.textAlignment = .center
         label.adjustsFontSizeToFitWidth = true
         label.decimalPoints = .two
+        label.textColor = UIColor.Theme1.black
         label.font = UIFont.systemFont(ofSize: 16)
         return label
     }
     
     func makeLabelTotalsCal() -> AnimatedLabelTotalsCal {
         let label = AnimatedLabelTotalsCal()
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.widthAnchor.constraint(equalToConstant: 70).isActive = true
         label.textAlignment = .center
         label.adjustsFontSizeToFitWidth = true
         label.decimalPoints = .two
+        label.textColor = UIColor.Theme1.black
         label.font = UIFont.systemFont(ofSize: 16)
         return label
     }
@@ -141,14 +148,13 @@ class AddIngredientsViewController: UIViewController {
             let (header, total) = view
             let vStackView = UIStackView(arrangedSubviews: [header, total])
             vStackView.axis = .vertical
-            vStackView.translatesAutoresizingMaskIntoConstraints = false
             vStackView.alignment = .center
             vStackView.distribution = .fillEqually
             vStackView.spacing = 5
             vStackView.widthAnchor.constraint(equalToConstant: 70).isActive = true
             hStackView.addArrangedSubview(vStackView)
         }
-        hStackView.translatesAutoresizingMaskIntoConstraints = false
+
         hStackView.axis = .horizontal
         hStackView.alignment = .center
         hStackView.distribution = .equalCentering
@@ -166,6 +172,7 @@ class AddIngredientsViewController: UIViewController {
         let fiberTotalLabel = makeLabelTotals(with: "Fiber")
         //total labels are declared as variable so that their text property can be updated and animated
         caloriesTotalCountLabel = makeLabelTotalsCal()
+        caloriesTotalCountLabel.textColor = UIColor.Theme1.black
         carbsTotalCountLabel = makeLabelTotals()
         proteinTotalCountLabel = makeLabelTotals()
         fatTotalCountLabel = makeLabelTotals()
@@ -190,11 +197,14 @@ class AddIngredientsViewController: UIViewController {
    
         vStackView.addArrangedSubview(hStackView)
         vStackView.addArrangedSubview(totalsStackViews)
+        vStackView.addArrangedSubview(UIView())
         
         view.addSubview(vStackView)
         
         vStackView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
-        vStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8).isActive = true
+        vStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
+        vStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0).isActive = true
+        vStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0).isActive = true
 
     }
     
@@ -206,7 +216,7 @@ class AddIngredientsViewController: UIViewController {
             addButton.setImage(UIImage(named: meal), for: .normal)
         }
     
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor.Theme1.white
         navigationItem.hidesBackButton = true
         title = recipeTitle
         setupStackViews()
@@ -287,7 +297,7 @@ class AddIngredientsViewController: UIViewController {
     
     fileprivate func setupTableView() {
         tableview = UITableView(frame: view.frame, style: .insetGrouped)
-        tableview.backgroundColor = .white
+        tableview.backgroundColor = UIColor.Theme1.white
         view.addSubview(tableview)
         
         tableview.register(IngredientTableViewCell.self, forCellReuseIdentifier: IngredientTableViewCell.identifier)
@@ -296,7 +306,7 @@ class AddIngredientsViewController: UIViewController {
         tableview.delegate = self
         tableview.dataSource = self
         tableview.translatesAutoresizingMaskIntoConstraints = false
-        tableview.topAnchor.constraint(equalTo: vStackView.bottomAnchor, constant: 12).isActive = true
+        tableview.topAnchor.constraint(equalTo: vStackView.bottomAnchor, constant: 0).isActive = true
         tableview.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
         tableview.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0).isActive = true
         tableview.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0).isActive = true
@@ -322,7 +332,7 @@ extension AddIngredientsViewController: UITableViewDelegate, UITableViewDataSour
             let ingredient = ingredients[indexPath.row]
             let cell = tableView.dequeueReusableCell(withIdentifier: IngredientTableViewCell.identifier, for: indexPath) as! IngredientTableViewCell
             cell.update(with: ingredient)
-            cell.layer.borderColor = UIColor.gray.cgColor
+            cell.layer.borderColor = CGColor.Theme1.black
             cell.layer.borderWidth = 0.5
             cell.accessoryType = .detailButton
             cell.selectionStyle = .none
@@ -385,6 +395,7 @@ extension AddIngredientsViewController: UITableViewDelegate, UITableViewDataSour
         myLabel.frame = CGRect(x: .zero, y: .zero, width: tableView.frame.width, height: 35)
         myLabel.font = UIFont.boldSystemFont(ofSize: 22)
         myLabel.text = self.tableView(tableView, titleForHeaderInSection: section)
+        myLabel.textColor = UIColor.Theme1.brown
 
         let headerView = UIView()
         headerView.addSubview(myLabel)
@@ -406,8 +417,12 @@ extension AddIngredientsViewController: UITableViewDelegate, UITableViewDataSour
     
     func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
         let selectedIngredient = Ingredient(serving: ingredients[indexPath.row].serving, nutrition: ingredients[indexPath.row].nutrition!)
-        print(selectedIngredient)
-//        present(WelcomeViewController(), animated: true, completion: nil)
+        selectedRowForEdit = indexPath
+        let editVC = EditIngredientViewController()
+        editVC.meal = meal
+        editVC.delegate = self
+        editVC.ingredient = selectedIngredient
+        present(editVC, animated: true, completion: nil)
     }
     //function needed to enable swipe delete
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
