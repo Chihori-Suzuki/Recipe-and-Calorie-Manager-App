@@ -7,7 +7,15 @@
 
 import UIKit
 
-class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate {
+class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, SaveRecipeTableViewCellDelegate {
+    
+    func save(_ mealType: Meal, _ recipe: Recipe) {
+    }
+    
+    func discardRecipe() {
+        navigationController?.popViewController(animated: true)
+    }
+    
     
     var selectedRowForEdit: IndexPath?
     
@@ -16,6 +24,20 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate {
         ingredients.remove(at: indexPath.row)
         ingredients.insert((serving: ingredient.serving, nutrition: ingredient.nutrition), at: indexPath.row)
         tableview.reloadRows(at: [indexPath], with: .automatic)
+        tableview.reloadSections([1, 2], with: .none)
+    }
+    
+    
+    func delete(_ ingredient: Ingredient) {
+        guard let indexPath = selectedRowForEdit else { return }
+        
+        let (serving, nutrition) = ingredients[indexPath.row]
+        let currentIngredient = Ingredient(serving: serving, nutrition: nutrition!)
+        if currentIngredient == ingredient {
+            ingredients.remove(at: indexPath.row)
+            tableview.deleteRows(at: [indexPath], with: .automatic)
+            tableview.reloadSections([1, 2], with: .none)
+        }
     }
     
     let sectionTitles = ["Ingredients", "Nutrition Facts", ""]
@@ -242,6 +264,7 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate {
                 print(error)
             }
         }
+            self.ingredientTextField.text?.removeAll()
     }
     
     fileprivate func calculateTotals() {
@@ -374,14 +397,20 @@ extension AddIngredientsViewController: UITableViewDelegate, UITableViewDataSour
             cell.totalFiberLabel.text = String(format: "%.2f g", ingredients.map { $0.nutrition!.fiber }.reduce(0){ $0 + $1 })
             cell.totalSugarLabel.text = String(format: "%.2f g", ingredients.map { $0.nutrition!.sugar }.reduce(0){ $0 + $1 })
 
-
+            cell.backgroundColor = UIColor.Theme1.white
             return cell
         case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: SaveRecipeTableViewCell.identifier, for: indexPath) as! SaveRecipeTableViewCell
             cell.mealType = meal
             cell.newRecipe = Recipe(title: recipeTitle!, ingredients: ingredients)
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                    self.ingredients.count > 1 ? (cell.saveButton.isHidden ? cell.saveButton.isHidden.toggle() : nil) : (cell.saveButton.isHidden = true)
+                if self.ingredients.count > 1 {
+                    cell.saveButton.isHidden = false
+                    cell.discardButton.isHidden = false
+                } else {
+                    cell.saveButton.isHidden = true
+                    cell.discardButton.isHidden = true
+                }
             }
             cell.selectionStyle = .none
             return cell
