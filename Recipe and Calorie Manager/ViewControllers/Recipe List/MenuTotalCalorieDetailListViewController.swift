@@ -39,7 +39,7 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
     lazy var myTable: UITableView = {
         let table = UITableView(frame: view.frame, style: .grouped)
         table.translatesAutoresizingMaskIntoConstraints = false
-        table.register(UITableViewCell.self, forCellReuseIdentifier: cellId)
+        table.register(MenuTotalCalorieDetailTableViewCell.self, forCellReuseIdentifier: cellId)
         table.delegate = self
         table.dataSource = self
         return table
@@ -55,10 +55,10 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
     
     func setupTableView() {
         view.addSubview(myTable)
-        myTable.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-        myTable.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
-        myTable.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
-        myTable.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
+        myTable.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
+        myTable.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10).isActive = true
+        myTable.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10).isActive = true
+        myTable.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10).isActive = true
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -71,22 +71,16 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! MenuTotalCalorieDetailTableViewCell
             
         guard let selectCategory = selectedCategory else { return UITableViewCell()}
         let cellTitle = catalog.catalog[selectCategory].recipes[indexPath.row].title
-        
-//        var ingredients = [(serving: String, nutrition: Nutrition?)]()
-//        caloriesTotal = ingredients.map { $0.nutrition!.calories }.reduce(0){ $0 + $1 }
-        
         let cellTotalCalories = catalog.catalog[selectCategory].recipes[indexPath.row].ingredients.map { $0.nutrition!.calories }.reduce(0){ $0 + $1 }
-        print(cellTotalCalories)
-        
-        cell.textLabel?.text = "\(cellTitle) : \(cellTotalCalories ?? 0)"
-        
-        cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 30)
-        cell.layer.cornerRadius = 10
-        cell.layer.borderWidth = 1
+        cell.update(cellTitle, cellTotalCalories)
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 50.0
     }
 }
