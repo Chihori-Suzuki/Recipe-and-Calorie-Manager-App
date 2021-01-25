@@ -9,12 +9,18 @@ import UIKit
 
 protocol EditIngredientVCDelegate: class {
     func edit(_ ingredient: Ingredient)
+    func delete(_ ingredient: Ingredient)
 }
 
 class EditIngredientViewController: UIViewController, saveIngredientButtonTapped {
     
     func saveButtonTapped() {
         delegate?.edit(ingredient!)
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func discardButtonTapped() {
+        delegate?.delete(ingredient!)
         dismiss(animated: true, completion: nil)
     }
     
@@ -130,12 +136,21 @@ class EditIngredientViewController: UIViewController, saveIngredientButtonTapped
             }
         }
     }
-    fileprivate func updateNutritionFacts(with serving: String, and ingredient: Dataset) {
+    fileprivate func updateNutritionFacts(with serving: String, and newIngredient: Dataset) {
         DispatchQueue.main.async { [self] in
-            if ingredient.items.count > 0 {
-                print("UPDATE SECTION")
+            if newIngredient.items.count > 0 {
+                    ingredient = Ingredient(serving: serving, nutrition: newIngredient.items[0])
+                    tableView.reloadSections([0,1], with: .none)
+                UIView.animate(withDuration: 1) {
+                    tableView.isHidden = false
+                }
             } else {
-                //UPDATE SECTION to ZEROS
+                ingredient = nil
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    UIView.animate(withDuration: 5, delay: 0, options: .curveEaseOut) {
+                        tableView.isHidden = true
+                    }
+                }
                 //addButton vibrates to indicate invalid ingredient
                 let animation = CABasicAnimation(keyPath: "position")
                 animation.duration = 0.05
@@ -148,13 +163,18 @@ class EditIngredientViewController: UIViewController, saveIngredientButtonTapped
         }
     }
     @objc func textEditingChanged(_ sender: UITextField) {
-        guard let text = sender.text, text.count > 4 else {
-            updateButton.alpha = 0.5
-            updateButton.isEnabled = false
-            return
+        
+        UIView.animate(withDuration: 0.5) {
+            self.tableView.isHidden = true
+            
+            guard let text = sender.text, text.count > 4 else {
+                self.updateButton.alpha = 0.5
+                self.updateButton.isEnabled = false
+                return
+            }
+            self.updateButton.alpha = 1.0
+            self.updateButton.isEnabled = true
         }
-        updateButton.alpha = 1.0
-        updateButton.isEnabled = true
     }
 }
 
@@ -198,6 +218,7 @@ extension EditIngredientViewController: UITableViewDelegate, UITableViewDataSour
             
             cell.totalCaloriesLabel.text = String(format: "%.2f", ingredient.nutrition.calories)
             cell.isUserInteractionEnabled = false
+            cell.backgroundColor = UIColor.Theme1.white
             
             cell.totalFiberLabel.text = String(format: "%.2f g", ingredient.nutrition.fiber)
             cell.totalSugarLabel.text = String(format: "%.2f g", ingredient.nutrition.sugar)
@@ -209,6 +230,16 @@ extension EditIngredientViewController: UITableViewDelegate, UITableViewDataSour
             cell.backgroundColor = UIColor.Theme1.white
             cell.delegate = self
             cell.selectionStyle = .none
+        
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                if !self.updateButton.isEnabled {
+                    cell.saveButton.isHidden = true
+                    cell.discardButton.isHidden = true
+                } else {
+                    cell.saveButton.isHidden = false
+                    cell.discardButton.isHidden = false
+                }
+            }
             return cell
         default:
             fatalError()

@@ -18,9 +18,13 @@ struct Recipe {
     var title: String
     var ingredients: [(serving: String, nutrition: Nutrition?)]
 }
-struct Ingredient {
+struct Ingredient: Equatable {
     var serving: String
     var nutrition: Nutrition
+    
+    static func == (lhs: Ingredient, rhs: Ingredient) -> Bool {
+        return lhs.serving.lowercased() == rhs.serving.lowercased()
+    }
 }
 enum Meal: String {
     case breakfast = "breakfast"
