@@ -25,6 +25,9 @@ class RecipeListViewController: UIViewController, UITableViewDelegate,UITableVie
     lazy var snackMeals = RecipeList(category: .snack, recipes: [recipe4])
     lazy var catalog = Catalog(catalog: [breakfastMeals, lunchMeals, dinnerMeals, snackMeals])
     
+    
+    
+    
     let cellId = "RecipeListCell"
     
     lazy var myTable: UITableView = {
@@ -42,7 +45,6 @@ class RecipeListViewController: UIViewController, UITableViewDelegate,UITableVie
         title = "Recipe List"
         navigationController?.navigationBar.prefersLargeTitles = true
         setupTableView()
-//        print(catalog.catalog[0].category.rawValue)
     }
     
     func setupTableView() {
