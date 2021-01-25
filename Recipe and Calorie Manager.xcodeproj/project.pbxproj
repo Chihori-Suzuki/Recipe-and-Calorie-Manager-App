@@ -154,8 +154,8 @@
 			children = (
 				FA0EB5D425B75F050085BCE7 /* RecipeListViewController.swift */,
 				FAC0910A25B8D7A300A7F5E2 /* MenuTotalCalorieDetailListViewController.swift */,
-				FA0EB5D825B75F360085BCE7 /* ProfileViewController.swift */,
 				526B350525B6430700BAE8D9 /* WelcomeViewController.swift */,
+				FA0EB5D825B75F360085BCE7 /* ProfileViewController.swift */,
 				2E792C0225BA4A4A00515D76 /* showProfileViewController.swift */,
 				52FF472725BB8E8F00B3888F /* Add Recipe */,
 			);
