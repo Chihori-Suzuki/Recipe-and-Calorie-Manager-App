@@ -13,12 +13,19 @@ import CoreData
 class ProfileViewController: UIViewController, UITextFieldDelegate {
     
     // persistantContainer
-    private static var persistentContainer: NSPersistentCloudKitContainer! = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
+    private static var persistentCon: NSPersistentCloudKitContainer! = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
 
+    // ScrollView
+    let scrollView: UIScrollView = {
+        let sv = UIScrollView()
+        sv.translatesAutoresizingMaskIntoConstraints = false
+        return sv
+    }()
     
     // profileimage
     let imageView: UIView = {
         let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     let profileImage: UIImageView = {
@@ -87,13 +94,15 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     let nameTxt: UITextField = {
         let tf = UITextField()
         tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.borderStyle = .line
+        tf.layer.borderWidth = 0.8
+        tf.layer.borderColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
+        tf.layer.cornerRadius = 5
         return tf
     }()
     
     let birthPick: UIDatePicker = {
         let dp = UIDatePicker()
-        
+        dp.datePickerMode = .date
         dp.translatesAutoresizingMaskIntoConstraints = false
         return dp
     }()
@@ -108,7 +117,9 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     let weightTxt: UITextField = {
         let tf = UITextField()
         tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.borderStyle = .line
+        tf.layer.borderWidth = 0.8
+        tf.layer.borderColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
+        tf.layer.cornerRadius = 5
         return tf
     }()
     let weightSeg: UISegmentedControl = {
@@ -121,7 +132,9 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     let heightTxt: UITextField = {
         let tf = UITextField()
         tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.borderStyle = .line
+        tf.layer.borderWidth = 0.8
+        tf.layer.borderColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
+        tf.layer.cornerRadius = 5
         return tf
     }()
     let heightSeg: UISegmentedControl = {
@@ -134,7 +147,9 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     let activeText: UITextField = {
         let tf = UITextField()
         tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.borderStyle = .line
+        tf.layer.borderWidth = 0.8
+        tf.layer.borderColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
+        tf.layer.cornerRadius = 5
         tf.addTarget(self, action: #selector(textFieldDidBeginEditing), for: .touchDown)
         return tf
     }()
@@ -205,7 +220,15 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         view.backgroundColor = .white
         
-        view.addSubview(mainSV)
+        title = "Register Your Profile"
+        
+        navigationController?.navigationBar.prefersLargeTitles = true
+//        navigationController?.navigationBar.largeTitleTextAttributes =
+//            [NSAttributedString.Key.foregroundColor: UIColor.black,
+//             NSAttributedString.Key.font: UIFont(name: "San Francisco", size: 30) ??
+//                                         UIFont.systemFont(ofSize: 30)]
+        view.addSubview(scrollView)
+        scrollView.addSubview(mainSV)
         setSVConfig()
         
         activePick.delegate = self
@@ -216,6 +239,13 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     }
     
     func setSVConfig() {
+        
+        /* scrollView **********/
+        scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
+        scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
+        scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        
         /* mainSV **********/
         mainSV.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30).isActive = true
         mainSV.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -50).isActive = true
@@ -303,25 +333,34 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     
 
     static func newPersion() -> Person {
-        let context = persistentContainer.viewContext
+        let context = persistentCon.viewContext
         let person = NSEntityDescription.insertNewObject(forEntityName: "Person", into: context) as! Person
         return person
     }
+    
     @objc func addNewPerson() {
         let person = ProfileViewController.newPersion()
+        let dateFormater: DateFormatter = DateFormatter()
+        dateFormater.dateFormat = "MM/dd/yyyy"
+        let stringFromDate: String = dateFormater.string(from: self.birthPick.date) as String
+        let birthDate: Date = dateFormater.date(from: stringFromDate)!
+        
+//        print("\(nameTxt.text), \(genderSeg.titleForSegment(at: genderSeg.selectedSegmentIndex)), \(activeText.text)")
         person.name = nameTxt.text
-//        person.birthday = DateFormatter.date()
+        person.birthday = birthDate
         person.gender = genderSeg.titleForSegment(at: genderSeg.selectedSegmentIndex)
         guard let weight = Double(weightTxt.text!), let height = Double(heightTxt.text!) else { return }
         person.weight = weight
         person.height = height
         person.activityType = activeText.text
         
-        
+
     }
     
+    
+    
     static func save() {
-        ProfileViewController.persistentContainer.saveContext()
+        ProfileViewController.persistentCon.saveContext()
     }
     
 }
