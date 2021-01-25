@@ -46,20 +46,23 @@ class NutritionFactsTableViewCell: UITableViewCell {
         amountPerServingLabel.heightAnchor.constraint(equalToConstant: 32).isActive = true
         amountPerServingLabel.textAlignment = .left
         amountPerServingLabel.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        amountPerServingLabel.textColor = UIColor.Theme1.black
         amountPerServingLabel.backgroundColor = #colorLiteral(red: 1, green: 0.9697935916, blue: 0.7963718291, alpha: 1)
             
         let disclaimerLabel = UILabel()
-        disclaimerLabel.text = " * The % Daily Value (DV) tells you how much a nutrient in a serving of food contributes to a daily diet. 2,000 calories a day is used for general nutrition advice."
+        disclaimerLabel.text = " * The % Daily Value (DV) tells you how much a nutrient in a serving of food contributes to a daily diet. 2,000 calories a day is used for general nutrition advice. (FDA.gov)"
         disclaimerLabel.setMargins()
         disclaimerLabel.textAlignment = .justified
         disclaimerLabel.numberOfLines = 0
-        disclaimerLabel.font = UIFont.systemFont(ofSize: 13, weight: .light)
+        disclaimerLabel.font = UIFont.systemFont(ofSize: 14, weight: .light)
+        disclaimerLabel.textColor = UIColor.Theme1.black
         disclaimerLabel.backgroundColor = #colorLiteral(red: 1, green: 0.9697935916, blue: 0.7963718291, alpha: 1)
         
         let caloriesLabel = UILabel()
         caloriesLabel.text = "Calories"
         caloriesLabel.font = UIFont.systemFont(ofSize: 28, weight: .semibold)
         caloriesLabel.textAlignment = .natural
+        caloriesLabel.textColor = UIColor.Theme1.black
         
         totalCaloriesLabel.font = UIFont.systemFont(ofSize: 20)
         let hSV1 = UIStackView(arrangedSubviews: [caloriesLabel, UIView(), totalCaloriesLabel])
@@ -70,9 +73,10 @@ class NutritionFactsTableViewCell: UITableViewCell {
         hSV1.backgroundColor = #colorLiteral(red: 1, green: 0.9697935916, blue: 0.7963718291, alpha: 1)
         
         let percentDailyValue = UILabel()
-        percentDailyValue.text = "% Daily Value"
+        percentDailyValue.text = "% Daily Value*"
         percentDailyValue.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
         percentDailyValue.textAlignment = .right
+        percentDailyValue.textColor = UIColor.Theme1.black
         
         let hSV2 = UIStackView(arrangedSubviews: [UIView(), percentDailyValue])
         hSV2.axis = .horizontal
@@ -108,6 +112,7 @@ class NutritionFactsTableViewCell: UITableViewCell {
         
         let nameLabel = UILabel()
         nameLabel.text = name
+        nameLabel.textColor = UIColor.Theme1.black
         !isBold ? nameLabel.setMargins() : nil
         isBold ? (nameLabel.font = UIFont.boldSystemFont(ofSize: 19)) : (nameLabel.font = UIFont.systemFont(ofSize: 18))
         

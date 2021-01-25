@@ -142,7 +142,7 @@ class AddRecipeViewController: UIViewController {
         super.viewDidLoad()
         title = "Add New Recipe"
         navigationController?.navigationBar.prefersLargeTitles = true
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor.Theme1.white
         setupLayout()
     }
     
