@@ -1,19 +1,13 @@
 //
-//  ProfileViewController.swift
+//  EditProfileViewController.swift
 //  Recipe and Calorie Manager
 //
-//  Created by Kazunobu Someya on 2021-01-19.
+//  Created by 鈴木ちほり on 2021/01/25.
 //
-//  Committed by Chiori Suzuki
-
 
 import UIKit
-import CoreData
 
-class ProfileViewController: UIViewController, UITextFieldDelegate {
-    
-    // persistantContainer
-    private static var persistentContainer: NSPersistentCloudKitContainer! = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
+class EditProfileViewController: UIViewController {
 
     // ScrollView
     let scrollView: UIScrollView = {
@@ -323,107 +317,6 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         activeSV.spacing = 10
         
     }
-    
-    @objc func textFieldDidBeginEditing(_ textField: UITextField) {
-        activePick.isHidden = false
-    }
-    
-    @objc func setActivityView() {
-        guard let image = profileImage.image else { return }
-        let activitiController = UIActivityViewController(activityItems: [image], applicationActivities: nil)
-        present(activitiController, animated: true, completion: nil)
-    }
-    
-
-    static func newPersion() -> Person {
-        let context = persistentContainer.viewContext
-        let person = NSEntityDescription.insertNewObject(forEntityName: "Person", into: context) as! Person
-        return person
-    }
-    
-    @objc func addNewPerson() {
-        let person = ProfileViewController.newPersion()
-        let dateFormater: DateFormatter = DateFormatter()
-        dateFormater.dateFormat = "MM/dd/yyyy"
-        let stringFromDate: String = dateFormater.string(from: self.birthPick.date) as String
-        let birthDate: Date = dateFormater.date(from: stringFromDate)!
-        
-//        print("\(nameTxt.text), \(genderSeg.titleForSegment(at: genderSeg.selectedSegmentIndex)), \(activeText.text)")
-        person.name = nameTxt.text
-        person.birthday = birthDate
-        person.gender = genderSeg.titleForSegment(at: genderSeg.selectedSegmentIndex)
-        guard let weight = Double(weightTxt.text!), let height = Double(heightTxt.text!) else { return }
-        person.weight = weight
-        person.height = height
-        person.activityType = activeText.text
-        
-
-    }
-    
-    static func save() {
-        ProfileViewController.persistentContainer.saveContext()
-    }
-    
-    // scrollView
-    @objc func dismissKeyboard(_ sender: UITapGestureRecognizer) {
-      view.endEditing(true)
-    }
-    
-    fileprivate func registerForKeyboardNotification() {
-      // 1. I want to listen to the keyboard showing / hiding
-      //    - "hey iOS, tell(notify) me when keyboard shows / hides"
-      NotificationCenter.default.addObserver(self, selector: #selector(keyboardWasShown(_:)), name: UIResponder.keyboardDidShowNotification, object: nil)
-      NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillBeHidden(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    @objc func keyboardWasShown(_ notification: NSNotification) {
-      // 2. When notified, I want to ask iOS the size(height) of the keyboard
-      guard let info = notification.userInfo, let keyboardFrameValue = info[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue else { return }
-      
-      let keyboardFrame = keyboardFrameValue.cgRectValue
-      let keyboardHeight = keyboardFrame.size.height
-      
-      // 3. Tell scrollview to scroll up (height)
-      let insets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 100)
-      scrollView.contentInset = insets
-      scrollView.scrollIndicatorInsets = insets
-    }
-
-    @objc func keyboardWillBeHidden(_ notification: NSNotification) {
-      // 2. When notified, I want to ask iOS the size(height) of the keyboard
-      // 3. Tell scrollview to scroll down (height)
-      let insets = UIEdgeInsets.zero
-      scrollView.contentInset = insets
-      scrollView.scrollIndicatorInsets = insets
-    }
-    
-    
-}
 
 
-extension ProfileViewController: UIPickerViewDelegate, UIPickerViewDataSource {
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return activityItems.count
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return activityItems[row]
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        activeText.text = activityItems[row]
-        UIView.animate(withDuration: 0.3) {
-            pickerView.isHidden = true
-        }
-    }
-}
-
-extension ProfileViewController: UIScrollViewDelegate {
-  func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-    return nil
-  }
 }
