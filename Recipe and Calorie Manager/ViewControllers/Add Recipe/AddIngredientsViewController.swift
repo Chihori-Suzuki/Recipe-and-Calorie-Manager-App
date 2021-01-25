@@ -7,7 +7,15 @@
 
 import UIKit
 
-class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate {
+class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, SaveRecipeTableViewCellDelegate {
+    
+    func save(_ mealType: Meal, _ recipe: Recipe) {
+    }
+    
+    func discardRecipe() {
+        navigationController?.popViewController(animated: true)
+    }
+    
     
     var selectedRowForEdit: IndexPath?
     
@@ -18,6 +26,7 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate {
         tableview.reloadRows(at: [indexPath], with: .automatic)
         tableview.reloadSections([1, 2], with: .none)
     }
+    
     
     func delete(_ ingredient: Ingredient) {
         guard let indexPath = selectedRowForEdit else { return }
@@ -255,6 +264,7 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate {
                 print(error)
             }
         }
+            self.ingredientTextField.text?.removeAll()
     }
     
     fileprivate func calculateTotals() {

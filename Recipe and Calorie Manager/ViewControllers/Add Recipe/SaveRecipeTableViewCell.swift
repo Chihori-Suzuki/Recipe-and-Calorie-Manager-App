@@ -9,6 +9,7 @@ import UIKit
 
 protocol SaveRecipeTableViewCellDelegate: class {
     func save(_ mealType: Meal, _ recipe: Recipe)
+    func discardRecipe()
 }
 
 class SaveRecipeTableViewCell: UITableViewCell {
@@ -45,7 +46,7 @@ class SaveRecipeTableViewCell: UITableViewCell {
         button.heightAnchor.constraint(equalToConstant: 50).isActive = true
         button.backgroundColor = UIColor.Theme1.orange
         button.layer.cornerRadius = 10
-        button.addTarget(self, action: #selector(saveRecipe(_:)), for: .touchUpInside)
+        button.addTarget(self, action: #selector(discardRecipe(_:)), for: .touchUpInside)
         button.isHidden = true
         return button
     }()
@@ -85,6 +86,18 @@ class SaveRecipeTableViewCell: UITableViewCell {
         //temporary code for testing
         guard let meal = mealType, let recipe = newRecipe else { return }
         delegate?.save(meal, recipe)
+    }
+    
+    @objc func discardRecipe(_ sender: UIButton) {
+        UIView.animate(withDuration: 0.10) {
+            sender.transform = CGAffineTransform(scaleX: 0.6, y: 0.6)
+        } completion: { (_) in
+            UIView.animate(withDuration: 0.10) {
+                sender.transform = CGAffineTransform.identity
+            }
+        }
+        
+        delegate?.discardRecipe()
     }
 }
 
