@@ -83,4 +83,8 @@ class RecipeListViewController: UIViewController, UITableViewDelegate,UITableVie
         clickedMeal.selectedCategory = indexPath.row
         navigationController?.pushViewController(clickedMeal, animated: true)
     }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 40.0
+    }
 }

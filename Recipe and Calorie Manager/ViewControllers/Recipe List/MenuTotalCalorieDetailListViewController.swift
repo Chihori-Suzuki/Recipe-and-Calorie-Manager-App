@@ -66,6 +66,7 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
         title = mealTitle
         navigationController?.navigationBar.prefersLargeTitles = true
         setupTableView()
+        self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
     
     func setupTableView() {
@@ -92,12 +93,20 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
         let cellTitle = catalog.catalog[selectCategory].recipes[indexPath.row].title
         let cellTotalCalories = catalog.catalog[selectCategory].recipes[indexPath.row].ingredients.map { $0.nutrition!.calories }.reduce(0){ $0 + $1 }
         cell.update(cellTitle, cellTotalCalories)
-        cell.accessoryType = .detailDisclosureButton
-        
+//        cell.accessoryType = .detailDisclosureButton
+        cell.showsReorderControl = true
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 40.0
+        return 50.0
+    }
+    
+    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        return true 
+    }
+    
+    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+//        let removedCell = catalog.catalog[selectedCategory].recipes.
     }
 }
