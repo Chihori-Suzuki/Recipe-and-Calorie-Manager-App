@@ -151,10 +151,17 @@ class AddRecipeViewController: UIViewController {
         setupLayout()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        recipeTextField.text?.removeAll()
+        for button in mealButtons {
+            button.alpha = 0.5
+            button.isEnabled = false
+        }
+    }
+    
     @objc func addNewRecipe() {
         let newRecipeVC = AddIngredientsViewController()
         newRecipeVC.recipeTitle = recipeTextField.text
-        recipeTextField.text?.removeAll()
         navigationController?.pushViewController(newRecipeVC, animated: true)
     }
     
