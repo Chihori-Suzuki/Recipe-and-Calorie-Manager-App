@@ -165,10 +165,10 @@
 				FA0EB5D825B75F360085BCE7 /* ProfileViewController.swift */,
 				2E792C0225BA4A4A00515D76 /* showProfileViewController.swift */,
 				2E792D3C25BF6D7000515D76 /* EditProfileViewController.swift */,
+				2E792D4325BFAC9000515D76 /* Profile.swift */,
 				FAA2FBF325BDE4C500CD300F /* Recipe List */,
 				526B350525B6430700BAE8D9 /* WelcomeViewController.swift */,
 				52FF472725BB8E8F00B3888F /* Add Recipe */,
-				2E792D4325BFAC9000515D76 /* Profile.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
