@@ -68,6 +68,7 @@ class SaveRecipeTableViewCell: UITableViewCell {
         contentView.backgroundColor = UIColor.Theme1.white
         contentView.heightAnchor.constraint(equalTo: hStackView.heightAnchor, multiplier: 1).isActive = true
         hStackView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
+//        hStackView.heightAnchor.constraint(equalToConstant: 50).isActive = true
     }
     
     required init?(coder: NSCoder) {

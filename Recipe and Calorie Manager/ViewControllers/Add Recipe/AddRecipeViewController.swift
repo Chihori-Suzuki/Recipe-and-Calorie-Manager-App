@@ -9,16 +9,14 @@ import UIKit
 
 class AddRecipeViewController: UIViewController {
     
-    let recipeTextField: UITextField = {
-       let tf = UITextField()
-        tf.borderStyle = .roundedRect
-        tf.placeholder = "Chicken Parmigiano"
+    lazy var recipeTextField: UITextField = {
+        let tf = UITextField()
+        tf.placeholder = "Chicken Adobo       "
         tf.font = .systemFont(ofSize: 25)
-        tf.heightAnchor.constraint(equalToConstant: 50).isActive = true
         tf.becomeFirstResponder()
-        tf.layer.borderWidth = 0.8
-        tf.layer.borderColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
-        tf.layer.cornerRadius = 8
+        tf.borderStyle = .roundedRect
+        tf.backgroundColor = UIColor.Theme1.yellow
+        tf.textColor = UIColor.Theme1.brown
         tf.addTarget(self, action: #selector(textEditingChanged(_:)), for: .editingChanged)
         return tf
     }()
@@ -132,6 +130,7 @@ class AddRecipeViewController: UIViewController {
         }
         let vMealStackView = arrangeHStackViews(with: [breakfastButton, lunchButton, dinnerButton, snacksButton], and: mealLabels)
         vStackView.addArrangedSubview(recipeTextField)
+        
         vStackView.addArrangedSubview(vMealStackView)
         view.addSubview(vStackView)
         vStackView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor).isActive = true
@@ -148,8 +147,17 @@ class AddRecipeViewController: UIViewController {
         super.viewDidLoad()
         title = "Add New Recipe"
         view.backgroundColor = UIColor.Theme1.white
+        
         setupLayout()
     }
+    
+//    override func viewDidLayoutSubviews() {
+//        let bottomLine = CALayer()
+//        bottomLine.frame = CGRect(x: 0, y: recipeTextField.frame.height - 2, width: recipeTextField.frame.width, height: 1.8)
+//        bottomLine.backgroundColor = UIColor.Theme1.yellow.cgColor
+//        recipeTextField.borderStyle = .none
+//        recipeTextField.layer.addSublayer(bottomLine)
+//    }
     
     override func viewWillDisappear(_ animated: Bool) {
         recipeTextField.text?.removeAll()

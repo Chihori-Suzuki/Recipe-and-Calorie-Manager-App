@@ -94,6 +94,7 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
        let button = UIButton()
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 25)
         button.widthAnchor.constraint(equalToConstant: 60).isActive = true
+        button.contentMode = .scaleAspectFit
         button.heightAnchor.constraint(equalToConstant: 50).isActive = true
         button.layer.cornerRadius = 8
         button.addTarget(self, action: #selector(addNewIngredient), for: .touchUpInside)
@@ -384,11 +385,13 @@ extension AddIngredientsViewController: UITableViewDelegate, UITableViewDataSour
             cell.totalFatDV.text = (String(format: "%.2f", (totalFat/DailyValue.totalFat.rawValue)*100)+" %")
             
             let totalCholesterol = ingredients.map { $0.nutrition!.cholesterol }.reduce(0){ $0 + $1 }
-            cell.totalCholesterolLabel.text = String(format: "%.2f g", totalCholesterol)
-            cell.totalCholesterolDV.text = (String(format: "%.2f", (totalFat/DailyValue.cholesterol.rawValue)*100)+" %")
+            print(totalCholesterol)
+            cell.totalCholesterolLabel.text = String(format: "%.2f mg", totalCholesterol)
+            cell.totalCholesterolDV.text = (String(format: "%.2f", ((totalFat/DailyValue.cholesterol.rawValue))*100)+" %")
+            print(totalCholesterol)
             
             let totalSodium = ingredients.map { $0.nutrition!.sodium }.reduce(0){ $0 + $1 }
-            cell.totalSodiumLabel.text = String(format: "%.2f g", totalSodium)
+            cell.totalSodiumLabel.text = String(format: "%.2f mg", totalSodium)
             cell.totalSodiumDV.text = (String(format: "%.2f", (totalFat/DailyValue.sodium.rawValue)*100)+" %")
             
             let totalCarbs = ingredients.map { $0.nutrition!.carbohydrates }.reduce(0){ $0 + $1 }
@@ -400,7 +403,7 @@ extension AddIngredientsViewController: UITableViewDelegate, UITableViewDataSour
             cell.totalProteinDV.text = (String(format: "%.2f", (totalFat/DailyValue.protein.rawValue)*100)+" %")
 
             let totalPotassium = ingredients.map { $0.nutrition!.potassium }.reduce(0){ $0 + $1 }
-            cell.totalPotassiumLabel.text = String(format: "%.2f g", totalPotassium)
+            cell.totalPotassiumLabel.text = String(format: "%.2f mg", totalPotassium)
             cell.totalPotassiumDV.text = (String(format: "%.2f", (totalFat/DailyValue.potassium.rawValue)*100)+" %")
             
             let totalSatFat = ingredients.map { $0.nutrition!.fat }.reduce(0){ $0 + $1 }
