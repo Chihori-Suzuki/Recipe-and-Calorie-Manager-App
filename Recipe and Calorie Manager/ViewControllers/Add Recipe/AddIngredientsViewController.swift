@@ -13,9 +13,12 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
     }
     
     func discardRecipe() {
-        navigationController?.popViewController(animated: true)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            UIView.animate(withDuration: 1) {
+                self.navigationController?.popViewController(animated: true)
+            }
+        }
     }
-    
     
     var selectedRowForEdit: IndexPath?
     
@@ -50,8 +53,11 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
     var fiberTotalCountLabel = AnimatedLabelTotals()
     var meal: Meal?
     var recipeTitle: String?
-    var ingredients = [(serving: String, nutrition: Nutrition?)]()
-
+    var ingredients = [(serving: String, nutrition: Nutrition?)]() {
+        didSet {
+            ingredients.count == 0 ? (navigationItem.rightBarButtonItem?.isEnabled = true) : (navigationItem.rightBarButtonItem?.isEnabled = false)
+        }
+    }
     var caloriesTotal: Double? {
         didSet { caloriesTotalCountLabel.count(from: Float(oldValue ?? 0), to: Float(caloriesTotal ?? 0), duration: .brisk) }
     }
@@ -229,11 +235,22 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
         vStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0).isActive = true
 
     }
+
+    override func viewWillAppear(_ animated: Bool) {
+        let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.Theme1.orange, NSAttributedString.Key.font: UIFont(name: "ArialRoundedMTBold", size: 30)!]
+        navigationController?.navigationBar.largeTitleTextAttributes = textAttributes
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(dismissVC))
+        navigationItem.rightBarButtonItem?.tintColor = UIColor.Theme1.blue
+    }
     
+    @objc func dismissVC() {
+        navigationController?.popViewController(animated: true)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+    
         if let meal = meal?.rawValue {
             addButton.setImage(UIImage(named: meal), for: .normal)
         }
@@ -243,7 +260,6 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
         title = recipeTitle
         setupStackViews()
         setupTableView()
-        
     }
    
     @objc func addNewIngredient() {
@@ -401,10 +417,11 @@ extension AddIngredientsViewController: UITableViewDelegate, UITableViewDataSour
             return cell
         case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: SaveRecipeTableViewCell.identifier, for: indexPath) as! SaveRecipeTableViewCell
+            cell.delegate = self
             cell.mealType = meal
             cell.newRecipe = Recipe(title: recipeTitle!, ingredients: ingredients)
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                if self.ingredients.count > 1 {
+                if self.ingredients.count > 0 {
                     cell.saveButton.isHidden = false
                     cell.discardButton.isHidden = false
                 } else {
@@ -425,9 +442,11 @@ extension AddIngredientsViewController: UITableViewDelegate, UITableViewDataSour
         myLabel.font = UIFont.boldSystemFont(ofSize: 22)
         myLabel.text = self.tableView(tableView, titleForHeaderInSection: section)
         myLabel.textColor = UIColor.Theme1.brown
+        myLabel.layer.cornerRadius = 12
 
         let headerView = UIView()
         headerView.addSubview(myLabel)
+        myLabel.contentMode = .scaleAspectFit
 
         return headerView
     }

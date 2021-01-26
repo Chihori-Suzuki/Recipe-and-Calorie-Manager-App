@@ -138,12 +138,25 @@ class AddRecipeViewController: UIViewController {
         vStackView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.Theme1.blue, NSAttributedString.Key.font: UIFont(name: "ArialRoundedMTBold", size: 35)!]
+        navigationController?.navigationBar.largeTitleTextAttributes = textAttributes
+        navigationController?.navigationBar.prefersLargeTitles = true
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Add New Recipe"
-        navigationController?.navigationBar.prefersLargeTitles = true
         view.backgroundColor = UIColor.Theme1.white
         setupLayout()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        recipeTextField.text?.removeAll()
+        for button in mealButtons {
+            button.alpha = 0.5
+            button.isEnabled = false
+        }
     }
     
     @objc func addNewRecipe() {

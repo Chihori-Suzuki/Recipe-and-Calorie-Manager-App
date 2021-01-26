@@ -50,7 +50,7 @@ class EditIngredientViewController: UIViewController, saveIngredientButtonTapped
         button.widthAnchor.constraint(equalToConstant: 60).isActive = true
         button.heightAnchor.constraint(equalToConstant: 50).isActive = true
         button.layer.cornerRadius = 8
-        button.isEnabled = true
+        button.isEnabled = false
         button.addTarget(self, action: #selector(updateIngredient), for: .touchUpInside)
         button.alpha = 0.5
     return button
@@ -250,6 +250,7 @@ extension EditIngredientViewController: UITableViewDelegate, UITableViewDataSour
         myLabel.frame = CGRect(x: .zero, y: .zero, width: tableView.frame.width, height: 35)
         myLabel.font = UIFont.boldSystemFont(ofSize: 22)
         myLabel.text = self.tableView(tableView, titleForHeaderInSection: section)
+        myLabel.textColor = UIColor.Theme1.brown
 
         let headerView = UIView()
         headerView.addSubview(myLabel)
