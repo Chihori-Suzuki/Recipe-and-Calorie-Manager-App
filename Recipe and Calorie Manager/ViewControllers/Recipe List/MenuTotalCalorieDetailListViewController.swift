@@ -68,14 +68,13 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
         return edit
     }()
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         title = mealTitle
         navigationController?.navigationBar.prefersLargeTitles = true
         setupTableView()
-        myTable.allowsMultipleSelectionDuringEditing = true
+//        myTable.allowsMultipleSelectionDuringEditing = true
         navigationItem.rightBarButtonItem = editBtn
     }
     
@@ -113,7 +112,7 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
         let cellTitle = catalog.catalog[selectCategory].recipes[indexPath.row].title
         let cellTotalCalories = catalog.catalog[selectCategory].recipes[indexPath.row].ingredients.map { $0.nutrition!.calories }.reduce(0){ $0 + $1 }
         cell.update(cellTitle, cellTotalCalories)
-//        cell.accessoryType = .detailDisclosureButton
+        cell.accessoryType = .detailDisclosureButton
         cell.showsReorderControl = true
         return cell
     }
@@ -127,7 +126,19 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-//        let removedCell = catalog.catalog[selectedCategory].recipes.
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+//            guard let selectCategory = selectedCategory else { return }
+//            let cellTitle = catalog.catalog[selectCategory].recipes[indexPath.row].title
+//            let cellTotalCalories = catalog.catalog[selectCategory].recipes[indexPath.row].ingredients.map { $0.nutrition!.calories }.reduce(0){ $0 + $1 }
+            catalog.catalog.remove(at: 0)
+            let indexPath = IndexPath(item: 0, section: 0)
+            myTable.deleteRows(at: [indexPath], with: .fade)
+        } else if editingStyle == .insert {
+            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
+        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
