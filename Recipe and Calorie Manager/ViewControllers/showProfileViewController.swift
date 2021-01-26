@@ -100,7 +100,7 @@ class showProfileViewController: UIViewController {
         return tv
     }()
     let cellID = "CellID"
-    var personalData: [[]]
+//    var personalData: [[]]
     
     // editButton
     let editButton: UIButton = {

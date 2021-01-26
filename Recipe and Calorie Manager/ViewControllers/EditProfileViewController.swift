@@ -7,7 +7,7 @@
 
 import UIKit
 
-class EditProfileViewController: UIViewController {
+class EditProfileViewController: UIViewController, UITextFieldDelegate {
 
     // ScrollView
     let scrollView: UIScrollView = {
@@ -48,20 +48,6 @@ class EditProfileViewController: UIViewController {
         lb.text = "Name"
         return lb
     }()
-    let birthLabel: UILabel = {
-        let lb = UILabel()
-        lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.setContentHuggingPriority(.required, for: .horizontal)
-        lb.text = "Birthday"
-        return lb
-    }()
-    let genderLabel: UILabel = {
-        let lb = UILabel()
-        lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.setContentHuggingPriority(.required, for: .horizontal)
-        lb.text = "Gender"
-        return lb
-    }()
     let weightLabel: UILabel = {
         let lb = UILabel()
         lb.translatesAutoresizingMaskIntoConstraints = false
@@ -94,20 +80,6 @@ class EditProfileViewController: UIViewController {
         return tf
     }()
     
-    let birthPick: UIDatePicker = {
-        let dp = UIDatePicker()
-        dp.datePickerMode = .date
-        dp.translatesAutoresizingMaskIntoConstraints = false
-        return dp
-    }()
-    let genderSeg: UISegmentedControl = {
-        let items = ["male", "female"]
-        let tf = UISegmentedControl(items: items)
-        tf.selectedSegmentIndex = 0
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        
-        return tf
-    }()
     let weightTxt: UITextField = {
         let tf = UITextField()
         tf.translatesAutoresizingMaskIntoConstraints = false
@@ -168,16 +140,6 @@ class EditProfileViewController: UIViewController {
         sv.translatesAutoresizingMaskIntoConstraints = false
         return sv
     }()
-    let birthSV: UIStackView = {
-        let sv = UIStackView()
-        sv.translatesAutoresizingMaskIntoConstraints = false
-        return sv
-    }()
-    let genderSV: UIStackView = {
-        let sv = UIStackView()
-        sv.translatesAutoresizingMaskIntoConstraints = false
-        return sv
-    }()
     let weightSV: UIStackView = {
         let sv = UIStackView()
         sv.translatesAutoresizingMaskIntoConstraints = false
@@ -221,17 +183,17 @@ class EditProfileViewController: UIViewController {
         view.addSubview(scrollView)
         scrollView.addSubview(mainSV)
         setSVConfig()
-//        
-//        activePick.delegate = self
-//        activePick.dataSource = self
-//        
-//        activeText.delegate = self
-//        
-//        registerForKeyboardNotification()
-//        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard(_:)))
-//        view.addGestureRecognizer(gestureRecognizer)
-//        
-//        scrollView.delegate = self
+        
+        activePick.delegate = self
+        activePick.dataSource = self
+        
+        activeText.delegate = self
+        
+        registerForKeyboardNotification()
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard(_:)))
+        view.addGestureRecognizer(gestureRecognizer)
+        
+        scrollView.delegate = self
         
     }
     
@@ -251,8 +213,6 @@ class EditProfileViewController: UIViewController {
         
         mainSV.addArrangedSubview(imageView)
         mainSV.addArrangedSubview(nameSV)
-        mainSV.addArrangedSubview(birthSV)
-        mainSV.addArrangedSubview(genderSV)
         mainSV.addArrangedSubview(weightSV)
         mainSV.addArrangedSubview(heightSV)
         mainSV.addArrangedSubview(activeSV)
@@ -279,20 +239,6 @@ class EditProfileViewController: UIViewController {
         nameSV.alignment = .fill
         nameSV.spacing = 10
         
-        /* birthSV **********/
-        birthSV.addArrangedSubview(birthLabel)
-        birthSV.addArrangedSubview(birthPick)
-        birthSV.axis = .horizontal
-        birthSV.alignment = .fill
-        birthSV.spacing = 10
-        
-        /* genderSV **********/
-        genderSV.addArrangedSubview(genderLabel)
-        genderSV.addArrangedSubview(genderSeg)
-        genderSV.axis = .horizontal
-        genderSV.alignment = .fill
-        genderSV.spacing = 10
-        
         /* weightSV *********/
         weightSV.addArrangedSubview(weightLabel)
         weightSV.addArrangedSubview(weightTxt)
@@ -317,6 +263,67 @@ class EditProfileViewController: UIViewController {
         activeSV.spacing = 10
         
     }
+    
+    // scrollView
+    @objc func dismissKeyboard(_ sender: UITapGestureRecognizer) {
+      view.endEditing(true)
+    }
+    
+    fileprivate func registerForKeyboardNotification() {
+      // 1. I want to listen to the keyboard showing / hiding
+      //    - "hey iOS, tell(notify) me when keyboard shows / hides"
+      NotificationCenter.default.addObserver(self, selector: #selector(keyboardWasShown(_:)), name: UIResponder.keyboardDidShowNotification, object: nil)
+      NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillBeHidden(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc func keyboardWasShown(_ notification: NSNotification) {
+      // 2. When notified, I want to ask iOS the size(height) of the keyboard
+      guard let info = notification.userInfo, let keyboardFrameValue = info[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue else { return }
+      
+      let keyboardFrame = keyboardFrameValue.cgRectValue
+      let keyboardHeight = keyboardFrame.size.height
+      
+      // 3. Tell scrollview to scroll up (height)
+      let insets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 100)
+      scrollView.contentInset = insets
+      scrollView.scrollIndicatorInsets = insets
+    }
 
+    @objc func keyboardWillBeHidden(_ notification: NSNotification) {
+      // 2. When notified, I want to ask iOS the size(height) of the keyboard
+      // 3. Tell scrollview to scroll down (height)
+      let insets = UIEdgeInsets.zero
+      scrollView.contentInset = insets
+      scrollView.scrollIndicatorInsets = insets
+    }
+    
+    
 
+}
+
+extension EditProfileViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return activityItems.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return activityItems[row]
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        activeText.text = activityItems[row]
+        UIView.animate(withDuration: 0.3) {
+            pickerView.isHidden = true
+        }
+    }
+}
+
+extension EditProfileViewController: UIScrollViewDelegate {
+  func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+    return nil
+  }
 }
