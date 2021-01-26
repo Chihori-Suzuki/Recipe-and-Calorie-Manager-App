@@ -20,6 +20,7 @@ class NutritionFactsTableViewCell: UITableViewCell {
     var totalPotassiumLabel = UILabel()
     var totalProteinLabel = UILabel()
     var totalCaloriesLabel = UILabel()
+    var totalServingLabel = UILabel()
     
     var totalFatDV = UILabel()
     var totalCholesterolDV = UILabel()
@@ -48,6 +49,14 @@ class NutritionFactsTableViewCell: UITableViewCell {
         amountPerServingLabel.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
         amountPerServingLabel.textColor = UIColor.Theme1.black
             
+        totalServingLabel.font = UIFont.systemFont(ofSize: 19)
+        totalServingLabel.textColor = UIColor.Theme1.black
+        
+        let hServingSV = UIStackView(arrangedSubviews: [amountPerServingLabel, UIView(), totalServingLabel])
+        hServingSV.axis = .horizontal
+        hServingSV.distribution = .fill
+        hServingSV.alignment = .fill
+        
         let disclaimerLabel = UILabel()
         disclaimerLabel.text = " * The % Daily Value (DV) tells you how much a nutrient in a serving of food contributes to a daily diet. 2,000 calories a day is used for general nutrition advice. (FDA.gov)"
         disclaimerLabel.setMargins()
@@ -62,12 +71,11 @@ class NutritionFactsTableViewCell: UITableViewCell {
         caloriesLabel.textAlignment = .natural
         caloriesLabel.textColor = UIColor.Theme1.black
 
-        totalCaloriesLabel.font = UIFont.systemFont(ofSize: 20)
+        totalCaloriesLabel.font = UIFont.boldSystemFont(ofSize: 20)
         totalCaloriesLabel.textColor = UIColor.Theme1.black
         let hSV1 = UIStackView(arrangedSubviews: [caloriesLabel, UIView(), totalCaloriesLabel])
         hSV1.axis = .horizontal
         hSV1.alignment = .bottom
-        hSV1.alignment = .leading
         hSV1.distribution = .fill
 
         let percentDailyValue = UILabel()
@@ -76,7 +84,7 @@ class NutritionFactsTableViewCell: UITableViewCell {
         percentDailyValue.textAlignment = .right
         percentDailyValue.textColor = UIColor.Theme1.black
        
-        let vStackView = UIStackView(arrangedSubviews: [amountPerServingLabel, hSV1, percentDailyValue])
+        let vStackView = UIStackView(arrangedSubviews: [hServingSV, hSV1, percentDailyValue])
         vStackView.axis = .vertical
         vStackView.alignment = .fill
         vStackView.distribution = .fill
@@ -128,6 +136,78 @@ class NutritionFactsTableViewCell: UITableViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func update(with ingredients: [(serving: String, nutrition: Nutrition?)]) {
+        let totalFat = ingredients.map { $0.nutrition!.totalFat }.reduce(0){ $0 + $1 }
+        totalFatLabel.text = String(format: "%.2f g", totalFat)
+        totalFatDV.text = (String(format: "%.2f", (totalFat/DailyValue.totalFat.rawValue)*100)+" %")
+        
+        let totalCholesterol = ingredients.map { $0.nutrition!.cholesterol }.reduce(0){ $0 + $1 }
+        totalCholesterolLabel.text = String(format: "%.2f mg", totalCholesterolLabel)
+        totalCholesterolDV.text = (String(format: "%.2f", (totalCholesterol/DailyValue.cholesterol.rawValue)*100)+" %")
+        
+        let totalSodium = ingredients.map { $0.nutrition!.sodium }.reduce(0){ $0 + $1 }
+        totalSodiumLabel.text = String(format: "%.2f mg", totalSodium)
+        totalSodiumDV.text = (String(format: "%.2f", (totalSodium/DailyValue.totalFat.rawValue)*100)+" %")
+
+        let totalCarbs = ingredients.map { $0.nutrition!.carbohydrates }.reduce(0){ $0 + $1 }
+        totalCarbsLabel.text = String(format: "%.2f g", totalCarbs)
+        totalCarbsDV.text = (String(format: "%.2f", (totalCarbs/DailyValue.totalFat.rawValue)*100)+" %")
+
+        let totalProtein = ingredients.map { $0.nutrition!.protein }.reduce(0){ $0 + $1 }
+        totalProteinLabel.text = String(format: "%.2f g", totalProtein)
+        totalProteinDV.text = (String(format: "%.2f", (totalProtein/DailyValue.totalFat.rawValue)*100)+" %")
+
+        let totalPotassium = ingredients.map { $0.nutrition!.potassium }.reduce(0){ $0 + $1 }
+        totalPotassiumLabel.text = String(format: "%.2f mg", totalPotassium)
+        totalPotassiumDV.text = (String(format: "%.2f", (totalPotassium/DailyValue.totalFat.rawValue)*100)+" %")
+
+        let totalSatFat = ingredients.map { $0.nutrition!.fat }.reduce(0){ $0 + $1 }
+        totalSatFatLabel.text = String(format: "%.2f g", totalSatFat)
+        totalSatFatDV.text = (String(format: "%.2f", (totalSatFat/DailyValue.totalFat.rawValue)*100)+" %")
+        
+        let totalServingSize = ingredients.map { $0.nutrition!.serving }.reduce(0){ $0 + $1 }
+        totalServingLabel.text = String(format: "%.2f g", totalServingSize)
+        
+        totalCaloriesLabel.text = String(format: "%.2f", ingredients.map { $0.nutrition!.calories }.reduce(0){ $0 + $1 })
+        totalFiberLabel.text = String(format: "%.2f g", ingredients.map { $0.nutrition!.fiber }.reduce(0){ $0 + $1 })
+        totalSugarLabel.text = String(format: "%.2f g", ingredients.map { $0.nutrition!.sugar }.reduce(0){ $0 + $1 })
+    }
+    
+    func update(with ingredient: Ingredient) {
+        let totalFat = ingredient.nutrition.totalFat
+        totalFatLabel.text = String(format: "%.2f g", totalFat)
+        totalFatDV.text = (String(format: "%.2f", (totalFat/DailyValue.totalFat.rawValue)*100)+" %")
+        
+        let totalCholesterol = ingredient.nutrition.cholesterol
+        totalCholesterolLabel.text = String(format: "%.2f mg", totalCholesterol)
+        totalCholesterolDV.text = (String(format: "%.2f", (totalFat/DailyValue.cholesterol.rawValue)*100)+" %")
+        
+        let totalSodium = ingredient.nutrition.sodium
+        totalSodiumLabel.text = String(format: "%.2f mg", totalSodium)
+        totalSodiumDV.text = (String(format: "%.2f", (totalSodium/DailyValue.sodium.rawValue)*100)+" %")
+        
+        let totalCarbs = ingredient.nutrition.carbohydrates
+        totalCarbsLabel.text = String(format: "%.2f g", totalCarbs)
+        totalCarbsDV.text = (String(format: "%.2f", (totalCarbs/DailyValue.totalCarbs.rawValue)*100)+" %")
+        
+        let totalProtein = ingredient.nutrition.protein
+        totalProteinLabel.text = String(format: "%.2f g", totalProtein)
+        totalProteinDV.text = (String(format: "%.2f", (totalProtein/DailyValue.protein.rawValue)*100)+" %")
+        
+        let totalPotassium = ingredient.nutrition.potassium
+        totalPotassiumLabel.text = String(format: "%.2f mg", totalPotassium)
+        totalPotassiumDV.text = (String(format: "%.2f", (totalPotassium/DailyValue.potassium.rawValue)*100)+" %")
+        
+        let totalSatFat = ingredient.nutrition.fat
+        totalSatFatLabel.text = String(format: "%.2f g", totalSatFat)
+        totalSatFatDV.text = (String(format: "%.2f", (totalSatFat/DailyValue.satFat.rawValue)*100)+" %")
+        
+        let totalServing = ingredient.nutrition.serving
+        totalServingLabel.text = String(format: "%.2f g", totalServing)
+        
+        totalCaloriesLabel.text = String(format: "%.2f", ingredient.nutrition.calories)
     }
 }
 
