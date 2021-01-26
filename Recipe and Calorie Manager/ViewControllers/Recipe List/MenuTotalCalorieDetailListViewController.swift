@@ -136,8 +136,11 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
         guard let selectedCategory = selectedCategory else { return }
         
         let selectedMeal = catalog.catalog[selectedCategory].recipes[indexPath.row]
+        let mealType = catalog.catalog[selectedCategory].category
         clickedMeal.ingredients = selectedMeal.ingredients
         clickedMeal.recipeTitle = selectedMeal.title
+        clickedMeal.isViewFromRecipeList = true
+        clickedMeal.meal = mealType
 //        var ingredients = [(serving: String, nutrition: Nutrition?)]() {
         navigationController?.pushViewController(clickedMeal, animated: true)
     }
