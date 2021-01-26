@@ -6,11 +6,9 @@
 //
 
 import UIKit
-import CoreData
 
 class showProfileViewController: UIViewController {
 
-    var people: [NSManagedObject] = []
     
     // ScrollView
     let scrollView: UIScrollView = {
@@ -99,8 +97,10 @@ class showProfileViewController: UIViewController {
         tv.translatesAutoresizingMaskIntoConstraints = false
         return tv
     }()
-    let cellID = "CellID"
-//    var personalData: [[]]
+    
+    let cellId = "Cells"
+    var sectionTitle: [String] = ["Personal Profile"]
+    var personalData = [Profile]()
     
     // editButton
     let editButton: UIButton = {
@@ -126,8 +126,11 @@ class showProfileViewController: UIViewController {
         view.addSubview(scrollView)
         scrollView.addSubview(mainSV)
         setSVConfig()
+        setPersonalData()
         
-        
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellId)
+        tableView.dataSource = self
+        tableView.delegate = self
         
     }
     func setSVConfig() {
@@ -136,8 +139,6 @@ class showProfileViewController: UIViewController {
         scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
         scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
         scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
-        
-        /* sa **********/
         
         
         /* mainSV **********/
@@ -183,9 +184,62 @@ class showProfileViewController: UIViewController {
         cfSV.alignment = .fill
         cfSV.spacing = 10
         
+    }
+    
+    func setPersonalData(){
+        // UserDefaults
+        let defaults = UserDefaults.standard
+        let savedName = defaults.object(forKey: "Name") as? String ?? String()
+        var savedBirth = defaults.object(forKey: "Birthday") as? Date ?? Date()
+        let savedGender = defaults.object(forKey: "Gender") as? String ?? String()
+        let savedWeight = defaults.double(forKey: "weight")
+        let savedHeight = defaults.double(forKey: "height")
+        let savedActivity = defaults.object(forKey: "ActivityType") as? String ?? String()
+        
+//        let age =
+        personalData.append(Profile(palameter: "Name", value: savedName))
+        personalData.append(Profile(palameter: "Birthday", value: "28"))
+        personalData.append(Profile(palameter: "Gender", value: savedGender))
+        personalData.append(Profile(palameter: "Weight", value: "\(savedWeight)"))
+        personalData.append(Profile(palameter: "height", value: "\(savedHeight)"))
+        personalData.append(Profile(palameter: "ActivityType", value: savedActivity))
         
         
     }
 }
 
+extension showProfileViewController: UITableViewDataSource, UITableViewDelegate {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        print(#function)
+        return sectionTitle.count
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        print(#function)
+        print(personalData.count)
+        return personalData.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        print(#function)
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
+        cell.textLabel?.text = personalData[indexPath.row].palameter
+        cell.textLabel?.textColor = .black
+        cell.detailTextLabel?.text = personalData[indexPath.row].value
+        return cell
+    }
+    
+//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        print(#function)
+//        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
+//        cell.textLabel?.text = personalData[indexPath.row].palameter
+//        cell.detailTextLabel?.text = personalData[indexPath.row].value
+//        return cell
+//    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        print(#function)
+        return sectionTitle[section]
+    }
+}
 

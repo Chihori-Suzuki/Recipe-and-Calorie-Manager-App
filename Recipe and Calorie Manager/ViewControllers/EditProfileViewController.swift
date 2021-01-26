@@ -77,6 +77,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         tf.layer.borderWidth = 0.8
         tf.layer.cornerRadius = 5
         tf.backgroundColor = .white
+        
         return tf
     }()
     

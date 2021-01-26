@@ -12,6 +12,8 @@ import CoreData
 
 class ProfileViewController: UIViewController, UITextFieldDelegate {
     
+    
+    
     // persistantContainer
     private static var persistentContainer: NSPersistentCloudKitContainer! = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
 
@@ -364,13 +366,22 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     @objc func addNewPerson() {
         
         let dateFormater: DateFormatter = DateFormatter()
-        dateFormater.dateFormat = "MM/dd/yyyy"
+        dateFormater.dateStyle = .short
+        dateFormater.timeStyle = .none
+//        dateFormater.dateFormat = "MM/dd/yyyy"
+        
         let stringFromDate: String = dateFormater.string(from: self.birthPick.date) as String
         let birthDate: Date = dateFormater.date(from: stringFromDate)!
+        
         guard let weight = Double(weightTxt.text!), let height = Double(heightTxt.text!) else { return }
+        
+        
         
         // UserDefaults
         let defaults = UserDefaults.standard
+        print(defaults)
+        print(defaults.object(forKey: "Name") as? String ?? String())
+        
         defaults.set(nameTxt.text, forKey: "Name")
         defaults.set(birthDate, forKey: "Birthday")
         defaults.set(genderSeg.titleForSegment(at: genderSeg.selectedSegmentIndex), forKey: "Gender")
@@ -378,14 +389,14 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         defaults.set(height, forKey: "height")
         defaults.set(activeText.text, forKey: "ActivityType")
         
+        
 //        let savedName = defaults.object(forKey: "Name") as? String ?? String()
 //        var savedBirth = defaults.object(forKey: "Birthday") as? Date ?? Date()
 //        let savedGender = defaults.object(forKey: "Gender") as? String ?? String()
 //        let savedWeight = defaults.double(forKey: "weight")
 //        let savedHeight = defaults.double(forKey: "height")
 //        let savedActivity = defaults.object(forKey: "ActivityType") as? String ?? String()
-//
-//
+
 //        print(stringFromDate)
 //        print(birthDate)
 //        savedBirth = dateFormater.date(from: stringFromDate)!
