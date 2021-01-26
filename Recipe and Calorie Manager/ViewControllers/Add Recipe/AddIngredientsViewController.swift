@@ -9,7 +9,9 @@ import UIKit
 
 class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, SaveRecipeTableViewCellDelegate {
     
-    func save(_ mealType: Meal, _ recipe: Recipe) {
+    func save(_ mealType: Meal, _ recipe: RecipeFinal) {
+        print(mealType)
+        print(recipe)
     }
     
     func discardRecipe() {
@@ -21,11 +23,16 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
     }
     
     var selectedRowForEdit: IndexPath?
+    var recipe: RecipeFinal? {
+        didSet {
+            RecipeFinal.saveToFile(recipe: recipe!)
+        }
+    }
     
     func edit(_ ingredient: Ingredient) {
         guard let indexPath = selectedRowForEdit else { return }
         ingredients.remove(at: indexPath.row)
-        ingredients.insert((serving: ingredient.serving, nutrition: ingredient.nutrition), at: indexPath.row)
+        ingredients.insert(Ingredient(serving: ingredient.serving, nutrition: ingredient.nutrition), at: indexPath.row)
         tableview.reloadRows(at: [indexPath], with: .automatic)
         tableview.reloadSections([1, 2], with: .none)
     }
@@ -33,9 +40,8 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
     
     func delete(_ ingredient: Ingredient) {
         guard let indexPath = selectedRowForEdit else { return }
-        
-        let (serving, nutrition) = ingredients[indexPath.row]
-        let currentIngredient = Ingredient(serving: serving, nutrition: nutrition!)
+
+        let currentIngredient = ingredients[indexPath.row]
         if currentIngredient == ingredient {
             ingredients.remove(at: indexPath.row)
             tableview.deleteRows(at: [indexPath], with: .automatic)
@@ -52,9 +58,10 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
     var fatTotalCountLabel = AnimatedLabelTotals()
     var fiberTotalCountLabel = AnimatedLabelTotals()
     var isViewFromRecipeList: Bool?
+    var isDraft = true
     var meal: Meal?
     var recipeTitle: String?
-    var ingredients = [(serving: String, nutrition: Nutrition?)]() {
+    var ingredients = [Ingredient]() {
         didSet {
             guard let _ = isViewFromRecipeList else {
             ingredients.count == 0 ? (navigationItem.rightBarButtonItem?.isEnabled = true) : (navigationItem.rightBarButtonItem?.isEnabled = false)
@@ -87,7 +94,7 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
         tf.heightAnchor.constraint(equalToConstant: 50).isActive = true
         tf.becomeFirstResponder()
         tf.layer.borderWidth = 0.8
-        tf.layer.borderColor = CGColor.Theme1.black
+        tf.layer.borderColor = UIColor.Theme1.black.cgColor
         tf.backgroundColor = .white
         tf.layer.cornerRadius = 8
         tf.addTarget(self, action: #selector(textEditingChanged(_:)), for: .editingChanged)
@@ -251,6 +258,8 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
     }
     
     @objc func dismissVC() {
+        //TEMPORARY IMPLEMENTATION
+        Recipe.isDraft = false
         navigationController?.popViewController(animated: true)
     }
     
@@ -290,18 +299,18 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
     }
     
     fileprivate func calculateTotals() {
-        caloriesTotal = ingredients.map { $0.nutrition!.calories }.reduce(0){ $0 + $1 }
-        carbsTotal = ingredients.map { $0.nutrition!.carbohydrates }.reduce(0){ $0 + $1}
-        proteinTotal = ingredients.map { $0.nutrition!.protein }.reduce(0){ $0 + $1 }
-        fatTotal = ingredients.map { $0.nutrition!.totalFat }.reduce(0){ $0 + $1 }
-        fiberTotal = ingredients.map { $0.nutrition!.fiber }.reduce(0){ $0 + $1}
+        caloriesTotal = ingredients.map { $0.nutrition.calories }.reduce(0){ $0 + $1 }
+        carbsTotal = ingredients.map { $0.nutrition.carbohydrates }.reduce(0){ $0 + $1}
+        proteinTotal = ingredients.map { $0.nutrition.protein }.reduce(0){ $0 + $1 }
+        fatTotal = ingredients.map { $0.nutrition.totalFat }.reduce(0){ $0 + $1 }
+        fiberTotal = ingredients.map { $0.nutrition.fiber }.reduce(0){ $0 + $1}
     }
     
     fileprivate func updateTableView(with serving: String, and ingredient: Dataset) {
         DispatchQueue.main.async { [self] in
             if ingredient.items.count > 0 {
             
-                ingredients.insert((serving: serving, nutrition: ingredient.items[0]), at: 0)
+                ingredients.insert(Ingredient(serving: serving, nutrition: ingredient.items[0]), at: 0)
                 UIView.animate(withDuration: 0.9) {
                     totalsStackViews.isHidden ? totalsStackViews.isHidden.toggle() : nil
                     tableview.isHidden ? tableview.isHidden.toggle() : nil
@@ -381,7 +390,7 @@ extension AddIngredientsViewController: UITableViewDelegate, UITableViewDataSour
             let ingredient = ingredients[indexPath.row]
             let cell = tableView.dequeueReusableCell(withIdentifier: IngredientTableViewCell.identifier, for: indexPath) as! IngredientTableViewCell
             cell.update(with: ingredient)
-            cell.layer.borderColor = CGColor.Theme1.black
+            cell.layer.borderColor = UIColor.Theme1.black.cgColor
             cell.layer.borderWidth = 0.5
             cell.accessoryType = .detailButton
             cell.selectionStyle = .none
@@ -396,7 +405,7 @@ extension AddIngredientsViewController: UITableViewDelegate, UITableViewDataSour
             let cell = tableView.dequeueReusableCell(withIdentifier: SaveRecipeTableViewCell.identifier, for: indexPath) as! SaveRecipeTableViewCell
             cell.delegate = self
             cell.mealType = meal
-            cell.newRecipe = Recipe(title: recipeTitle!, ingredients: ingredients)
+            cell.newRecipe = RecipeFinal(title: recipeTitle!, ingredients: ingredients)
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                 if self.ingredients.count > 0 {
                     cell.saveButton.isHidden = false
@@ -441,7 +450,7 @@ extension AddIngredientsViewController: UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
-        let selectedIngredient = Ingredient(serving: ingredients[indexPath.row].serving, nutrition: ingredients[indexPath.row].nutrition!)
+        let selectedIngredient = Ingredient(serving: ingredients[indexPath.row].serving, nutrition: ingredients[indexPath.row].nutrition)
         selectedRowForEdit = indexPath
         let editVC = EditIngredientViewController()
         editVC.meal = meal

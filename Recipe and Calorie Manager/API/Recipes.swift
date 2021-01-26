@@ -17,8 +17,11 @@ struct RecipeList {
 struct Recipe {
     var title: String
     var ingredients: [(serving: String, nutrition: Nutrition?)]
+    
+    //TEMPORARY IMPLEMENTATION
+    static var isDraft = true
 }
-struct Ingredient: Equatable {
+struct Ingredient: Equatable, Codable {
     var serving: String
     var nutrition: Nutrition
     
@@ -26,6 +29,43 @@ struct Ingredient: Equatable {
         return lhs.serving.lowercased() == rhs.serving.lowercased()
     }
 }
+
+struct RecipeFinal: Codable {
+    var title: String
+    var ingredients: [Ingredient]
+    
+    static var archiveURL: URL {
+      let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+      let archiveURL = documentsURL.appendingPathComponent("recipe").appendingPathExtension("plist")
+      
+      return archiveURL
+    }
+    
+    static func saveToFile(recipe: RecipeFinal) {
+      let encoder = PropertyListEncoder()
+      do {
+        let encodedRecipe = try encoder.encode(recipe)
+        try encodedRecipe.write(to: RecipeFinal.archiveURL)
+      } catch {
+        print("Error encoding emojis: \(error.localizedDescription)")
+      }
+    }
+    
+    static func loadFromFile() -> RecipeFinal? {
+      guard let recipeData = try? Data(contentsOf: RecipeFinal.archiveURL) else { return nil }
+      
+      do {
+        let decoder = PropertyListDecoder()
+        let decodedRecipe = try decoder.decode(RecipeFinal.self, from: recipeData)
+        
+        return decodedRecipe
+      } catch {
+        print("Error decoding emojis: \(error)")
+        return nil
+      }
+    }
+}
+
 enum Meal: String {
     case breakfast = "breakfast"
     case lunch = "lunch"

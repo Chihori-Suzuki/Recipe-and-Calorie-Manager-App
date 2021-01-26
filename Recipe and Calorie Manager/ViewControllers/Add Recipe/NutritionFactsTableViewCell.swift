@@ -138,41 +138,41 @@ class NutritionFactsTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func update(with ingredients: [(serving: String, nutrition: Nutrition?)]) {
-        let totalFat = ingredients.map { $0.nutrition!.totalFat }.reduce(0){ $0 + $1 }
+    func update(with ingredients: [Ingredient]) {
+        let totalFat = ingredients.map { $0.nutrition.totalFat }.reduce(0){ $0 + $1 }
         totalFatLabel.text = String(format: "%.2f g", totalFat)
         totalFatDV.text = (String(format: "%.2f", (totalFat/DailyValue.totalFat.rawValue)*100)+" %")
         
-        let totalCholesterol = ingredients.map { $0.nutrition!.cholesterol }.reduce(0){ $0 + $1 }
-        totalCholesterolLabel.text = String(format: "%.2f mg", totalCholesterolLabel)
+        let totalCholesterol = ingredients.map { $0.nutrition.cholesterol }.reduce(0){ $0 + $1 }
+        totalCholesterolLabel.text = String(format: "%.2f mg", totalCholesterol)
         totalCholesterolDV.text = (String(format: "%.2f", (totalCholesterol/DailyValue.cholesterol.rawValue)*100)+" %")
         
-        let totalSodium = ingredients.map { $0.nutrition!.sodium }.reduce(0){ $0 + $1 }
+        let totalSodium = ingredients.map { $0.nutrition.sodium }.reduce(0){ $0 + $1 }
         totalSodiumLabel.text = String(format: "%.2f mg", totalSodium)
         totalSodiumDV.text = (String(format: "%.2f", (totalSodium/DailyValue.totalFat.rawValue)*100)+" %")
 
-        let totalCarbs = ingredients.map { $0.nutrition!.carbohydrates }.reduce(0){ $0 + $1 }
+        let totalCarbs = ingredients.map { $0.nutrition.carbohydrates }.reduce(0){ $0 + $1 }
         totalCarbsLabel.text = String(format: "%.2f g", totalCarbs)
         totalCarbsDV.text = (String(format: "%.2f", (totalCarbs/DailyValue.totalFat.rawValue)*100)+" %")
 
-        let totalProtein = ingredients.map { $0.nutrition!.protein }.reduce(0){ $0 + $1 }
+        let totalProtein = ingredients.map { $0.nutrition.protein }.reduce(0){ $0 + $1 }
         totalProteinLabel.text = String(format: "%.2f g", totalProtein)
         totalProteinDV.text = (String(format: "%.2f", (totalProtein/DailyValue.totalFat.rawValue)*100)+" %")
 
-        let totalPotassium = ingredients.map { $0.nutrition!.potassium }.reduce(0){ $0 + $1 }
+        let totalPotassium = ingredients.map { $0.nutrition.potassium }.reduce(0){ $0 + $1 }
         totalPotassiumLabel.text = String(format: "%.2f mg", totalPotassium)
         totalPotassiumDV.text = (String(format: "%.2f", (totalPotassium/DailyValue.totalFat.rawValue)*100)+" %")
 
-        let totalSatFat = ingredients.map { $0.nutrition!.fat }.reduce(0){ $0 + $1 }
+        let totalSatFat = ingredients.map { $0.nutrition.fat }.reduce(0){ $0 + $1 }
         totalSatFatLabel.text = String(format: "%.2f g", totalSatFat)
         totalSatFatDV.text = (String(format: "%.2f", (totalSatFat/DailyValue.totalFat.rawValue)*100)+" %")
         
-        let totalServingSize = ingredients.map { $0.nutrition!.serving }.reduce(0){ $0 + $1 }
+        let totalServingSize = ingredients.map { $0.nutrition.serving }.reduce(0){ $0 + $1 }
         totalServingLabel.text = String(format: "%.2f g", totalServingSize)
         
-        totalCaloriesLabel.text = String(format: "%.2f", ingredients.map { $0.nutrition!.calories }.reduce(0){ $0 + $1 })
-        totalFiberLabel.text = String(format: "%.2f g", ingredients.map { $0.nutrition!.fiber }.reduce(0){ $0 + $1 })
-        totalSugarLabel.text = String(format: "%.2f g", ingredients.map { $0.nutrition!.sugar }.reduce(0){ $0 + $1 })
+        totalCaloriesLabel.text = String(format: "%.2f", ingredients.map { $0.nutrition.calories }.reduce(0){ $0 + $1 })
+        totalFiberLabel.text = String(format: "%.2f g", ingredients.map { $0.nutrition.fiber }.reduce(0){ $0 + $1 })
+        totalSugarLabel.text = String(format: "%.2f g", ingredients.map { $0.nutrition.sugar }.reduce(0){ $0 + $1 })
     }
     
     func update(with ingredient: Ingredient) {
@@ -182,7 +182,7 @@ class NutritionFactsTableViewCell: UITableViewCell {
         
         let totalCholesterol = ingredient.nutrition.cholesterol
         totalCholesterolLabel.text = String(format: "%.2f mg", totalCholesterol)
-        totalCholesterolDV.text = (String(format: "%.2f", (totalFat/DailyValue.cholesterol.rawValue)*100)+" %")
+        totalCholesterolDV.text = (String(format: "%.2f", (totalCholesterol/DailyValue.cholesterol.rawValue)*100)+" %")
         
         let totalSodium = ingredient.nutrition.sodium
         totalSodiumLabel.text = String(format: "%.2f mg", totalSodium)

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SaveRecipeTableViewCellDelegate {
+class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     func discardRecipe() {
         
     }
@@ -137,7 +137,7 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
         
         let selectedMeal = catalog.catalog[selectedCategory].recipes[indexPath.row]
         let mealType = catalog.catalog[selectedCategory].category
-        clickedMeal.ingredients = selectedMeal.ingredients
+//        clickedMeal.ingredients = selectedMeal.ingredients
         clickedMeal.recipeTitle = selectedMeal.title
         clickedMeal.isViewFromRecipeList = true
         clickedMeal.meal = mealType
