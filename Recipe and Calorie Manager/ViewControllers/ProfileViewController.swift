@@ -239,6 +239,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         
         scrollView.delegate = self
         
+
     }
     
     func setSVConfig() {
@@ -341,7 +342,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         return person
     }
     
-    @objc func addNewPerson() {
+    @objc func addNewPerson1() {
         let person = ProfileViewController.newPersion()
         let dateFormater: DateFormatter = DateFormatter()
         dateFormater.dateFormat = "MM/dd/yyyy"
@@ -357,8 +358,45 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         person.height = height
         person.activityType = activeText.text
         
-
     }
+    
+    // saving Personal Data
+    @objc func addNewPerson() {
+        
+        let dateFormater: DateFormatter = DateFormatter()
+        dateFormater.dateFormat = "MM/dd/yyyy"
+        let stringFromDate: String = dateFormater.string(from: self.birthPick.date) as String
+        let birthDate: Date = dateFormater.date(from: stringFromDate)!
+        guard let weight = Double(weightTxt.text!), let height = Double(heightTxt.text!) else { return }
+        
+        // UserDefaults
+        let defaults = UserDefaults.standard
+        defaults.set(nameTxt.text, forKey: "Name")
+        defaults.set(birthDate, forKey: "Birthday")
+        defaults.set(genderSeg.titleForSegment(at: genderSeg.selectedSegmentIndex), forKey: "Gender")
+        defaults.set(weight, forKey: "weight")
+        defaults.set(height, forKey: "height")
+        defaults.set(activeText.text, forKey: "ActivityType")
+        
+//        let savedName = defaults.object(forKey: "Name") as? String ?? String()
+//        var savedBirth = defaults.object(forKey: "Birthday") as? Date ?? Date()
+//        let savedGender = defaults.object(forKey: "Gender") as? String ?? String()
+//        let savedWeight = defaults.double(forKey: "weight")
+//        let savedHeight = defaults.double(forKey: "height")
+//        let savedActivity = defaults.object(forKey: "ActivityType") as? String ?? String()
+//
+//
+//        print(stringFromDate)
+//        print(birthDate)
+//        savedBirth = dateFormater.date(from: stringFromDate)!
+//        print(savedName)
+//        print(savedBirth)
+//        print(savedGender)
+//        print(savedWeight)
+//        print(savedHeight)
+//        print(savedActivity)
+    }
+    
     
     static func save() {
         ProfileViewController.persistentContainer.saveContext()

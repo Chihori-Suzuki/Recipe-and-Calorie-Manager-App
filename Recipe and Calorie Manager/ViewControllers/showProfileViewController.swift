@@ -99,6 +99,8 @@ class showProfileViewController: UIViewController {
         tv.translatesAutoresizingMaskIntoConstraints = false
         return tv
     }()
+    let cellID = "CellID"
+    var personalData: [[]]
     
     // editButton
     let editButton: UIButton = {
@@ -125,6 +127,8 @@ class showProfileViewController: UIViewController {
         scrollView.addSubview(mainSV)
         setSVConfig()
         
+        
+        
     }
     func setSVConfig() {
         /* scrollView **********/
@@ -132,6 +136,9 @@ class showProfileViewController: UIViewController {
         scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
         scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
         scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        
+        /* sa **********/
+        
         
         /* mainSV **********/
         mainSV.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30).isActive = true
