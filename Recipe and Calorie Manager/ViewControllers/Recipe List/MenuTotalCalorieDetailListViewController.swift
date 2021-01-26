@@ -27,7 +27,6 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
         myTable.insertRows(at: [IndexPath(row: 0, section: 0)], with: .none)
     }
     
-    let addIngredients = AddIngredientsViewController()
     var selectedCategory: Int?
     
     // sample data
@@ -47,7 +46,6 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
 
     var mealTitle: String?
 
-    lazy var totalCalorie: Double? = addIngredients.caloriesTotal
     let cellId = "MenuTotalCalorie"
     
     
@@ -91,9 +89,6 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
         navigationItem.rightBarButtonItem = editBtn
     }
     
-    
-    
-    
     func setupTableView() {
         view.addSubview(myTable)
         myTable.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
@@ -133,5 +128,17 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
 //        let removedCell = catalog.catalog[selectedCategory].recipes.
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let clickedMeal = AddIngredientsViewController()
+        
+        guard let selectedCategory = selectedCategory else { return }
+        
+        let selectedMeal = catalog.catalog[selectedCategory].recipes[indexPath.row]
+        clickedMeal.ingredients = selectedMeal.ingredients
+        clickedMeal.recipeTitle = selectedMeal.title
+//        var ingredients = [(serving: String, nutrition: Nutrition?)]() {
+        navigationController?.pushViewController(clickedMeal, animated: true)
     }
 }
