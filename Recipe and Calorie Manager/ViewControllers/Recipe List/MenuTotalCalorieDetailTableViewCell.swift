@@ -67,11 +67,11 @@ class MenuTotalCalorieDetailTableViewCell: UITableViewCell {
     }
     
     // make margin between two tableview cells
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        let padding = UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0)
-        contentView.frame = contentView.frame.inset(by: padding)
-    }
+//    override func layoutSubviews() {
+//        super.layoutSubviews()
+//        let padding = UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0)
+//        contentView.frame = contentView.frame.inset(by: padding)
+//    }
 
 //    override func setSelected(_ selected: Bool, animated: Bool) {
 //        super.setSelected(selected, animated: animated)
