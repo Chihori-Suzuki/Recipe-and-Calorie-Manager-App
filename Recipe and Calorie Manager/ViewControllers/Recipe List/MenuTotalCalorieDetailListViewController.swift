@@ -60,14 +60,39 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
         return table
     }()
     
+    lazy var doneBtn: UIBarButtonItem =  {
+        let done = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneEditing))
+        return done
+    }()
+    
+    lazy var editBtn: UIBarButtonItem = {
+        let edit = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editTableViewCell))
+        return edit
+    }()
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         title = mealTitle
         navigationController?.navigationBar.prefersLargeTitles = true
         setupTableView()
-        self.navigationItem.rightBarButtonItem = self.editButtonItem
+        myTable.allowsMultipleSelectionDuringEditing = true
+        navigationItem.rightBarButtonItem = editBtn
     }
+    
+    @objc func editTableViewCell() {
+        myTable.setEditing(true, animated: true)
+        navigationItem.rightBarButtonItem = doneBtn
+    }
+    
+    @objc func doneEditing() {
+        myTable.setEditing(false, animated: true)
+        navigationItem.rightBarButtonItem = editBtn
+    }
+    
+    
+    
     
     func setupTableView() {
         view.addSubview(myTable)
