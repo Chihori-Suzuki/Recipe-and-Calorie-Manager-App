@@ -9,6 +9,7 @@ import UIKit
 
 class AddRecipeViewController: UIViewController {
     
+    var isDraft = true
     lazy var recipeTextField: UITextField = {
         let tf = UITextField()
         tf.placeholder = "Chicken Adobo       "
@@ -138,14 +139,29 @@ class AddRecipeViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        
+        if let savedRecipe = RecipeFinal.loadFromFile() {
+            print(savedRecipe)
+            let draftVC = AddIngredientsViewController()
+            draftVC.recipe = savedRecipe
+            draftVC.recipeTitle = savedRecipe.title
+            draftVC.meal = savedRecipe.meal
+            draftVC.isFirstLoad = true
+//            draftVC.tableview.isHidden = false
+            draftVC.ingredients = savedRecipe.ingredients
+            navigationController?.pushViewController(draftVC, animated: false)
+        } else {
+        
         let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.Theme1.blue, NSAttributedString.Key.font: UIFont(name: "ArialRoundedMTBold", size: 35)!]
         navigationController?.navigationBar.largeTitleTextAttributes = textAttributes
         navigationController?.navigationBar.prefersLargeTitles = true
+        }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Add New Recipe"
+        navigationItem.hidesBackButton = true
         view.backgroundColor = UIColor.Theme1.white
         
         setupLayout()

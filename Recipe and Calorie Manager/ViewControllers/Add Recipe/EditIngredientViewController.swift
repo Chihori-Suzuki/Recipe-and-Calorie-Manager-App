@@ -187,42 +187,9 @@ extension EditIngredientViewController: UITableViewDelegate, UITableViewDataSour
         switch indexPath.section {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: NutritionFactsTableViewCell.identifier, for: indexPath) as! NutritionFactsTableViewCell
-            
-            let totalFat = ingredient.nutrition.totalFat
-            cell.totalFatLabel.text = String(format: "%.2f g", totalFat)
-            cell.totalFatDV.text = (String(format: "%.2f", (totalFat/DailyValue.totalFat.rawValue)*100)+" %")
-            
-            let totalCholesterol = ingredient.nutrition.cholesterol
-            cell.totalCholesterolLabel.text = String(format: "%.2f g", totalCholesterol)
-            cell.totalCholesterolDV.text = (String(format: "%.2f", (totalFat/DailyValue.cholesterol.rawValue)*100)+" %")
-            
-            let totalSodium = ingredient.nutrition.sodium
-            cell.totalSodiumLabel.text = String(format: "%.2f g", totalSodium)
-            cell.totalSodiumDV.text = (String(format: "%.2f", (totalSodium/DailyValue.sodium.rawValue)*100)+" %")
-            
-            let totalCarbs = ingredient.nutrition.carbohydrates
-            cell.totalCarbsLabel.text = String(format: "%.2f g", totalCarbs)
-            cell.totalCarbsDV.text = (String(format: "%.2f", (totalCarbs/DailyValue.totalCarbs.rawValue)*100)+" %")
-            
-            let totalProtein = ingredient.nutrition.protein
-            cell.totalProteinLabel.text = String(format: "%.2f g", totalProtein)
-            cell.totalProteinDV.text = (String(format: "%.2f", (totalProtein/DailyValue.protein.rawValue)*100)+" %")
-
-            let totalPotassium = ingredient.nutrition.potassium
-            cell.totalPotassiumLabel.text = String(format: "%.2f g", totalPotassium)
-            cell.totalPotassiumDV.text = (String(format: "%.2f", (totalPotassium/DailyValue.potassium.rawValue)*100)+" %")
-            
-            let totalSatFat = ingredient.nutrition.fat
-            cell.totalSatFatLabel.text = String(format: "%.2f g", totalSatFat)
-            cell.totalSatFatDV.text = (String(format: "%.2f", (totalSatFat/DailyValue.satFat.rawValue)*100)+" %")
-            
-            cell.totalCaloriesLabel.text = String(format: "%.2f", ingredient.nutrition.calories)
+            cell.update(with: ingredient)
             cell.isUserInteractionEnabled = false
             cell.backgroundColor = UIColor.Theme1.white
-            
-            cell.totalFiberLabel.text = String(format: "%.2f g", ingredient.nutrition.fiber)
-            cell.totalSugarLabel.text = String(format: "%.2f g", ingredient.nutrition.sugar)
-            
             return cell
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: SaveIngredientTableViewCell.identifier, for: indexPath) as! SaveIngredientTableViewCell
