@@ -51,11 +51,15 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
     var proteinTotalCountLabel = AnimatedLabelTotals()
     var fatTotalCountLabel = AnimatedLabelTotals()
     var fiberTotalCountLabel = AnimatedLabelTotals()
+    var isViewFromRecipeList: Bool?
     var meal: Meal?
     var recipeTitle: String?
     var ingredients = [(serving: String, nutrition: Nutrition?)]() {
         didSet {
+            guard let _ = isViewFromRecipeList else {
             ingredients.count == 0 ? (navigationItem.rightBarButtonItem?.isEnabled = true) : (navigationItem.rightBarButtonItem?.isEnabled = false)
+                return
+            }
         }
     }
     var caloriesTotal: Double? {
@@ -350,7 +354,11 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
         tableview.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
         tableview.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0).isActive = true
         tableview.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0).isActive = true
-        tableview.isHidden = true
+        if let _ = isViewFromRecipeList {
+            tableview.isHidden = false
+        } else {
+            tableview.isHidden = true
+        }
     }
 }
 
