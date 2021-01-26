@@ -8,14 +8,14 @@
 import UIKit
 
 protocol SaveRecipeTableViewCellDelegate: class {
-    func save(_ mealType: Meal, _ recipe: RecipeFinal)
+    func save()
     func discardRecipe()
 }
 
 class SaveRecipeTableViewCell: UITableViewCell {
     
     static let identifier = "saveRecipe"
-    var newRecipe: RecipeFinal?
+//    var newRecipe: RecipeFinal?
     var mealType: Meal?
     weak var delegate: SaveRecipeTableViewCellDelegate?
     
@@ -85,8 +85,10 @@ class SaveRecipeTableViewCell: UITableViewCell {
         }
         
         //temporary code for testing
-        guard let meal = mealType, let recipe = newRecipe else { return }
-        delegate?.save(meal, recipe)
+//        guard let meal = mealType, let recipe = newRecipe else { return }
+//        delegate?.save(meal, recipe)
+        delegate?.save()
+        
     }
     
     @objc func discardRecipe(_ sender: UIButton) {

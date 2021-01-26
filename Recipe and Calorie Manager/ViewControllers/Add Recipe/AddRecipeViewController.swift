@@ -140,9 +140,15 @@ class AddRecipeViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         
-        if Recipe.isDraft {
+        if let savedRecipe = RecipeFinal.loadFromFile() {
+            print(savedRecipe)
             let draftVC = AddIngredientsViewController()
-            draftVC.recipeTitle = "Test"
+            draftVC.recipe = savedRecipe
+            draftVC.recipeTitle = savedRecipe.title
+            draftVC.meal = savedRecipe.meal
+            draftVC.isFirstLoad = true
+//            draftVC.tableview.isHidden = false
+            draftVC.ingredients = savedRecipe.ingredients
             navigationController?.pushViewController(draftVC, animated: false)
         } else {
         

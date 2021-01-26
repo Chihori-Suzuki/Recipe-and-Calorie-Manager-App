@@ -32,6 +32,7 @@ struct Ingredient: Equatable, Codable {
 
 struct RecipeFinal: Codable {
     var title: String
+    var meal: Meal
     var ingredients: [Ingredient]
     
     static var archiveURL: URL {
@@ -39,6 +40,10 @@ struct RecipeFinal: Codable {
       let archiveURL = documentsURL.appendingPathComponent("recipe").appendingPathExtension("plist")
       
       return archiveURL
+    }
+    
+    static func deleteFile() {
+
     }
     
     static func saveToFile(recipe: RecipeFinal) {
@@ -66,7 +71,7 @@ struct RecipeFinal: Codable {
     }
 }
 
-enum Meal: String {
+enum Meal: String, Codable {
     case breakfast = "breakfast"
     case lunch = "lunch"
     case snack = "snack"

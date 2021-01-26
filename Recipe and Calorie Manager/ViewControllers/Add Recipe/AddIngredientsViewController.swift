@@ -9,9 +9,14 @@ import UIKit
 
 class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, SaveRecipeTableViewCellDelegate {
     
-    func save(_ mealType: Meal, _ recipe: RecipeFinal) {
-        print(mealType)
-        print(recipe)
+    func save() {
+        let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory,.userDomainMask,true)[0] as NSString
+        let destinationPath = documentsPath.appendingPathComponent("recipe.plist")
+        do {
+            try FileManager.default.removeItem(atPath: destinationPath)
+        } catch {
+            print(error.localizedDescription)
+        }
     }
     
     func discardRecipe() {
@@ -58,15 +63,19 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
     var fatTotalCountLabel = AnimatedLabelTotals()
     var fiberTotalCountLabel = AnimatedLabelTotals()
     var isViewFromRecipeList: Bool?
-    var isDraft = true
+    var isFirstLoad: Bool?
     var meal: Meal?
     var recipeTitle: String?
     var ingredients = [Ingredient]() {
         didSet {
+            if !isFirstLoad! {
+                recipe = RecipeFinal(title: recipeTitle!, meal: meal!, ingredients: ingredients)
+            }
             guard let _ = isViewFromRecipeList else {
             ingredients.count == 0 ? (navigationItem.rightBarButtonItem?.isEnabled = true) : (navigationItem.rightBarButtonItem?.isEnabled = false)
                 return
             }
+            isFirstLoad = true
         }
     }
     var caloriesTotal: Double? {
@@ -369,6 +378,10 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
         } else {
             tableview.isHidden = true
         }
+        
+        if let _ = isFirstLoad {
+            tableview.isHidden = false
+        }
     }
 }
 
@@ -405,7 +418,7 @@ extension AddIngredientsViewController: UITableViewDelegate, UITableViewDataSour
             let cell = tableView.dequeueReusableCell(withIdentifier: SaveRecipeTableViewCell.identifier, for: indexPath) as! SaveRecipeTableViewCell
             cell.delegate = self
             cell.mealType = meal
-            cell.newRecipe = RecipeFinal(title: recipeTitle!, ingredients: ingredients)
+//            cell.newRecipe = RecipeFinal(title: recipeTitle!, ingredients: ingredients)
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                 if self.ingredients.count > 0 {
                     cell.saveButton.isHidden = false
