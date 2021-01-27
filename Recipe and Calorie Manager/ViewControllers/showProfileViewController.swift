@@ -203,7 +203,7 @@ class showProfileViewController: UIViewController {
         
 //        let age =
         personalData.append(Profile(palameter: "Name", value: savedName))
-        personalData.append(Profile(palameter: "Birthday", value: "28"))
+        personalData.append(Profile(palameter: "Age", value: "28"))
         personalData.append(Profile(palameter: "Gender", value: savedGender))
         personalData.append(Profile(palameter: "Weight", value: "\(savedWeight)"))
         personalData.append(Profile(palameter: "height", value: "\(savedHeight)"))
@@ -223,11 +223,12 @@ extension showProfileViewController: UITableViewDataSource, UITableViewDelegate 
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
+//        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
+        let cell = UITableViewCell(style: .value1, reuseIdentifier: cellId)
         cell.textLabel?.text = personalData[indexPath.row].palameter
-        cell.detailTextLabel?.text = "AAAA"
+//        cell.detailTextLabel?.text = "AAAA"
         // 
-//        cell.detailTextLabel?.text = personalData[indexPath.row].value
+        cell.detailTextLabel?.text = personalData[indexPath.row].value
         return cell
     }
 
