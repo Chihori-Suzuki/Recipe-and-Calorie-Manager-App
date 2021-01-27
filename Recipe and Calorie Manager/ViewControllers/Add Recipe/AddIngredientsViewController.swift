@@ -10,13 +10,8 @@ import UIKit
 class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, SaveRecipeTableViewCellDelegate {
     
     func save() {
-        let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory,.userDomainMask,true)[0] as NSString
-        let destinationPath = documentsPath.appendingPathComponent("recipe.plist")
-        do {
-            try FileManager.default.removeItem(atPath: destinationPath)
-        } catch {
-            print(error.localizedDescription)
-        }
+        RecipeFinal.deleteDraft()
+        navigationController?.popViewController(animated: true)
     }
     
     func discardRecipe() {
@@ -25,12 +20,16 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
                 self.navigationController?.popViewController(animated: true)
             }
         }
+        guard let _ = isViewFromRecipeList else {
+            RecipeFinal.deleteDraft()
+            return
+        }
     }
     
     var selectedRowForEdit: IndexPath?
     var recipe: RecipeFinal? {
         didSet {
-            RecipeFinal.saveToFile(recipe: recipe!)
+            RecipeFinal.saveToDraft(recipe: recipe!)
         }
     }
     
@@ -68,14 +67,11 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
     var recipeTitle: String?
     var ingredients = [Ingredient]() {
         didSet {
-            if !isFirstLoad! {
-                recipe = RecipeFinal(title: recipeTitle!, meal: meal!, ingredients: ingredients)
-            }
+            recipe = RecipeFinal(title: recipeTitle!, meal: meal!, ingredients: ingredients)
             guard let _ = isViewFromRecipeList else {
             ingredients.count == 0 ? (navigationItem.rightBarButtonItem?.isEnabled = true) : (navigationItem.rightBarButtonItem?.isEnabled = false)
                 return
             }
-            isFirstLoad = true
         }
     }
     var caloriesTotal: Double? {
@@ -255,21 +251,28 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
         vStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
         vStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0).isActive = true
         vStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0).isActive = true
-
     }
 
     override func viewWillAppear(_ animated: Bool) {
         let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.Theme1.orange, NSAttributedString.Key.font: UIFont(name: "ArialRoundedMTBold", size: 30)!]
         navigationController?.navigationBar.largeTitleTextAttributes = textAttributes
         navigationController?.navigationBar.prefersLargeTitles = true
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(dismissVC))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonTapped))
         navigationItem.rightBarButtonItem?.tintColor = UIColor.Theme1.blue
+        
+//        if let _ = recipe {
+//            recipe = RecipeFinal(title: recipeTitle!, meal: meal!, ingredients: ingredients)
+////            isFirstLoad = false
+//        }
     }
     
-    @objc func dismissVC() {
-        //TEMPORARY IMPLEMENTATION
-        Recipe.isDraft = false
+    @objc func cancelButtonTapped() {
         navigationController?.popViewController(animated: true)
+        
+        guard let _ = isViewFromRecipeList else {
+            RecipeFinal.deleteDraft()
+            return
+        }
     }
     
     override func viewDidLoad() {
@@ -373,15 +376,11 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
         tableview.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
         tableview.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0).isActive = true
         tableview.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0).isActive = true
-        if let _ = isViewFromRecipeList {
-            tableview.isHidden = false
-        } else {
-            tableview.isHidden = true
-        }
+       
+        tableview.isHidden = true
         
-        if let _ = isFirstLoad {
-            tableview.isHidden = false
-        }
+        if let _ = isViewFromRecipeList { tableview.isHidden = false }
+        if let _ = recipe { tableview.isHidden = false }
     }
 }
 
