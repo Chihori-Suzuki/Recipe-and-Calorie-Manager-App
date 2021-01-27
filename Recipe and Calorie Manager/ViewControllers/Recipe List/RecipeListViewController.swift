@@ -9,34 +9,6 @@ import UIKit
 
 
 class RecipeListViewController: UIViewController, UITableViewDelegate,UITableViewDataSource {
-    // make nutrition object
-    var ingredientNutrition = Nutrition(sugar: 1.0, fiber: 1, serving: 1, sodium: 1, name: "onion", potassium: 1, fat: 1, totalFat: 1, calories: 1.0, cholesterol: 1, protein: 1, carbohydrates: 1)
-    // make ingredient object
-    lazy var ingredient = Ingredient(serving: "Ingredient1", nutrition: ingredientNutrition)
-    
-    lazy var recipe1 = RecipeFinal(title: "Breakfast Meal 1", meal: .breakfast, ingredients: [ingredient, ingredient])
-    lazy var recipe5 = RecipeFinal(title: "Breakfast Meal 2", meal: .breakfast, ingredients: [ingredient, ingredient])
-    lazy var recipe2 = RecipeFinal(title: "Lunch Meal 1", meal: .lunch, ingredients: [ingredient, ingredient])
-    lazy var recipe3 = RecipeFinal(title: "Dinner Meal 1", meal: .dinner,ingredients: [ingredient, ingredient])
-    lazy var recipe4 = RecipeFinal(title: "Snack Meal 1", meal: .snack, ingredients: [ingredient, ingredient])
-    
-    lazy var recipes: [RecipeFinal] = [recipe1,recipe2,recipe3,recipe4,recipe5]
-    
-    // sample data
-//    var ingredientNutrition = Nutrition(sugar: 1, fiber: 1, serving: 1, sodium: 1, name: "onion", potassium: 1, fat: 1, totalFat: 1, calories: 1, cholesterol: 1, protein: 1, carbohydrates: 1)
-//    lazy var recipe1 = Recipe(title: "Breakfast Meal 1", ingredients: [(serving: "ingredient 1", nutrition: ingredientNutrition),
-//                                                                                         (serving: "ingredient 2", nutrition: ingredientNutrition)])
-//    lazy var recipe5 = Recipe(title: "Breakfast Meal 2", ingredients: [(serving: "ingredient 10", nutrition: ingredientNutrition)])
-//    lazy var recipe2 = Recipe(title: "Lunch Meal 1", ingredients: [(serving: "ingredient 2", nutrition: ingredientNutrition)])
-//    lazy var recipe3 = Recipe(title: "Dinner Meal 1", ingredients: [(serving: "ingredient 3", nutrition: ingredientNutrition)])
-//    lazy var recipe4 = Recipe(title: "Snack Meal 1", ingredients: [(serving: "ingredient 4", nutrition: ingredientNutrition)])
-
-//    lazy var breakfastMeals = RecipeList(category: .breakfast, recipes: [recipe1, recipe5])
-//    lazy var lunchMeals = RecipeList(category: .lunch, recipes: [recipe2])
-//    lazy var dinnerMeals = RecipeList(category: .dinner, recipes: [recipe3])
-//    lazy var snackMeals = RecipeList(category: .snack, recipes: [recipe4])
-//    lazy var catalog = Catalog(catalog: [breakfastMeals, lunchMeals, dinnerMeals, snackMeals])
-    
     let cellId = "RecipeListCell"
     
     lazy var myTable: UITableView = {
@@ -47,6 +19,15 @@ class RecipeListViewController: UIViewController, UITableViewDelegate,UITableVie
         table.dataSource = self
         return table
     }()
+    
+    // make variable to fill data from file
+    var recipeList: [RecipeFinal] = []
+    
+    override func viewWillAppear(_ animated: Bool) {
+        if let recipeList = RecipeFinal.loadFromList() {
+            self.recipeList = recipeList
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -76,9 +57,8 @@ class RecipeListViewController: UIViewController, UITableViewDelegate,UITableVie
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
-//        let meal = catalog.catalog[indexPath.row].category.rawValue
-        
-        let meal = recipes[indexPath.row].meal.rawValue
+        let category = Meal.allCases
+        let meal = category[indexPath.row].rawValue
         cell.textLabel?.text = "\(meal)"
         cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 30)
         cell.layer.cornerRadius = 10
@@ -88,10 +68,10 @@ class RecipeListViewController: UIViewController, UITableViewDelegate,UITableVie
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let clickedMeal = MenuTotalCalorieDetailListViewController()
-        clickedMeal.mealTitle = recipes[indexPath.row].meal.rawValue
-        clickedMeal.selectedCategory = recipes[indexPath.row].meal
-        navigationController?.pushViewController(clickedMeal, animated: true)
+        let clickedCategory = MenuTotalCalorieDetailListViewController()
+        clickedCategory.mealTitle = recipeList[indexPath.row].meal.rawValue
+        clickedCategory.selectedCategory = recipeList[indexPath.row].meal
+        navigationController?.pushViewController(clickedCategory, animated: true)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

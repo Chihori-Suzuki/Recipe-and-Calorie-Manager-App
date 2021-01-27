@@ -163,14 +163,29 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            guard let selectCategory = selectedCategory else { return }
-//            let cellTitle = catalog.catalog[selectCategory].recipes[indexPath.row].title
-//            let cellTotalCalories = catalog.catalog[selectCategory].recipes[indexPath.row].ingredients.map { $0.nutrition!.calories }.reduce(0){ $0 + $1 }
-//            catalog.catalog.remove(at: 0)
-            let indexPath = IndexPath(item: 0, section: 0)
+            guard let selectedCategory = selectedCategory else { return }
+            
+            var recipe: RecipeFinal!
+            switch selectedCategory {
+            case .breakfast:
+                recipe = breakfastMeals[indexPath.row]
+                breakfastMeals = breakfastMeals.filter { $0 != recipe}
+            case .lunch:
+                recipe = lunchMeals[indexPath.row]
+                lunchMeals = lunchMeals.filter {$0 != recipe}
+            case .dinner:
+                recipe = dinnerMeals[indexPath.row]
+                dinnerMeals = dinnerMeals.filter {$0 != recipe}
+            case .snack:
+                recipe = snackMeals[indexPath.row]
+                snackMeals = snackMeals.filter {$0 != recipe}
+            }
+            
             myTable.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
+            // update recipeList
+            recipeList = recipeList.filter {$0 != recipe}
+            // save recipeList to file
+            RecipeFinal.saveToList(recipes: recipeList)
         }
     }
     
