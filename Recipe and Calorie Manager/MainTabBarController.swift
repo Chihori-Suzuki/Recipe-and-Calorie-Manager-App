@@ -17,7 +17,10 @@ class MainTabBarController: UITabBarController {
         let addRecipeVC = AddRecipeViewController()
         addRecipeVC.tabBarItem = UITabBarItem(tabBarSystemItem: .search, tag: 1)
         // make a viewController for profile screen
+        
         let profileVC = ProfileViewController()
+//        let profileVC = EditProfileViewController()
+//        let profileVC = showProfileViewController()
         profileVC.tabBarItem = UITabBarItem(tabBarSystemItem: .contacts, tag: 2)
         // make a viewController for recipe list screen
         let viewControllers = [recipeListVC, addRecipeVC, profileVC]

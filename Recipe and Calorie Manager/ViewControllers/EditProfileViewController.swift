@@ -1,21 +1,13 @@
 //
-//  ProfileViewController.swift
+//  EditProfileViewController.swift
 //  Recipe and Calorie Manager
 //
-//  Created by Kazunobu Someya on 2021-01-19.
+//  Created by 鈴木ちほり on 2021/01/25.
 //
-//  Committed by Chiori Suzuki
-
 
 import UIKit
-import CoreData
 
-class ProfileViewController: UIViewController, UITextFieldDelegate {
-    
-    
-    
-    // persistantContainer
-    private static var persistentContainer: NSPersistentCloudKitContainer! = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
+class EditProfileViewController: UIViewController, UITextFieldDelegate {
 
     // ScrollView
     let scrollView: UIScrollView = {
@@ -44,7 +36,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         button.setImage(UIImage(systemName: "pencil"), for: .normal)
         button.backgroundColor = .white
         button.layer.borderWidth = 0.5
-        button.addTarget(self, action: #selector(setActivityView), for: .touchUpInside)
+//        button.addTarget(self, action: #selector(setActivityView), for: .touchUpInside)
         return button
     }()
     
@@ -54,20 +46,6 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.setContentHuggingPriority(.required, for: .horizontal)
         lb.text = "Name"
-        return lb
-    }()
-    let birthLabel: UILabel = {
-        let lb = UILabel()
-        lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.setContentHuggingPriority(.required, for: .horizontal)
-        lb.text = "Birthday"
-        return lb
-    }()
-    let genderLabel: UILabel = {
-        let lb = UILabel()
-        lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.setContentHuggingPriority(.required, for: .horizontal)
-        lb.text = "Gender"
         return lb
     }()
     let weightLabel: UILabel = {
@@ -99,23 +77,10 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         tf.layer.borderWidth = 0.8
         tf.layer.cornerRadius = 5
         tf.backgroundColor = .white
-        return tf
-    }()
-    
-    let birthPick: UIDatePicker = {
-        let dp = UIDatePicker()
-        dp.datePickerMode = .date
-        dp.translatesAutoresizingMaskIntoConstraints = false
-        return dp
-    }()
-    let genderSeg: UISegmentedControl = {
-        let items = ["male", "female"]
-        let tf = UISegmentedControl(items: items)
-        tf.selectedSegmentIndex = 0
-        tf.translatesAutoresizingMaskIntoConstraints = false
         
         return tf
     }()
+    
     let weightTxt: UITextField = {
         let tf = UITextField()
         tf.translatesAutoresizingMaskIntoConstraints = false
@@ -151,7 +116,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.layer.borderWidth = 0.8
         tf.layer.cornerRadius = 5
-        tf.addTarget(self, action: #selector(textFieldDidBeginEditing), for: .touchDown)
+//        tf.addTarget(self, action: #selector(textFieldDidBeginEditing), for: .touchDown)
         tf.backgroundColor = .white
         return tf
     }()
@@ -172,16 +137,6 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         return sv
     }()
     let nameSV: UIStackView = {
-        let sv = UIStackView()
-        sv.translatesAutoresizingMaskIntoConstraints = false
-        return sv
-    }()
-    let birthSV: UIStackView = {
-        let sv = UIStackView()
-        sv.translatesAutoresizingMaskIntoConstraints = false
-        return sv
-    }()
-    let genderSV: UIStackView = {
         let sv = UIStackView()
         sv.translatesAutoresizingMaskIntoConstraints = false
         return sv
@@ -212,7 +167,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         button.widthAnchor.constraint(equalToConstant: 80).isActive = true
         button.heightAnchor.constraint(equalToConstant: 50).isActive = true
         button.layer.cornerRadius = 8
-        button.addTarget(self, action: #selector(addNewPerson), for: .touchUpInside)
+//        button.addTarget(self, action: #selector(addNewPerson), for: .touchUpInside)
 //        button.isEnabled = false
         button.alpha = 0.5
         return button
@@ -241,7 +196,6 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         
         scrollView.delegate = self
         
-
     }
     
     func setSVConfig() {
@@ -260,8 +214,6 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         
         mainSV.addArrangedSubview(imageView)
         mainSV.addArrangedSubview(nameSV)
-        mainSV.addArrangedSubview(birthSV)
-        mainSV.addArrangedSubview(genderSV)
         mainSV.addArrangedSubview(weightSV)
         mainSV.addArrangedSubview(heightSV)
         mainSV.addArrangedSubview(activeSV)
@@ -288,20 +240,6 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         nameSV.alignment = .fill
         nameSV.spacing = 10
         
-        /* birthSV **********/
-        birthSV.addArrangedSubview(birthLabel)
-        birthSV.addArrangedSubview(birthPick)
-        birthSV.axis = .horizontal
-        birthSV.alignment = .fill
-        birthSV.spacing = 10
-        
-        /* genderSV **********/
-        genderSV.addArrangedSubview(genderLabel)
-        genderSV.addArrangedSubview(genderSeg)
-        genderSV.axis = .horizontal
-        genderSV.alignment = .fill
-        genderSV.spacing = 10
-        
         /* weightSV *********/
         weightSV.addArrangedSubview(weightLabel)
         weightSV.addArrangedSubview(weightTxt)
@@ -325,92 +263,6 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         activeSV.alignment = .fill
         activeSV.spacing = 10
         
-    }
-    
-    @objc func textFieldDidBeginEditing(_ textField: UITextField) {
-        activePick.isHidden = false
-    }
-    
-    @objc func setActivityView() {
-        guard let image = profileImage.image else { return }
-        let activitiController = UIActivityViewController(activityItems: [image], applicationActivities: nil)
-        present(activitiController, animated: true, completion: nil)
-    }
-    
-
-    static func newPersion() -> Person {
-        let context = persistentContainer.viewContext
-        let person = NSEntityDescription.insertNewObject(forEntityName: "Person", into: context) as! Person
-        return person
-    }
-    
-    @objc func addNewPerson1() {
-        let person = ProfileViewController.newPersion()
-        let dateFormater: DateFormatter = DateFormatter()
-        dateFormater.dateFormat = "MM/dd/yyyy"
-        let stringFromDate: String = dateFormater.string(from: self.birthPick.date) as String
-        let birthDate: Date = dateFormater.date(from: stringFromDate)!
-        
-//        print("\(nameTxt.text), \(genderSeg.titleForSegment(at: genderSeg.selectedSegmentIndex)), \(activeText.text)")
-        person.name = nameTxt.text
-        person.birthday = birthDate
-        person.gender = genderSeg.titleForSegment(at: genderSeg.selectedSegmentIndex)
-        guard let weight = Double(weightTxt.text!), let height = Double(heightTxt.text!) else { return }
-        person.weight = weight
-        person.height = height
-        person.activityType = activeText.text
-        
-    }
-    
-    // saving Personal Data
-    @objc func addNewPerson() {
-        
-        let dateFormater: DateFormatter = DateFormatter()
-        dateFormater.dateStyle = .short
-        dateFormater.timeStyle = .none
-//        dateFormater.dateFormat = "MM/dd/yyyy"
-        
-        let stringFromDate: String = dateFormater.string(from: self.birthPick.date) as String
-        let birthDate: Date = dateFormater.date(from: stringFromDate)!
-        
-        guard let weight = Double(weightTxt.text!), let height = Double(heightTxt.text!) else { return }
-        
-        
-        
-        // UserDefaults
-        let defaults = UserDefaults.standard
-        print(defaults)
-        print(defaults.object(forKey: "Name") as? String ?? String())
-        
-        defaults.set(nameTxt.text, forKey: "Name")
-        defaults.set(birthDate, forKey: "Birthday")
-        defaults.set(genderSeg.titleForSegment(at: genderSeg.selectedSegmentIndex), forKey: "Gender")
-        defaults.set(weight, forKey: "weight")
-        defaults.set(height, forKey: "height")
-        defaults.set(activeText.text, forKey: "ActivityType")
-        
-        
-//        let savedName = defaults.object(forKey: "Name") as? String ?? String()
-//        var savedBirth = defaults.object(forKey: "Birthday") as? Date ?? Date()
-//        let savedGender = defaults.object(forKey: "Gender") as? String ?? String()
-//        let savedWeight = defaults.double(forKey: "weight")
-//        let savedHeight = defaults.double(forKey: "height")
-//        let savedActivity = defaults.object(forKey: "ActivityType") as? String ?? String()
-
-//        print(stringFromDate)
-//        print(birthDate)
-//        savedBirth = dateFormater.date(from: stringFromDate)!
-//        print(savedName)
-//        print(savedBirth)
-//        print(savedGender)
-//        print(savedWeight)
-//        print(savedHeight)
-//        print(savedActivity)
-    }
-    
-    
-    static func save() {
-        ProfileViewController.persistentContainer.saveContext()
     }
     
     // scrollView
@@ -447,10 +299,10 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     }
     
     
+
 }
 
-
-extension ProfileViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+extension EditProfileViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
@@ -471,7 +323,7 @@ extension ProfileViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     }
 }
 
-extension ProfileViewController: UIScrollViewDelegate {
+extension EditProfileViewController: UIScrollViewDelegate {
   func viewForZooming(in scrollView: UIScrollView) -> UIView? {
     return nil
   }

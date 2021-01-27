@@ -9,11 +9,13 @@ import UIKit
 
 class IngredientTableViewCell: UITableViewCell {
 
+    static let identifier = "ingredientCell"
+    
     let ingredientLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 18)
+        label.font = UIFont.systemFont(ofSize: 21)
         label.numberOfLines = 0
-        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = UIColor.Theme1.black
         return label
     }()
     
@@ -21,9 +23,8 @@ class IngredientTableViewCell: UITableViewCell {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16)
         label.numberOfLines = 0
-        label.backgroundColor = #colorLiteral(red: 0.9250274271, green: 1, blue: 0.8999154439, alpha: 1)
+        label.textColor = UIColor.Theme1.black
         label.heightAnchor.constraint(equalToConstant: 25).isActive = true
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -31,17 +32,15 @@ class IngredientTableViewCell: UITableViewCell {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16)
         label.numberOfLines = 0
-        label.backgroundColor = #colorLiteral(red: 0.9250274271, green: 1, blue: 0.8999154439, alpha: 1)
+        label.textColor = UIColor.Theme1.black
         label.heightAnchor.constraint(equalToConstant: 25).isActive = true
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     let vStackView: UIStackView = {
         let sv = UIStackView()
-        sv.translatesAutoresizingMaskIntoConstraints = false
         sv.axis = .vertical
-        sv.distribution = .equalCentering
+        sv.distribution = .fill
         sv.alignment = .fill
         sv.spacing = 0
         sv.widthAnchor.constraint(equalToConstant: 150).isActive = true
@@ -79,9 +78,9 @@ class IngredientTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func update(with ingredient: (serving: String, nutrition: Nutrition?)) {
+    func update(with ingredient: Ingredient) {
         ingredientLabel.text = ingredient.serving
-        caloriesLabel.text = " Calories: \t \(ingredient.nutrition!.calories)"
-        proteinLabel.text = " Protein: \t \(ingredient.nutrition!.protein) g"
+        caloriesLabel.text = " Calories: \t \(ingredient.nutrition.calories)"
+        proteinLabel.text = " Protein: \t \(ingredient.nutrition.protein) g"
     }
 }
