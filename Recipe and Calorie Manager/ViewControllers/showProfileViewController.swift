@@ -98,7 +98,7 @@ class showProfileViewController: UIViewController {
         return tv
     }()
     
-    let cellId = "Cells"
+    let cellId = "cellId"
     var sectionTitle: [String] = ["Personal Profile"]
     var personalData = [Profile]()
     
@@ -119,6 +119,9 @@ class showProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellId)
+        tableView.dataSource = self
+        tableView.delegate = self
         view.backgroundColor = .white
         title = "Personal Profile"
         navigationController?.navigationBar.prefersLargeTitles = true
@@ -126,11 +129,8 @@ class showProfileViewController: UIViewController {
         view.addSubview(scrollView)
         scrollView.addSubview(mainSV)
         setSVConfig()
-        setPersonalData()
         
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellId)
-        tableView.dataSource = self
-        tableView.delegate = self
+        setPersonalData()
         
     }
     func setSVConfig() {
@@ -142,18 +142,18 @@ class showProfileViewController: UIViewController {
         
         
         /* mainSV **********/
-        mainSV.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30).isActive = true
+        mainSV.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor).isActive = true
         mainSV.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -50).isActive = true
         mainSV.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 50).isActive = true
-        mainSV.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive = true
+        mainSV.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor).isActive = true
         
         mainSV.addArrangedSubview(headSV)
         mainSV.addArrangedSubview(tableView)
         mainSV.addArrangedSubview(editButton)
         mainSV.axis = .vertical
         mainSV.alignment = .fill
-        mainSV.distribution = .equalSpacing
-        mainSV.spacing = 5
+        mainSV.distribution = .fill
+        mainSV.spacing = 50
         
         /* headSV **********/
         headSV.addArrangedSubview(profileImage)
@@ -184,6 +184,8 @@ class showProfileViewController: UIViewController {
         cfSV.alignment = .fill
         cfSV.spacing = 10
         
+        tableView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.4).isActive = true
+        
     }
     
     func setPersonalData(){
@@ -195,6 +197,9 @@ class showProfileViewController: UIViewController {
         let savedWeight = defaults.double(forKey: "weight")
         let savedHeight = defaults.double(forKey: "height")
         let savedActivity = defaults.object(forKey: "ActivityType") as? String ?? String()
+        
+        print("aaaaaaaaaaaa")
+        print(savedName)
         
 //        let age =
         personalData.append(Profile(palameter: "Name", value: savedName))
@@ -210,35 +215,23 @@ class showProfileViewController: UIViewController {
 
 extension showProfileViewController: UITableViewDataSource, UITableViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
-        print(#function)
         return sectionTitle.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print(#function)
-        print(personalData.count)
         return personalData.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        print(#function)
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
         cell.textLabel?.text = personalData[indexPath.row].palameter
-        cell.textLabel?.textColor = .black
-        cell.detailTextLabel?.text = personalData[indexPath.row].value
+        cell.detailTextLabel?.text = "AAAA"
+        // 
+//        cell.detailTextLabel?.text = personalData[indexPath.row].value
         return cell
     }
-    
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        print(#function)
-//        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
-//        cell.textLabel?.text = personalData[indexPath.row].palameter
-//        cell.detailTextLabel?.text = personalData[indexPath.row].value
-//        return cell
-//    }
-    
+
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        print(#function)
         return sectionTitle[section]
     }
 }
