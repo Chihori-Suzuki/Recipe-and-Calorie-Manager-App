@@ -376,7 +376,6 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         guard let weight = Double(weightTxt.text!), let height = Double(heightTxt.text!) else { return }
         
         
-        
         // UserDefaults
         let defaults = UserDefaults.standard
         print(defaults)
