@@ -32,13 +32,13 @@ struct RecipeFinal: Codable {
     var meal: Meal
     var ingredients: [Ingredient]
     
-    static var draftURL: URL {
+    private static var draftURL: URL {
       let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
       let draftURL = documentsURL.appendingPathComponent("recipe").appendingPathExtension("plist")
       return draftURL
     }
     
-    static var archiveURL: URL {
+    private static var archiveURL: URL {
       let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
       let archiveURL = documentsURL.appendingPathComponent("recipeList").appendingPathExtension("plist")
       return archiveURL
@@ -62,6 +62,30 @@ struct RecipeFinal: Codable {
         let decodedRecipe = try decoder.decode(RecipeFinal.self, from: recipeData)
         
         return decodedRecipe
+      } catch {
+        print("Error decoding recipe: \(error)")
+        return nil
+      }
+    }
+    
+    static func saveToList(recipes: [RecipeFinal]) {
+      let encoder = PropertyListEncoder()
+      do {
+        let encodedRecipe = try encoder.encode(recipes)
+        try encodedRecipe.write(to: RecipeFinal.archiveURL)
+      } catch {
+        print("Error encoding recipe: \(error.localizedDescription)")
+      }
+    }
+    
+    static func loadFromList() -> [RecipeFinal]? {
+      guard let recipeData = try? Data(contentsOf: RecipeFinal.archiveURL) else { return nil }
+      
+      do {
+        let decoder = PropertyListDecoder()
+        let decodedRecipes = try decoder.decode([RecipeFinal].self, from: recipeData)
+        
+        return decodedRecipes
       } catch {
         print("Error decoding recipe: \(error)")
         return nil

@@ -16,7 +16,7 @@ class AddRecipeViewController: UIViewController {
         tf.font = .systemFont(ofSize: 25)
         tf.becomeFirstResponder()
         tf.borderStyle = .roundedRect
-        tf.backgroundColor = UIColor.Theme1.yellow
+        tf.backgroundColor = .white
         tf.textColor = UIColor.Theme1.brown
         tf.addTarget(self, action: #selector(textEditingChanged(_:)), for: .editingChanged)
         return tf

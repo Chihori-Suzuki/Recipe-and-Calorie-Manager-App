@@ -36,6 +36,7 @@ class EditIngredientViewController: UIViewController, saveIngredientButtonTapped
         tf.widthAnchor.constraint(equalToConstant: 270).isActive = true
         tf.heightAnchor.constraint(equalToConstant: 50).isActive = true
         tf.becomeFirstResponder()
+        tf.textColor = UIColor.Theme1.brown
         tf.layer.borderWidth = 0.8
         tf.layer.borderColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
         tf.layer.cornerRadius = 8
@@ -61,7 +62,7 @@ class EditIngredientViewController: UIViewController, saveIngredientButtonTapped
         label.text = "update"
         label.widthAnchor.constraint(equalToConstant: 60).isActive = true
         label.textAlignment = .center
-        label.textColor = #colorLiteral(red: 0.4527973475, green: 0.2011018268, blue: 0.03813635361, alpha: 1)
+        label.textColor = UIColor.Theme1.blue
         label.alpha = 0.8
         label.adjustsFontSizeToFitWidth = true
         label.font = UIFont.boldSystemFont(ofSize: 20)

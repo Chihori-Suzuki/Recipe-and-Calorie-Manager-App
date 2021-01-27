@@ -10,8 +10,14 @@ import UIKit
 class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, SaveRecipeTableViewCellDelegate {
     
     func save() {
-        RecipeFinal.deleteDraft()
         navigationController?.popViewController(animated: true)
+        
+        RecipeFinal.deleteDraft()
+        if let recipe = recipe {
+            recipes.append(recipe)
+            print(recipes)
+            RecipeFinal.saveToList(recipes: recipes)
+        }
     }
     
     func discardRecipe() {
@@ -53,16 +59,8 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
         }
     }
     
-    let sectionTitles = ["Ingredients", "Nutrition Facts", ""]
-    var tableview = UITableView()
-    var totalsStackViews = UIStackView()
-    var caloriesTotalCountLabel = AnimatedLabelTotalsCal()
-    var carbsTotalCountLabel = AnimatedLabelTotals()
-    var proteinTotalCountLabel = AnimatedLabelTotals()
-    var fatTotalCountLabel = AnimatedLabelTotals()
-    var fiberTotalCountLabel = AnimatedLabelTotals()
+    var recipes: [RecipeFinal] = []
     var isViewFromRecipeList: Bool?
-    var isFirstLoad: Bool?
     var meal: Meal?
     var recipeTitle: String?
     var ingredients = [Ingredient]() {
@@ -89,6 +87,14 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
     var fiberTotal: Double? {
         didSet { fiberTotalCountLabel.count(from: Float(oldValue ?? 0), to: Float(fiberTotal ?? 0), duration: .brisk) }
     }
+    let sectionTitles = ["Ingredients", "Nutrition Facts", ""]
+    var tableview = UITableView()
+    var totalsStackViews = UIStackView()
+    var caloriesTotalCountLabel = AnimatedLabelTotalsCal()
+    var carbsTotalCountLabel = AnimatedLabelTotals()
+    var proteinTotalCountLabel = AnimatedLabelTotals()
+    var fatTotalCountLabel = AnimatedLabelTotals()
+    var fiberTotalCountLabel = AnimatedLabelTotals()
     
     let ingredientTextField: UITextField = {
        let tf = UITextField()
@@ -100,6 +106,7 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
         tf.becomeFirstResponder()
         tf.layer.borderWidth = 0.8
         tf.layer.borderColor = UIColor.Theme1.black.cgColor
+        tf.textColor = UIColor.Theme1.brown
         tf.backgroundColor = .white
         tf.layer.cornerRadius = 8
         tf.addTarget(self, action: #selector(textEditingChanged(_:)), for: .editingChanged)
@@ -199,13 +206,16 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
             vStackView.widthAnchor.constraint(equalToConstant: 70).isActive = true
             hStackView.addArrangedSubview(vStackView)
         }
-
         hStackView.axis = .horizontal
         hStackView.alignment = .center
         hStackView.distribution = .equalCentering
         hStackView.spacing = 5
         
         hStackView.isHidden = true
+        
+        if let _ = isViewFromRecipeList { hStackView.isHidden = false }
+        if let _ = recipe { hStackView.isHidden = false }
+        
         return hStackView
     }
     
@@ -260,17 +270,29 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonTapped))
         navigationItem.rightBarButtonItem?.tintColor = UIColor.Theme1.blue
         
-//        if let _ = recipe {
-//            recipe = RecipeFinal(title: recipeTitle!, meal: meal!, ingredients: ingredients)
-////            isFirstLoad = false
-//        }
+        if let savedList = RecipeFinal.loadFromList() {
+            recipes = savedList
+        }
+        
+        guard let _ = isViewFromRecipeList else {
+            if let recipe = RecipeFinal.loadFromDraft() {
+                caloriesTotalCountLabel.text = String(format: "%.2f", recipe.ingredients.map { $0.nutrition.calories }.reduce(0){ $0 + $1 })
+                carbsTotalCountLabel.text = String(format: "%.2f g", recipe.ingredients.map { $0.nutrition.carbohydrates }.reduce(0){ $0 + $1 })
+                proteinTotalCountLabel.text = String(format: "%.2f g", recipe.ingredients.map { $0.nutrition.protein }.reduce(0){ $0 + $1 })
+                fatTotalCountLabel.text = String(format: "%.2f g", recipe.ingredients.map { $0.nutrition.totalFat }.reduce(0){ $0 + $1 })
+                fiberTotalCountLabel.text = String(format: "%.2f g", recipe.ingredients.map { $0.nutrition.fiber }.reduce(0){ $0 + $1 })
+            }
+            return
+        }
     }
     
     @objc func cancelButtonTapped() {
         navigationController?.popViewController(animated: true)
         
         guard let _ = isViewFromRecipeList else {
-            RecipeFinal.deleteDraft()
+            if let _ = RecipeFinal.loadFromDraft() {
+                RecipeFinal.deleteDraft()
+            }
             return
         }
     }
@@ -328,16 +350,9 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
                     tableview.isHidden ? tableview.isHidden.toggle() : nil
                     tableview.insertRows(at: [IndexPath.init(row: 0, section: 0)], with: .top)
                     tableview.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
-                
                 }
                 calculateTotals()
-                //need to reload the section of saveRecipe button to pass the updated contents of ingredients
-                UIView.animate(withDuration: 0.5, animations: {
-                    tableview.reloadSections([1, 2], with: .none)
                 tableview.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .none)
-                })
-            
-
             } else {
                 //addButton vibrates to indicate invalid ingredient
                 let animation = CABasicAnimation(keyPath: "position")
@@ -417,7 +432,6 @@ extension AddIngredientsViewController: UITableViewDelegate, UITableViewDataSour
             let cell = tableView.dequeueReusableCell(withIdentifier: SaveRecipeTableViewCell.identifier, for: indexPath) as! SaveRecipeTableViewCell
             cell.delegate = self
             cell.mealType = meal
-//            cell.newRecipe = RecipeFinal(title: recipeTitle!, ingredients: ingredients)
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                 if self.ingredients.count > 0 {
                     cell.saveButton.isHidden = false
@@ -472,12 +486,11 @@ extension AddIngredientsViewController: UITableViewDelegate, UITableViewDataSour
     }
     //function needed to enable swipe delete
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-            self.ingredients.remove(at: indexPath.row)
-            self.tableview.deleteRows(at: [indexPath], with: .left)
-            self.calculateTotals()
-            //need to reload the section of saveRecipe button to pass the updated contents of ingredients
-            self.tableview.reloadSections([1, 2], with: .none)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { [self] in
+            ingredients.remove(at: indexPath.row)
+            tableview.deleteRows(at: [indexPath], with: .left)
+            calculateTotals()
+            tableview.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .none)
         }
     }
     //function needed to enable swipe delete
