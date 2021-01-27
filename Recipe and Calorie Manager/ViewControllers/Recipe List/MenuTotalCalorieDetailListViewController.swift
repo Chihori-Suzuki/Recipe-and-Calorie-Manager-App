@@ -9,8 +9,8 @@ import UIKit
 
 class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    // number of selected row on RecipeListViewControleller
-    var selectedCategory: Int?
+    // meal category of selected row on RecipeListViewControleller
+    var selectedCategory: Meal?
     // make nutrition object
     var ingredientNutrition = Nutrition(sugar: 1.0, fiber: 1, serving: 1, sodium: 1, name: "onion", potassium: 1, fat: 1, totalFat: 1, calories: 1.0, cholesterol: 1, protein: 1, carbohydrates: 1)
     // make ingredient object
@@ -56,6 +56,25 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
         return edit
     }()
     
+    // make variable to fill data from file
+    var recipeList: [RecipeFinal] = []
+    // make empty array to classify meal type after fetching data from file
+    var breakfastMeals: [RecipeFinal] = []
+    var lunchMeals: [RecipeFinal] = []
+    var dinnerMeals: [RecipeFinal] = []
+    var snackMeals: [RecipeFinal] = []
+    
+    
+    override func viewWillAppear(_ animated: Bool) {
+        if let recipeList = RecipeFinal.loadFromList() {
+            self.recipeList = recipeList
+            breakfastMeals = self.recipeList.filter {$0.meal == .breakfast}
+            lunchMeals = self.recipeList.filter {$0.meal == .lunch}
+            dinnerMeals = self.recipeList.filter {$0.meal == .dinner}
+            snackMeals = self.recipeList.filter {$0.meal == .snack}
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -90,20 +109,16 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let selectCategory = selectedCategory else { return 0}
-//        return catalog.catalog[selectCategory].recipes.count
-        
         // Reference -> https://www.hackingwithswift.com/example-code/language/how-to-count-matching-items-in-an-array
         switch selectCategory {
-        case 0:
-            return recipes.filter {$0.meal == .breakfast}.count
-        case 1:
-            return recipes.filter {$0.meal == .lunch}.count
-        case 2:
-            return recipes.filter {$0.meal == .dinner}.count
-        case 3:
-            return recipes.filter {$0.meal == .snack}.count
-        default:
-            fatalError()
+        case .breakfast:
+            return breakfastMeals.count
+        case .lunch:
+            return lunchMeals.count
+        case .dinner:
+            return dinnerMeals.count
+        case .snack:
+            return snackMeals.count
         }
     }
     
@@ -111,20 +126,25 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! MenuTotalCalorieDetailTableViewCell
             
         guard let selectCategory = selectedCategory else { return UITableViewCell()}
-//        let cellTitle = catalog.catalog[selectCategory].recipes[indexPath.row].title
-//        switch selectCategory {
-//        case 0:
-//            let cellTitle = recipes.filter {$0.meal == .breakfast}.map {$0.title}
-////            let cellTotalCalories = recipes.filter {$0.meal == .breakfast}.map {$0.ingredients}.
-//                 recipes[indexPath.row].ingredients.map {$0.nutrition.calories}.reduce(0) {$0 + $1}
-
-//        }
         
+        var cellTitle: String = ""
+        var totalCalories: Double = 0.0
         
-        
-        
-//        let cellTotalCalories = catalog.catalog[selectCategory].recipes[indexPath.row].ingredients.map { $0.nutrition!.calories }.reduce(0){ $0 + $1 }
-//                cell.update(cellTitle, cellTotalCalories)
+        switch selectCategory {
+        case .breakfast:
+            cellTitle = breakfastMeals[indexPath.row].title
+            totalCalories = breakfastMeals[indexPath.row].ingredients.map { $0.nutrition.calories }.reduce(0) { $0 + $1 }
+        case .lunch:
+            cellTitle = lunchMeals[indexPath.row].title
+            totalCalories = lunchMeals[indexPath.row].ingredients.map { $0.nutrition.calories }.reduce(0) { $0 + $1 }
+        case .dinner:
+            cellTitle = dinnerMeals[indexPath.row].title
+            totalCalories = dinnerMeals[indexPath.row].ingredients.map { $0.nutrition.calories }.reduce(0) { $0 + $1 }
+        case .snack:
+            cellTitle = snackMeals[indexPath.row].title
+            totalCalories = snackMeals[indexPath.row].ingredients.map { $0.nutrition.calories }.reduce(0) { $0 + $1 }
+        }
+        cell.update(cellTitle, totalCalories)
 //        cell.accessoryType = .detailDisclosureButton
         cell.showsReorderControl = true
         return cell
@@ -156,16 +176,27 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let clickedMeal = AddIngredientsViewController()
-        
         guard let selectedCategory = selectedCategory else { return }
         
-//        let selectedMeal = catalog.catalog[selectedCategory].recipes[indexPath.row]
-//        let mealType = catalog.catalog[selectedCategory].category
-//        clickedMeal.ingredients = selectedMeal.ingredients
-//        clickedMeal.recipeTitle = selectedMeal.title
+        var recipe: RecipeFinal!
+        
+        switch selectedCategory {
+        case .breakfast:
+            recipe = breakfastMeals[indexPath.row]
+        case .lunch:
+            recipe = lunchMeals[indexPath.row]
+        case .dinner:
+            recipe = dinnerMeals[indexPath.row]
+        case .snack:
+            recipe = snackMeals[indexPath.row]
+        }
+        
+        
+        // pass data to variable of instance clickedMeal should be in the following order
+        clickedMeal.recipeTitle = recipe.title
+        clickedMeal.meal = selectedCategory
+        clickedMeal.ingredients = recipe.ingredients
         clickedMeal.isViewFromRecipeList = true
-//        clickedMeal.meal = mealType
-//        var ingredients = [(serving: String, nutrition: Nutrition?)]() {
         navigationController?.pushViewController(clickedMeal, animated: true)
     }
 }

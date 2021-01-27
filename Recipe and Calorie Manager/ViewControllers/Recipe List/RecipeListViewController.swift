@@ -89,11 +89,8 @@ class RecipeListViewController: UIViewController, UITableViewDelegate,UITableVie
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let clickedMeal = MenuTotalCalorieDetailListViewController()
-//        clickedMeal.mealTitle = catalog.catalog[indexPath.row].category.rawValue
         clickedMeal.mealTitle = recipes[indexPath.row].meal.rawValue
-        // Reference -> https://stackoverflow.com/questions/28672836/how-to-get-a-value-of-selected-row-in-swift/42088775
-        let selectedItem = indexPath
-        clickedMeal.selectedCategory = selectedItem.row
+        clickedMeal.selectedCategory = recipes[indexPath.row].meal
         navigationController?.pushViewController(clickedMeal, animated: true)
     }
     
