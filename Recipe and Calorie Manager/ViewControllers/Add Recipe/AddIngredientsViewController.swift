@@ -284,6 +284,15 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
             }
             return
         }
+        
+        guard let recipe = recipe else { return }
+        
+        caloriesTotalCountLabel.text = String(format: "%.2f", recipe.ingredients.map { $0.nutrition.calories }.reduce(0){ $0 + $1 })
+        carbsTotalCountLabel.text = String(format: "%.2f g", recipe.ingredients.map { $0.nutrition.carbohydrates }.reduce(0){ $0 + $1 })
+        proteinTotalCountLabel.text = String(format: "%.2f g", recipe.ingredients.map { $0.nutrition.protein }.reduce(0){ $0 + $1 })
+        fatTotalCountLabel.text = String(format: "%.2f g", recipe.ingredients.map { $0.nutrition.totalFat }.reduce(0){ $0 + $1 })
+        fiberTotalCountLabel.text = String(format: "%.2f g", recipe.ingredients.map { $0.nutrition.fiber }.reduce(0){ $0 + $1 })
+        
     }
     
     @objc func cancelButtonTapped() {
