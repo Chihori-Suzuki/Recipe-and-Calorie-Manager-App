@@ -8,46 +8,34 @@
 import UIKit
 
 class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    func discardRecipe() {
-        
-    }
     
-    
-    func save(_ mealType: Meal, _ recipe: Recipe) {
-        switch mealType {
-        case .breakfast:
-            breakfastMeals.recipes.insert(recipe, at: 0)
-        case .lunch:
-            lunchMeals.recipes.insert(recipe, at: 0)
-        case .snack:
-            snackMeals.recipes.insert(recipe, at: 0)
-        case .dinner:
-            dinnerMeals.recipes.insert(recipe, at: 0)
-        }
-        myTable.insertRows(at: [IndexPath(row: 0, section: 0)], with: .none)
-    }
-    
+    // number of selected row on RecipeListViewControleller
     var selectedCategory: Int?
-    
-    // sample data
+    // make nutrition object
     var ingredientNutrition = Nutrition(sugar: 1.0, fiber: 1, serving: 1, sodium: 1, name: "onion", potassium: 1, fat: 1, totalFat: 1, calories: 1.0, cholesterol: 1, protein: 1, carbohydrates: 1)
-    lazy var recipe1 = Recipe(title: "Breakfast Meal 1", ingredients: [(serving: "ingredient 1", nutrition: ingredientNutrition),
-                                                                                         (serving: "ingredient 2", nutrition: ingredientNutrition)])
-    lazy var recipe5 = Recipe(title: "Breakfast Meal 2", ingredients: [(serving: "ingredient 10", nutrition: ingredientNutrition)])
-    lazy var recipe2 = Recipe(title: "Lunch Meal 1", ingredients: [(serving: "ingredient 2", nutrition: ingredientNutrition)])
-    lazy var recipe3 = Recipe(title: "Dinner Meal 1", ingredients: [(serving: "ingredient 3", nutrition: ingredientNutrition)])
-    lazy var recipe4 = Recipe(title: "Snack Meal 1", ingredients: [(serving: "ingredient 4", nutrition: ingredientNutrition)])
-
-    lazy var breakfastMeals = RecipeList(category: .breakfast, recipes: [recipe1, recipe5])
-    lazy var lunchMeals = RecipeList(category: .lunch, recipes: [recipe2])
-    lazy var dinnerMeals = RecipeList(category: .dinner, recipes: [recipe3])
-    lazy var snackMeals = RecipeList(category: .snack, recipes: [recipe4])
-    lazy var catalog = Catalog(catalog: [breakfastMeals, lunchMeals, dinnerMeals, snackMeals])
-
-    var mealTitle: String?
-
-    let cellId = "MenuTotalCalorie"
+    // make ingredient object
+    lazy var ingredient = Ingredient(serving: "Ingredient1", nutrition: ingredientNutrition)
     
+    
+    
+    lazy var recipe1 = RecipeFinal(title: "Breakfast Meal 1", meal: .breakfast, ingredients: [ingredient, ingredient])
+    lazy var recipe5 = RecipeFinal(title: "Breakfast Meal 2", meal: .breakfast, ingredients: [ingredient, ingredient])
+    lazy var recipe2 = RecipeFinal(title: "Lunch Meal 1", meal: .lunch, ingredients: [ingredient, ingredient])
+    lazy var recipe3 = RecipeFinal(title: "Dinner Meal 1", meal: .dinner,ingredients: [ingredient, ingredient])
+    lazy var recipe4 = RecipeFinal(title: "Snack Meal 1", meal: .snack, ingredients: [ingredient, ingredient])
+    
+    lazy var recipes: [RecipeFinal] = [recipe1,recipe2,recipe3,recipe4,recipe5]
+    
+    
+//    lazy var breakfastMeals = RecipeList(category: .breakfast, recipes: [recipe1, recipe5])
+//    lazy var lunchMeals = RecipeList(category: .lunch, recipes: [recipe2])
+//    lazy var dinnerMeals = RecipeList(category: .dinner, recipes: [recipe3])
+//    lazy var snackMeals = RecipeList(category: .snack, recipes: [recipe4])
+//    lazy var catalog = Catalog(catalog: [breakfastMeals, lunchMeals, dinnerMeals, snackMeals])
+    
+    // set large title on navigation bar
+    var mealTitle: String?
+    let cellId = "MenuTotalCalorie"
     
     lazy var myTable: UITableView = {
         let table = UITableView(frame: view.frame, style: .grouped)
@@ -102,17 +90,42 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let selectCategory = selectedCategory else { return 0}
-        return catalog.catalog[selectCategory].recipes.count
+//        return catalog.catalog[selectCategory].recipes.count
+        
+        // Reference -> https://www.hackingwithswift.com/example-code/language/how-to-count-matching-items-in-an-array
+        switch selectCategory {
+        case 0:
+            return recipes.filter {$0.meal == .breakfast}.count
+        case 1:
+            return recipes.filter {$0.meal == .lunch}.count
+        case 2:
+            return recipes.filter {$0.meal == .dinner}.count
+        case 3:
+            return recipes.filter {$0.meal == .snack}.count
+        default:
+            fatalError()
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! MenuTotalCalorieDetailTableViewCell
             
         guard let selectCategory = selectedCategory else { return UITableViewCell()}
-        let cellTitle = catalog.catalog[selectCategory].recipes[indexPath.row].title
-        let cellTotalCalories = catalog.catalog[selectCategory].recipes[indexPath.row].ingredients.map { $0.nutrition!.calories }.reduce(0){ $0 + $1 }
-        cell.update(cellTitle, cellTotalCalories)
-        cell.accessoryType = .detailDisclosureButton
+//        let cellTitle = catalog.catalog[selectCategory].recipes[indexPath.row].title
+//        switch selectCategory {
+//        case 0:
+//            let cellTitle = recipes.filter {$0.meal == .breakfast}.map {$0.title}
+////            let cellTotalCalories = recipes.filter {$0.meal == .breakfast}.map {$0.ingredients}.
+//                 recipes[indexPath.row].ingredients.map {$0.nutrition.calories}.reduce(0) {$0 + $1}
+
+//        }
+        
+        
+        
+        
+//        let cellTotalCalories = catalog.catalog[selectCategory].recipes[indexPath.row].ingredients.map { $0.nutrition!.calories }.reduce(0){ $0 + $1 }
+//                cell.update(cellTitle, cellTotalCalories)
+//        cell.accessoryType = .detailDisclosureButton
         cell.showsReorderControl = true
         return cell
     }
@@ -130,10 +143,10 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-//            guard let selectCategory = selectedCategory else { return }
+            guard let selectCategory = selectedCategory else { return }
 //            let cellTitle = catalog.catalog[selectCategory].recipes[indexPath.row].title
 //            let cellTotalCalories = catalog.catalog[selectCategory].recipes[indexPath.row].ingredients.map { $0.nutrition!.calories }.reduce(0){ $0 + $1 }
-            catalog.catalog.remove(at: 0)
+//            catalog.catalog.remove(at: 0)
             let indexPath = IndexPath(item: 0, section: 0)
             myTable.deleteRows(at: [indexPath], with: .fade)
         } else if editingStyle == .insert {
@@ -146,12 +159,12 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
         
         guard let selectedCategory = selectedCategory else { return }
         
-        let selectedMeal = catalog.catalog[selectedCategory].recipes[indexPath.row]
-        let mealType = catalog.catalog[selectedCategory].category
+//        let selectedMeal = catalog.catalog[selectedCategory].recipes[indexPath.row]
+//        let mealType = catalog.catalog[selectedCategory].category
 //        clickedMeal.ingredients = selectedMeal.ingredients
-        clickedMeal.recipeTitle = selectedMeal.title
+//        clickedMeal.recipeTitle = selectedMeal.title
         clickedMeal.isViewFromRecipeList = true
-        clickedMeal.meal = mealType
+//        clickedMeal.meal = mealType
 //        var ingredients = [(serving: String, nutrition: Nutrition?)]() {
         navigationController?.pushViewController(clickedMeal, animated: true)
     }
