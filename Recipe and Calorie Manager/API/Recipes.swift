@@ -103,7 +103,7 @@ struct RecipeFinal: Codable {
     }
 }
 
-enum Meal: String, Codable {
+enum Meal: String, Codable, CaseIterable {
     case breakfast = "breakfast"
     case lunch = "lunch"
     case snack = "snack"
