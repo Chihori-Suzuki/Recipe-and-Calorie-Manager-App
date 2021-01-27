@@ -16,7 +16,7 @@ class AddRecipeViewController: UIViewController {
         tf.font = .systemFont(ofSize: 25)
         tf.becomeFirstResponder()
         tf.borderStyle = .roundedRect
-        tf.backgroundColor = UIColor.Theme1.yellow
+        tf.backgroundColor = .white
         tf.textColor = UIColor.Theme1.brown
         tf.addTarget(self, action: #selector(textEditingChanged(_:)), for: .editingChanged)
         return tf
@@ -140,14 +140,11 @@ class AddRecipeViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         
-        if let savedRecipe = RecipeFinal.loadFromFile() {
+        if let savedRecipe = RecipeFinal.loadFromDraft() {
             print(savedRecipe)
             let draftVC = AddIngredientsViewController()
-            draftVC.recipe = savedRecipe
             draftVC.recipeTitle = savedRecipe.title
             draftVC.meal = savedRecipe.meal
-            draftVC.isFirstLoad = true
-//            draftVC.tableview.isHidden = false
             draftVC.ingredients = savedRecipe.ingredients
             navigationController?.pushViewController(draftVC, animated: false)
         } else {
