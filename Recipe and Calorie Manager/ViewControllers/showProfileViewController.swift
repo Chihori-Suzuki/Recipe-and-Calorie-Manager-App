@@ -112,7 +112,7 @@ class showProfileViewController: UIViewController {
         button.widthAnchor.constraint(equalToConstant: 80).isActive = true
         button.heightAnchor.constraint(equalToConstant: 50).isActive = true
         button.layer.cornerRadius = 8
-//        button.addTarget(self, action: #selector(addNewPerson), for: .touchUpInside)
+        button.addTarget(self, action: #selector(didTapEditBtn), for: .touchUpInside)
         button.alpha = 0.5
         return button
     }()
@@ -198,11 +198,8 @@ class showProfileViewController: UIViewController {
         let savedHeight = defaults.double(forKey: "height")
         let savedActivity = defaults.object(forKey: "ActivityType") as? String ?? String()
         
-        print("aaaaaaaaaaaa")
-        print(savedName)
-        
-//        let age =
-        personalData.append(Profile(palameter: "Name", value: savedName))
+        nameLabel.text = savedName
+//        personalData.append(Profile(palameter: "Name", value: savedName))
         personalData.append(Profile(palameter: "Age", value: "28"))
         personalData.append(Profile(palameter: "Gender", value: savedGender))
         personalData.append(Profile(palameter: "Weight", value: "\(savedWeight)"))
@@ -211,6 +208,26 @@ class showProfileViewController: UIViewController {
         
         
     }
+    
+    @objc func didTapEditBtn(){
+        let editVC = EditProfileViewController()
+//        editVC.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(dismissSelf))
+//        let navVC = UINavigationController(rootViewController: editVC)
+//        navVC.modalPresentationStyle = .fullScreen
+
+        present(editVC, animated: true)
+
+//        present(navVC, animated: true)
+    }
+    
+    @objc func dismissSelf() {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        print("AIJI")
+    }
+    
 }
 
 extension showProfileViewController: UITableViewDataSource, UITableViewDelegate {
@@ -226,8 +243,6 @@ extension showProfileViewController: UITableViewDataSource, UITableViewDelegate 
 //        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
         let cell = UITableViewCell(style: .value1, reuseIdentifier: cellId)
         cell.textLabel?.text = personalData[indexPath.row].palameter
-//        cell.detailTextLabel?.text = "AAAA"
-        // 
         cell.detailTextLabel?.text = personalData[indexPath.row].value
         return cell
     }
