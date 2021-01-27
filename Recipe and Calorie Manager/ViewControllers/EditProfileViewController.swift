@@ -30,6 +30,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         iv.heightAnchor.constraint(equalToConstant: 100).isActive = true
         return iv
     }()
+    
     let pencilBtn: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -39,6 +40,9 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
 //        button.addTarget(self, action: #selector(setActivityView), for: .touchUpInside)
         return button
     }()
+    
+    // UserDefaults
+    let defaults = UserDefaults.standard
     
     // Label Field
     let nameLabel: UILabel = {
@@ -77,7 +81,6 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         tf.layer.borderWidth = 0.8
         tf.layer.cornerRadius = 5
         tf.backgroundColor = .white
-        
         return tf
     }()
     
@@ -167,7 +170,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         button.widthAnchor.constraint(equalToConstant: 80).isActive = true
         button.heightAnchor.constraint(equalToConstant: 50).isActive = true
         button.layer.cornerRadius = 8
-//        button.addTarget(self, action: #selector(addNewPerson), for: .touchUpInside)
+        button.addTarget(self, action: #selector(editProfile), for: .touchUpInside)
 //        button.isEnabled = false
         button.alpha = 0.5
         return button
@@ -184,6 +187,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         view.addSubview(scrollView)
         scrollView.addSubview(mainSV)
         setSVConfig()
+        setProfile()
         
         activePick.delegate = self
         activePick.dataSource = self
@@ -264,6 +268,28 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         activeSV.spacing = 10
         
     }
+    func setProfile() {
+        nameTxt.text = defaults.object(forKey: "Name") as? String ?? String()
+        weightTxt.text = "\(defaults.double(forKey: "weight"))"
+        heightTxt.text = "\(defaults.double(forKey: "height"))"
+        activeText.text = defaults.object(forKey: "ActivityType") as? String ?? String()
+        
+        
+    }
+    
+    @objc func editProfile() {
+        guard let weight = Double(weightTxt.text!), let height = Double(heightTxt.text!) else { return }
+        
+        defaults.set(nameTxt.text, forKey: "Name")
+        defaults.set(weight, forKey: "weight")
+        defaults.set(height, forKey: "height")
+        defaults.set(activeText.text, forKey: "ActivityType")
+        
+        dismiss(animated: true, completion: nil)
+        
+    }
+    
+    
     
     // scrollView
     @objc func dismissKeyboard(_ sender: UITapGestureRecognizer) {
