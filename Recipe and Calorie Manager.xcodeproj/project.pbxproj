@@ -37,8 +37,6 @@
 		FAA2FBF525BDE4FA00CD300F /* MenuTotalCalorieDetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA2FBF425BDE4FA00CD300F /* MenuTotalCalorieDetailTableViewCell.swift */; };
 		FAAA842F25BF361800DFFBEB /* RecipeListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAAA842E25BF361800DFFBEB /* RecipeListViewController.swift */; };
 		FAAA843225BF362300DFFBEB /* MenuTotalCalorieDetailListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAAA843125BF362300DFFBEB /* MenuTotalCalorieDetailListViewController.swift */; };
-		FAAA843E25BFE33200DFFBEB /* CheckIngredientsDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAAA843D25BFE33200DFFBEB /* CheckIngredientsDetailViewController.swift */; };
-		FAAA844425BFF6CA00DFFBEB /* CheckIngredientsDetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAAA844325BFF6CA00DFFBEB /* CheckIngredientsDetailTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -74,8 +72,6 @@
 		FAA2FBF425BDE4FA00CD300F /* MenuTotalCalorieDetailTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuTotalCalorieDetailTableViewCell.swift; sourceTree = "<group>"; };
 		FAAA842E25BF361800DFFBEB /* RecipeListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipeListViewController.swift; sourceTree = "<group>"; };
 		FAAA843125BF362300DFFBEB /* MenuTotalCalorieDetailListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuTotalCalorieDetailListViewController.swift; sourceTree = "<group>"; };
-		FAAA843D25BFE33200DFFBEB /* CheckIngredientsDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckIngredientsDetailViewController.swift; sourceTree = "<group>"; };
-		FAAA844325BFF6CA00DFFBEB /* CheckIngredientsDetailTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckIngredientsDetailTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -179,8 +175,6 @@
 				FAA2FBF425BDE4FA00CD300F /* MenuTotalCalorieDetailTableViewCell.swift */,
 				FAAA843125BF362300DFFBEB /* MenuTotalCalorieDetailListViewController.swift */,
 				FAAA842E25BF361800DFFBEB /* RecipeListViewController.swift */,
-				FAAA843D25BFE33200DFFBEB /* CheckIngredientsDetailViewController.swift */,
-				FAAA844325BFF6CA00DFFBEB /* CheckIngredientsDetailTableViewCell.swift */,
 			);
 			path = "Recipe List";
 			sourceTree = "<group>";
@@ -279,11 +273,9 @@
 				52FF472F25BD04E200B3888F /* EditIngredientViewController.swift in Sources */,
 				52FF46D825B7B3B900B3888F /* IngredientTableViewCell.swift in Sources */,
 				2E792C5625BB848400515D76 /* Person+CoreDataProperties.swift in Sources */,
-				FAAA843E25BFE33200DFFBEB /* CheckIngredientsDetailViewController.swift in Sources */,
 				52FF46E925BA446400B3888F /* Recipes.swift in Sources */,
 				2E792C5525BB848400515D76 /* Person+CoreDataClass.swift in Sources */,
 				FA0EB5D925B75F360085BCE7 /* ProfileViewController.swift in Sources */,
-				FAAA844425BFF6CA00DFFBEB /* CheckIngredientsDetailTableViewCell.swift in Sources */,
 				526B350425B6430700BAE8D9 /* SceneDelegate.swift in Sources */,
 				2E792D4425BFAC9100515D76 /* Profile.swift in Sources */,
 				526B352225B6609100BAE8D9 /* API.swift in Sources */,

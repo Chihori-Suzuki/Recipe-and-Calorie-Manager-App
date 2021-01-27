@@ -11,40 +11,15 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
     
     // meal category of selected row on RecipeListViewControleller
     var selectedCategory: Meal?
-    // make nutrition object
-    var ingredientNutrition = Nutrition(sugar: 1.0, fiber: 1, serving: 1, sodium: 1, name: "onion", potassium: 1, fat: 1, totalFat: 1, calories: 1.0, cholesterol: 1, protein: 1, carbohydrates: 1)
-    // make ingredient object
-    lazy var ingredient = Ingredient(serving: "Ingredient1", nutrition: ingredientNutrition)
-    
-    
-    
-    lazy var recipe1 = RecipeFinal(title: "Breakfast Meal 1", meal: .breakfast, ingredients: [ingredient, ingredient])
-    lazy var recipe5 = RecipeFinal(title: "Breakfast Meal 2", meal: .breakfast, ingredients: [ingredient, ingredient])
-    lazy var recipe2 = RecipeFinal(title: "Lunch Meal 1", meal: .lunch, ingredients: [ingredient, ingredient])
-    lazy var recipe3 = RecipeFinal(title: "Dinner Meal 1", meal: .dinner,ingredients: [ingredient, ingredient])
-    lazy var recipe4 = RecipeFinal(title: "Snack Meal 1", meal: .snack, ingredients: [ingredient, ingredient])
-    
-    lazy var recipes: [RecipeFinal] = [recipe1,recipe2,recipe3,recipe4,recipe5]
-    
-    
-//    lazy var breakfastMeals = RecipeList(category: .breakfast, recipes: [recipe1, recipe5])
-//    lazy var lunchMeals = RecipeList(category: .lunch, recipes: [recipe2])
-//    lazy var dinnerMeals = RecipeList(category: .dinner, recipes: [recipe3])
-//    lazy var snackMeals = RecipeList(category: .snack, recipes: [recipe4])
-//    lazy var catalog = Catalog(catalog: [breakfastMeals, lunchMeals, dinnerMeals, snackMeals])
-    
     // set large title on navigation bar
     var mealTitle: String?
-    let cellId = "MenuTotalCalorie"
-    
-    lazy var myTable: UITableView = {
-        let table = UITableView(frame: view.frame, style: .grouped)
-        table.translatesAutoresizingMaskIntoConstraints = false
-        table.register(MenuTotalCalorieDetailTableViewCell.self, forCellReuseIdentifier: cellId)
-        table.delegate = self
-        table.dataSource = self
-        return table
-    }()
+    // make variable to fill data from file
+    var recipeList: [RecipeFinal] = []
+    // make empty array to classify meal type after fetching data from file
+    var breakfastMeals: [RecipeFinal] = []
+    var lunchMeals: [RecipeFinal] = []
+    var dinnerMeals: [RecipeFinal] = []
+    var snackMeals: [RecipeFinal] = []
     
     lazy var doneBtn: UIBarButtonItem =  {
         let done = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneEditing))
@@ -56,14 +31,14 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
         return edit
     }()
     
-    // make variable to fill data from file
-    var recipeList: [RecipeFinal] = []
-    // make empty array to classify meal type after fetching data from file
-    var breakfastMeals: [RecipeFinal] = []
-    var lunchMeals: [RecipeFinal] = []
-    var dinnerMeals: [RecipeFinal] = []
-    var snackMeals: [RecipeFinal] = []
-    
+    lazy var myTable: UITableView = {
+        let table = UITableView(frame: view.frame, style: .grouped)
+        table.translatesAutoresizingMaskIntoConstraints = false
+        table.register(MenuTotalCalorieDetailTableViewCell.self, forCellReuseIdentifier: MenuTotalCalorieDetailTableViewCell.identifier)
+        table.delegate = self
+        table.dataSource = self
+        return table
+    }()
     
     override func viewWillAppear(_ animated: Bool) {
         if let recipeList = RecipeFinal.loadFromList() {
@@ -81,7 +56,6 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
         title = mealTitle
         navigationController?.navigationBar.prefersLargeTitles = true
         setupTableView()
-//        myTable.allowsMultipleSelectionDuringEditing = true
         navigationItem.rightBarButtonItem = editBtn
     }
     
@@ -108,8 +82,8 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let selectCategory = selectedCategory else { return 0}
-        // Reference -> https://www.hackingwithswift.com/example-code/language/how-to-count-matching-items-in-an-array
+        guard let selectCategory = selectedCategory else { return 0 }
+        
         switch selectCategory {
         case .breakfast:
             return breakfastMeals.count
@@ -123,8 +97,8 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! MenuTotalCalorieDetailTableViewCell
-            
+        let cell = tableView.dequeueReusableCell(withIdentifier: MenuTotalCalorieDetailTableViewCell.identifier, for: indexPath) as! MenuTotalCalorieDetailTableViewCell
+        
         guard let selectCategory = selectedCategory else { return UITableViewCell()}
         
         var cellTitle: String = ""
@@ -145,20 +119,12 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
             totalCalories = snackMeals[indexPath.row].ingredients.map { $0.nutrition.calories }.reduce(0) { $0 + $1 }
         }
         cell.update(cellTitle, totalCalories)
-//        cell.accessoryType = .detailDisclosureButton
-        cell.showsReorderControl = true
+        cell.accessoryType = .disclosureIndicator
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 50.0
-    }
-    
-    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        return true 
-    }
-    
-    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -180,7 +146,6 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
                 recipe = snackMeals[indexPath.row]
                 snackMeals = snackMeals.filter {$0 != recipe}
             }
-            
             myTable.deleteRows(at: [indexPath], with: .fade)
             // update recipeList
             recipeList = recipeList.filter {$0 != recipe}
@@ -190,7 +155,6 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let clickedMeal = AddIngredientsViewController()
         guard let selectedCategory = selectedCategory else { return }
         
         var recipe: RecipeFinal!
@@ -205,14 +169,14 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
         case .snack:
             recipe = snackMeals[indexPath.row]
         }
-        
-        
         // pass data to variable of instance clickedMeal should be in the following order
+        let clickedMeal = AddIngredientsViewController()
         clickedMeal.recipeTitle = recipe.title
         clickedMeal.meal = selectedCategory
         clickedMeal.ingredients = recipe.ingredients
         clickedMeal.isViewFromRecipeList = true
         clickedMeal.recipe = recipe
+        
         navigationController?.pushViewController(clickedMeal, animated: true)
     }
 }

@@ -10,6 +10,11 @@ import UIKit
 
 class RecipeListViewController: UIViewController, UITableViewDelegate,UITableViewDataSource {
     let cellId = "RecipeListCell"
+    // make variable to fill data from file
+    var recipeList: [RecipeFinal] = []
+    var meal: Meal!
+    // make variable to set array for all meal types
+    let category = Meal.allCases
     
     lazy var myTable: UITableView = {
         let table = UITableView(frame: view.frame, style: .grouped)
@@ -19,9 +24,6 @@ class RecipeListViewController: UIViewController, UITableViewDelegate,UITableVie
         table.dataSource = self
         return table
     }()
-    
-    // make variable to fill data from file
-    var recipeList: [RecipeFinal] = []
     
     override func viewWillAppear(_ animated: Bool) {
         if let recipeList = RecipeFinal.loadFromList() {
@@ -50,27 +52,25 @@ class RecipeListViewController: UIViewController, UITableViewDelegate,UITableVie
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return catalog.catalog.count
-        // Reference -> https://stackoverflow.com/questions/27094878/how-do-i-get-the-count-of-a-swift-enum#:~:text=25%20Answers&text=Adopt%20the%20CaseIterable%20protocol%20in,many%20cases%20the%20enum%20has.
         return Meal.allCases.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
-        let category = Meal.allCases
-        let meal = category[indexPath.row].rawValue
-        cell.textLabel?.text = "\(meal)"
+        meal = category[indexPath.row]
+        cell.textLabel?.text = meal.rawValue
         cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 30)
         cell.layer.cornerRadius = 10
         cell.layer.borderWidth = 0.5
+        cell.accessoryType = .disclosureIndicator
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let clickedCategory = MenuTotalCalorieDetailListViewController()
-        clickedCategory.mealTitle = recipeList[indexPath.row].meal.rawValue
-        clickedCategory.selectedCategory = recipeList[indexPath.row].meal
+        clickedCategory.mealTitle = category[indexPath.row].rawValue
+        clickedCategory.selectedCategory = category[indexPath.row]
         navigationController?.pushViewController(clickedCategory, animated: true)
     }
     
