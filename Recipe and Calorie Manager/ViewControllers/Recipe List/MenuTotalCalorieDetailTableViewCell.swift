@@ -63,7 +63,7 @@ class MenuTotalCalorieDetailTableViewCell: UITableViewCell {
     
     func update(_ cellTitle: String, _ cellTotalCalories: Double) {
         recipeTitleLabel.text = "\(cellTitle)"
-        totalCalorieLabel.text = "\(cellTotalCalories)"
+        totalCalorieLabel.text = String(format: "%.2f", cellTotalCalories)
     }
     
     // make margin between two tableview cells
