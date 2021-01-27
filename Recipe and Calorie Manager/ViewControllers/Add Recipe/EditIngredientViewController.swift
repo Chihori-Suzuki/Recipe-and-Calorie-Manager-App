@@ -200,13 +200,8 @@ extension EditIngredientViewController: UITableViewDelegate, UITableViewDataSour
             cell.selectionStyle = .none
         
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                if !self.updateButton.isEnabled {
-                    cell.saveButton.isHidden = true
-                    cell.discardButton.isHidden = true
-                } else {
-                    cell.saveButton.isHidden = false
-                    cell.discardButton.isHidden = false
-                }
+                cell.saveButton.isHidden = false
+                cell.discardButton.isHidden = false
             }
             return cell
         default:
