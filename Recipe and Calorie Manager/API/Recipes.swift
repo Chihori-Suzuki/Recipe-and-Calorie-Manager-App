@@ -27,10 +27,14 @@ struct Ingredient: Equatable, Codable {
         return lhs.serving.lowercased() == rhs.serving.lowercased()
     }
 }
-struct RecipeFinal: Codable {
+struct RecipeFinal: Codable, Equatable {
     var title: String
     var meal: Meal
     var ingredients: [Ingredient]
+    
+    static func == (lhs: RecipeFinal, rhs: RecipeFinal) -> Bool {
+        return lhs.title == rhs.title && lhs.meal == rhs.meal && lhs.ingredients == rhs.ingredients
+    }
     
     private static var draftURL: URL {
       let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
