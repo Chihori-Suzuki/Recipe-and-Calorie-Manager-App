@@ -197,6 +197,7 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
         clickedMeal.meal = selectedCategory
         clickedMeal.ingredients = recipe.ingredients
         clickedMeal.isViewFromRecipeList = true
+        clickedMeal.recipe = recipe
         navigationController?.pushViewController(clickedMeal, animated: true)
     }
 }
