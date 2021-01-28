@@ -12,8 +12,6 @@ import CoreData
 
 class ProfileViewController: UIViewController, UITextFieldDelegate {
     
-    
-    
     // persistantContainer
     private static var persistentContainer: NSPersistentCloudKitContainer! = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
 
@@ -203,10 +201,10 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     }()
     
     // submitButton
-    let submitBtn: UIButton = {
+    let saveBtn: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Submit", for: .normal)
+        button.setTitle("Save", for: .normal)
         button.backgroundColor = .systemBlue
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 25)
         button.widthAnchor.constraint(equalToConstant: 80).isActive = true
@@ -266,7 +264,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         mainSV.addArrangedSubview(heightSV)
         mainSV.addArrangedSubview(activeSV)
         mainSV.addArrangedSubview(activePick)
-        mainSV.addArrangedSubview(submitBtn)
+        mainSV.addArrangedSubview(saveBtn)
         mainSV.axis = .vertical
         mainSV.alignment = .fill
         mainSV.distribution = .equalSpacing
@@ -344,23 +342,6 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         return person
     }
     
-    @objc func addNewPerson1() {
-        let person = ProfileViewController.newPersion()
-        let dateFormater: DateFormatter = DateFormatter()
-        dateFormater.dateFormat = "MM/dd/yyyy"
-        let stringFromDate: String = dateFormater.string(from: self.birthPick.date) as String
-        let birthDate: Date = dateFormater.date(from: stringFromDate)!
-        
-//        print("\(nameTxt.text), \(genderSeg.titleForSegment(at: genderSeg.selectedSegmentIndex)), \(activeText.text)")
-        person.name = nameTxt.text
-        person.birthday = birthDate
-        person.gender = genderSeg.titleForSegment(at: genderSeg.selectedSegmentIndex)
-        guard let weight = Double(weightTxt.text!), let height = Double(heightTxt.text!) else { return }
-        person.weight = weight
-        person.height = height
-        person.activityType = activeText.text
-        
-    }
     
     // saving Personal Data
     @objc func addNewPerson() {
@@ -388,23 +369,10 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         defaults.set(height, forKey: "height")
         defaults.set(activeText.text, forKey: "ActivityType")
         
+        let showVC = showProfileViewController()
+        navigationController?.pushViewController(showVC, animated: true)
         
-//        let savedName = defaults.object(forKey: "Name") as? String ?? String()
-//        var savedBirth = defaults.object(forKey: "Birthday") as? Date ?? Date()
-//        let savedGender = defaults.object(forKey: "Gender") as? String ?? String()
-//        let savedWeight = defaults.double(forKey: "weight")
-//        let savedHeight = defaults.double(forKey: "height")
-//        let savedActivity = defaults.object(forKey: "ActivityType") as? String ?? String()
-
-//        print(stringFromDate)
-//        print(birthDate)
-//        savedBirth = dateFormater.date(from: stringFromDate)!
-//        print(savedName)
-//        print(savedBirth)
-//        print(savedGender)
-//        print(savedWeight)
-//        print(savedHeight)
-//        print(savedActivity)
+        
     }
     
     

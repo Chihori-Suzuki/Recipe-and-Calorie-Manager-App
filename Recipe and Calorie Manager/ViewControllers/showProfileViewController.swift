@@ -45,6 +45,12 @@ class showProfileViewController: UIViewController, EditProfileDelegate {
         return sv
     }()
     
+    let bmrSV: UIStackView = { // BMR
+        let sv = UIStackView()
+        sv.translatesAutoresizingMaskIntoConstraints = false
+        return sv
+    }()
+    
     let bmiSV: UIStackView = { // BMI
         let sv = UIStackView()
         sv.translatesAutoresizingMaskIntoConstraints = false
@@ -64,7 +70,18 @@ class showProfileViewController: UIViewController, EditProfileDelegate {
         lb.text = "name"
         return lb
     }()
-    
+    let bmrLabel: UILabel = {
+        let lb = UILabel()
+        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.text = "BMR"
+        return lb
+    }()
+    let bmrValLabel: UILabel = {
+        let lb = UILabel()
+        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.text = "00"
+        return lb
+    }()
     let bmiLabel: UILabel = {
         let lb = UILabel()
         lb.translatesAutoresizingMaskIntoConstraints = false
@@ -74,19 +91,19 @@ class showProfileViewController: UIViewController, EditProfileDelegate {
     let bmiValLabel: UILabel = {
         let lb = UILabel()
         lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.text = "BMI"
+        lb.text = "00"
         return lb
     }()
     let cfLabel: UILabel = {
         let lb = UILabel()
         lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.text = "BMI"
+        lb.text = "Classification"
         return lb
     }()
     let cfValLabel: UILabel = {
         let lb = UILabel()
         lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.text = "BMI"
+        lb.text = "normal"
         return lb
     }()
     
@@ -130,6 +147,7 @@ class showProfileViewController: UIViewController, EditProfileDelegate {
         setSVConfig()
         
         setPersonalData()
+        navigationItem.hidesBackButton = true
         
     }
     func setSVConfig() {
@@ -163,11 +181,20 @@ class showProfileViewController: UIViewController, EditProfileDelegate {
         
         /* nameSV **********/
         nameSV.addArrangedSubview(nameLabel)
+        nameSV.addArrangedSubview(bmrSV)
         nameSV.addArrangedSubview(bmiSV)
         nameSV.addArrangedSubview(cfSV)
         nameSV.axis = .vertical
         nameSV.alignment = .fill
         nameSV.spacing = 10
+        
+        /* bmrSV **********/
+        bmrSV.addArrangedSubview(bmrLabel)
+        bmrSV.addArrangedSubview(bmrValLabel)
+        bmrSV.axis = .horizontal
+        bmrSV.alignment = .fill
+        bmrSV.spacing = 10
+        
         
         /* bmiSV **********/
         bmiSV.addArrangedSubview(bmiLabel)
@@ -208,9 +235,8 @@ class showProfileViewController: UIViewController, EditProfileDelegate {
         personalData.append(Profile(palameter: "Weight", value: "\(savedWeight)"))
         personalData.append(Profile(palameter: "height", value: "\(savedHeight)"))
         personalData.append(Profile(palameter: "ActivityType", value: savedActivity))
+        caluculateBmiBmr()
         
-        let bmi = savedWeight / savedHeight * savedHeight
-        bmiValLabel.text = String(bmi)
         
         
     }
@@ -240,15 +266,74 @@ class showProfileViewController: UIViewController, EditProfileDelegate {
         let ageComponents = calendar.components(.year, from: savedBirth, to: now as Date, options: [])
         let age = ageComponents.year!
         
+        personalData.removeAll()
+        
         nameLabel.text = savedName
+        caluculateBmiBmr()
+        
         personalData.append(Profile(palameter: "Age", value: "\(age)"))
         personalData.append(Profile(palameter: "Gender", value: savedGender))
         personalData.append(Profile(palameter: "Weight", value: "\(savedWeight)"))
         personalData.append(Profile(palameter: "height", value: "\(savedHeight)"))
         personalData.append(Profile(palameter: "ActivityType", value: savedActivity))
+        
+        tableView.reloadData()
+    }
+
+    func caluculateBmiBmr() {
+        
+        // UserDefaults
+        let defaults = UserDefaults.standard
+        let savedWeight = defaults.double(forKey: "weight")
+        let savedHeight = defaults.double(forKey: "height")
+        let savedGender = defaults.object(forKey: "Gender") as? String ?? String()
+        
+        /**
+         For men: BMR = 10 x weight (kg) + 6.25 x height (cm) – 5 x age (years) + 5
+         For women: BMR = 10 x weight (kg) + 6.25 x height (cm) – 5 x age (years) – 161
+         */
+        
+//        switch savedGender.lowercased() {
+//        case "male":
+//            <#code#>
+//        default:
+//            <#code#>
+//        }
+        
+        
+        let bmi = savedWeight / (savedHeight * savedHeight)
+        bmiValLabel.text =  String(format: "%.2f", bmi)
+//        print(defaults)
+//        print(bmi)
+        
+        
+        var classification = ""
+        
+        switch bmi {
+        case 0...18.49:
+            classification = "Underweight"
+        case 18.50...24.90:
+            classification = "Normal"
+        case 25.00...30.00:
+            classification = "Overweight"
+        case 30.00...34.90:
+            classification = "Obesity Class 1"
+        case 35.00...39.90:
+            classification = "Obesity Class 2"
+        default:
+            classification = "Obesity Class 3"
+        }
+        cfValLabel.text = classification
+        
+//        print(classification)
     }
     
 }
+
+extension MainTabBarController: UITabBarControllerDelegate {
+      func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+      return viewController != tabBarController.selectedViewController
+}}
 
 extension showProfileViewController: UITableViewDataSource, UITableViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
