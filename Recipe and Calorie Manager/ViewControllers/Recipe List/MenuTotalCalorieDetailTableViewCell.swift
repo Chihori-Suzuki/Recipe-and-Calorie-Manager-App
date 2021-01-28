@@ -15,7 +15,7 @@ class MenuTotalCalorieDetailTableViewCell: UITableViewCell {
         recipeTitle.numberOfLines = 0
         recipeTitle.textAlignment = .left
         recipeTitle.setMargins()
-        recipeTitle.font = UIFont(name: "ArialRoundedMTBold", size: 21)
+        recipeTitle.font = UIFont(name: "ArialRoundedMTBold", size: 22)
         recipeTitle.textColor = UIColor.Theme1.black
         return recipeTitle
     }()
@@ -24,9 +24,9 @@ class MenuTotalCalorieDetailTableViewCell: UITableViewCell {
     let totalCalorieLabel: UILabel = {
         let totalCalorie = UILabel()
         totalCalorie.numberOfLines = 0
-        totalCalorie.textAlignment = .center
+        totalCalorie.textAlignment = .natural
         totalCalorie.setMargins()
-        totalCalorie.font = UIFont(name: "ArialRoundedMTBold", size: 16)
+        totalCalorie.font = UIFont(name: "ArialRoundedMTBold", size: 17)
         totalCalorie.textColor = UIColor.Theme1.brown
         return totalCalorie
     }()
