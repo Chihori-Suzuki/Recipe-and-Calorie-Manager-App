@@ -11,7 +11,7 @@ import UIKit
 class RecipeListViewController: UIViewController, UITableViewDelegate,UITableViewDataSource {
     let cellId = "RecipeListCell"
     // make variable to fill data from file
-    var recipeList: [RecipeFinal] = []
+    var recipeList: [Recipe] = []
     var meal: Meal!
     // make variable to set array for all meal types
     let category = Meal.allCases
@@ -27,7 +27,7 @@ class RecipeListViewController: UIViewController, UITableViewDelegate,UITableVie
     }()
     
     override func viewWillAppear(_ animated: Bool) {
-        if let recipeList = RecipeFinal.loadFromList() {
+        if let recipeList = Recipe.loadFromList() {
             self.recipeList = recipeList
         }
         

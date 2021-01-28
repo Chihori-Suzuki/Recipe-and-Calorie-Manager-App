@@ -14,12 +14,12 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
     // set large title on navigation bar
     var mealTitle: String?
     // make variable to fill data from file
-    var recipeList: [RecipeFinal] = []
+    var recipeList: [Recipe] = []
     // make empty array to classify meal type after fetching data from file
-    var breakfastMeals: [RecipeFinal] = []
-    var lunchMeals: [RecipeFinal] = []
-    var dinnerMeals: [RecipeFinal] = []
-    var snackMeals: [RecipeFinal] = []
+    var breakfastMeals: [Recipe] = []
+    var lunchMeals: [Recipe] = []
+    var dinnerMeals: [Recipe] = []
+    var snackMeals: [Recipe] = []
     
     lazy var doneBtn: UIBarButtonItem =  {
         let done = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneEditing))
@@ -42,15 +42,21 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
     }()
     
     override func viewWillAppear(_ animated: Bool) {
-        if let recipeList = RecipeFinal.loadFromList() {
+        
+        if let recipeList = Recipe.loadFromList() {
             self.recipeList = recipeList
             breakfastMeals = self.recipeList.filter {$0.meal == .breakfast}
             lunchMeals = self.recipeList.filter {$0.meal == .lunch}
             dinnerMeals = self.recipeList.filter {$0.meal == .dinner}
             snackMeals = self.recipeList.filter {$0.meal == .snack}
+            
+            let meals = recipeList.filter { $0.meal == selectedCategory }
+            meals.count > 0 ? (navigationItem.rightBarButtonItem = editBtn) : ( navigationItem.rightBarButtonItem = nil)
+            //need to refresh the table if user added a new recipe
+            myTable.reloadData()
         }
         
-        let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.Theme1.yellow, NSAttributedString.Key.font: UIFont(name: "ArialRoundedMTBold", size: 30)!]
+        let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.Theme1.yellow, NSAttributedString.Key.font: UIFont(name: "ArialRoundedMTBold", size: 35)!]
         navigationController?.navigationBar.largeTitleTextAttributes = textAttributes
         navigationController?.navigationBar.prefersLargeTitles = true
     }
@@ -61,7 +67,6 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
         title = mealTitle
         navigationController?.navigationBar.prefersLargeTitles = true
         setupTableView()
-        navigationItem.rightBarButtonItem = editBtn
         navigationController?.navigationBar.tintColor = UIColor.Theme1.blue
     }
     
@@ -77,10 +82,10 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
     
     func setupTableView() {
         view.addSubview(myTable)
-        myTable.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
-        myTable.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10).isActive = true
-        myTable.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10).isActive = true
-        myTable.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10).isActive = true
+        myTable.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
+        myTable.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
+        myTable.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20).isActive = true
+        myTable.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -5).isActive = true
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -145,7 +150,7 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
         if editingStyle == .delete {
             guard let selectedCategory = selectedCategory else { return }
             
-            var recipe: RecipeFinal!
+            var recipe: Recipe!
             switch selectedCategory {
             case .breakfast:
                 recipe = breakfastMeals[indexPath.row]
@@ -166,7 +171,7 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
             // update recipeList
             recipeList = recipeList.filter {$0 != recipe}
             // save recipeList to file
-            RecipeFinal.saveToList(recipes: recipeList)
+            Recipe.saveToList(recipes: recipeList)
         }
     }
     
@@ -174,7 +179,7 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
         
         guard let selectedCategory = selectedCategory else { return }
         
-        var recipe: RecipeFinal!
+        var recipe: Recipe!
         
         switch selectedCategory {
         case .breakfast:
@@ -193,6 +198,7 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
         clickedMeal.ingredients = recipe.ingredients
         clickedMeal.isViewFromRecipeList = true
         clickedMeal.recipe = recipe
+        clickedMeal.recipeFromList = recipe
         
         navigationController?.pushViewController(clickedMeal, animated: true)
         tableView.deselectRow(at: indexPath, animated: false)

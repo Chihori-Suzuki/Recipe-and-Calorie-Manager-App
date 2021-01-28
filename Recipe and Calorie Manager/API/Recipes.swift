@@ -2,22 +2,16 @@
 //  Recipes.swift
 //  Recipe and Calorie Manager
 //
-//  Created by Macbook Pro on 2021-01-21.
+//  Created by Gil Jetomo on 2021-01-21.
 //
 
 import Foundation
 
-struct Catalog {
-    var catalog: [RecipeList]
-}
-struct RecipeList {
-    var category: Meal
-    var recipes: [Recipe]
-}
-//to be deprecated, tuple cannot conform to Codable
-struct Recipe {
-    var title: String
-    var ingredients: [(serving: String, nutrition: Nutrition?)]
+enum Meal: String, Codable, CaseIterable {
+    case breakfast = "breakfast"
+    case lunch = "lunch"
+    case snack = "snack"
+    case dinner = "dinner"
 }
 struct Ingredient: Equatable, Codable {
     var serving: String
@@ -27,67 +21,58 @@ struct Ingredient: Equatable, Codable {
         return lhs.serving.lowercased() == rhs.serving.lowercased()
     }
 }
-struct RecipeFinal: Codable, Equatable {
+struct Recipe: Codable, Equatable {
     var title: String
     var meal: Meal
     var ingredients: [Ingredient]
     
-    static func == (lhs: RecipeFinal, rhs: RecipeFinal) -> Bool {
-        return lhs.title == rhs.title && lhs.meal == rhs.meal && lhs.ingredients == rhs.ingredients
+    static func == (lhs: Recipe, rhs: Recipe) -> Bool {
+        return lhs.title.lowercased() == rhs.title.lowercased() && lhs.meal == rhs.meal && lhs.ingredients == rhs.ingredients
     }
+    private static let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
     
     private static var draftURL: URL {
-      let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-      let draftURL = documentsURL.appendingPathComponent("recipe").appendingPathExtension("plist")
+        let draftURL = Recipe.documentsURL.appendingPathComponent("recipe").appendingPathExtension("plist")
       return draftURL
     }
-    
     private static var archiveURL: URL {
-      let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-      let archiveURL = documentsURL.appendingPathComponent("recipeList").appendingPathExtension("plist")
+        let archiveURL = Recipe.documentsURL.appendingPathComponent("recipeList").appendingPathExtension("plist")
       return archiveURL
     }
-
-    static func saveToDraft(recipe: RecipeFinal) {
+    static func saveToDraft(recipe: Recipe) {
       let encoder = PropertyListEncoder()
       do {
         let encodedRecipe = try encoder.encode(recipe)
-        try encodedRecipe.write(to: RecipeFinal.draftURL)
+        try encodedRecipe.write(to: Recipe.draftURL)
       } catch {
         print("Error encoding recipe: \(error.localizedDescription)")
       }
     }
-    
-    static func loadFromDraft() -> RecipeFinal? {
-      guard let recipeData = try? Data(contentsOf: RecipeFinal.draftURL) else { return nil }
-      
+    static func loadFromDraft() -> Recipe? {
+      guard let recipeData = try? Data(contentsOf: Recipe.draftURL) else { return nil }
       do {
         let decoder = PropertyListDecoder()
-        let decodedRecipe = try decoder.decode(RecipeFinal.self, from: recipeData)
-        
+        let decodedRecipe = try decoder.decode(Recipe.self, from: recipeData)
         return decodedRecipe
       } catch {
         print("Error decoding recipe: \(error)")
         return nil
       }
     }
-    
-    static func saveToList(recipes: [RecipeFinal]) {
+    static func saveToList(recipes: [Recipe]) {
       let encoder = PropertyListEncoder()
       do {
         let encodedRecipe = try encoder.encode(recipes)
-        try encodedRecipe.write(to: RecipeFinal.archiveURL)
+        try encodedRecipe.write(to: Recipe.archiveURL)
       } catch {
         print("Error encoding recipe: \(error.localizedDescription)")
       }
     }
-    
-    static func loadFromList() -> [RecipeFinal]? {
-      guard let recipeData = try? Data(contentsOf: RecipeFinal.archiveURL) else { return nil }
-      
+    static func loadFromList() -> [Recipe]? {
+      guard let recipeData = try? Data(contentsOf: Recipe.archiveURL) else { return nil }
       do {
         let decoder = PropertyListDecoder()
-        let decodedRecipes = try decoder.decode([RecipeFinal].self, from: recipeData)
+        let decodedRecipes = try decoder.decode([Recipe].self, from: recipeData)
         
         return decodedRecipes
       } catch {
@@ -95,7 +80,6 @@ struct RecipeFinal: Codable, Equatable {
         return nil
       }
     }
-    
     static func deleteDraft() {
         let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory,.userDomainMask,true)[0] as NSString
         let destinationPath = documentsPath.appendingPathComponent("recipe.plist")
@@ -105,11 +89,4 @@ struct RecipeFinal: Codable, Equatable {
             print("Error deleting draft: \(error.localizedDescription)")
         }
     }
-}
-
-enum Meal: String, Codable, CaseIterable {
-    case breakfast = "breakfast"
-    case lunch = "lunch"
-    case snack = "snack"
-    case dinner = "dinner"
 }
