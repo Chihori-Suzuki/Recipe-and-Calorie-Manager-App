@@ -11,19 +11,17 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
     //SaveRecipeTableViewCellDelegate function
     func save() -> Bool {
         guard let newRecipe = recipe else { return true }
-        if let _ = Recipe.loadFromDraft() {
-            Recipe.deleteDraft()
-        }
+        if let _ = Recipe.loadFromDraft() { Recipe.deleteDraft() }
+        
+        let duplicateRecipe = recipes.filter {$0 == recipe}
+        guard duplicateRecipe.count == 0 else { return true }
+        
         if let recipeFromList = recipeFromList {
             recipes = recipes.filter {$0 != recipeFromList}
-            recipes.append(newRecipe)
-            Recipe.saveToList(recipes: recipes)
-        } else {
-            let duplicateRecipe = recipes.filter {$0 == recipe}
-            guard duplicateRecipe.count == 0 else { return true }
-            recipes.append(newRecipe)
-            Recipe.saveToList(recipes: recipes)
         }
+        recipes.append(newRecipe)
+        Recipe.saveToList(recipes: recipes)
+        
         navigationController?.popViewController(animated: true)
         return false
     }
