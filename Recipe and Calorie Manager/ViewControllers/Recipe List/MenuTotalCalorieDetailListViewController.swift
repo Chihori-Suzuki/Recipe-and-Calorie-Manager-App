@@ -42,6 +42,7 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
     }()
     
     override func viewWillAppear(_ animated: Bool) {
+        
         if let recipeList = Recipe.loadFromList() {
             self.recipeList = recipeList
             breakfastMeals = self.recipeList.filter {$0.meal == .breakfast}
@@ -51,6 +52,8 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
             
             let meals = recipeList.filter { $0.meal == selectedCategory }
             meals.count > 0 ? (navigationItem.rightBarButtonItem = editBtn) : ( navigationItem.rightBarButtonItem = nil)
+            //need to refresh the table if user added a new recipe
+            myTable.reloadData()
         }
         
         let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.Theme1.yellow, NSAttributedString.Key.font: UIFont(name: "ArialRoundedMTBold", size: 35)!]
@@ -195,6 +198,7 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
         clickedMeal.ingredients = recipe.ingredients
         clickedMeal.isViewFromRecipeList = true
         clickedMeal.recipe = recipe
+        clickedMeal.recipeFromList = recipe
         
         navigationController?.pushViewController(clickedMeal, animated: true)
         tableView.deselectRow(at: indexPath, animated: false)

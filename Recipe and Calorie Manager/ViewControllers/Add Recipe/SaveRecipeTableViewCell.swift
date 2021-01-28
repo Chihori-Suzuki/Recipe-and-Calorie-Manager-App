@@ -8,7 +8,7 @@
 import UIKit
 
 protocol SaveRecipeTableViewCellDelegate: class {
-    func save()
+    func save() -> Bool
     func discardRecipe()
 }
 
@@ -67,13 +67,11 @@ class SaveRecipeTableViewCell: UITableViewCell {
         contentView.backgroundColor = UIColor.Theme1.white
         contentView.heightAnchor.constraint(equalTo: hStackView.heightAnchor, multiplier: 1).isActive = true
         hStackView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
-//        hStackView.heightAnchor.constraint(equalToConstant: 50).isActive = true
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
     @objc func saveRecipe(_ sender: UIButton) {
         UIView.animate(withDuration: 0.10) {
             sender.transform = CGAffineTransform(scaleX: 0.6, y: 0.6)
@@ -82,12 +80,15 @@ class SaveRecipeTableViewCell: UITableViewCell {
                 sender.transform = CGAffineTransform.identity
             }
         }
+        guard let duplicateFound = delegate?.save(), duplicateFound == true else { return }
         
-        //temporary code for testing
-//        guard let meal = mealType, let recipe = newRecipe else { return }
-//        delegate?.save(meal, recipe)
-        delegate?.save()
-        
+        let animation = CABasicAnimation(keyPath: "position")
+        animation.duration = 0.05
+        animation.repeatCount = 4
+        animation.autoreverses = true
+        animation.fromValue = NSValue(cgPoint: CGPoint(x: saveButton.center.x - 12, y: saveButton.center.y))
+        animation.toValue = NSValue(cgPoint: CGPoint(x: saveButton.center.x + 12, y: saveButton.center.y))
+        saveButton.layer.add(animation, forKey: "position")
     }
     
     @objc func discardRecipe(_ sender: UIButton) {
@@ -98,7 +99,6 @@ class SaveRecipeTableViewCell: UITableViewCell {
                 sender.transform = CGAffineTransform.identity
             }
         }
-        
         delegate?.discardRecipe()
     }
 }

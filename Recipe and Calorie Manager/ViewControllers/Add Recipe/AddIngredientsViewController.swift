@@ -9,15 +9,26 @@ import UIKit
 
 class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, SaveRecipeTableViewCellDelegate {
     
-    func save() {
-        navigationController?.popViewController(animated: true)
+    func save() -> Bool {
+        guard let newRecipe = recipe else { return true }
         
-        Recipe.deleteDraft()
-        if let recipe = recipe {
-            recipes.append(recipe)
-            print(recipes)
+        if let _ = Recipe.loadFromDraft() {
+            Recipe.deleteDraft()
+        }
+        
+        if let recipeFromList = recipeFromList {
+            recipes = recipes.filter {$0 != recipeFromList}
+            recipes.append(newRecipe)
+            Recipe.saveToList(recipes: recipes)
+        } else {
+            let duplicateRecipes = recipes.filter {$0 == recipe}
+            guard duplicateRecipes.count == 0 else { return true }
+            recipes.append(newRecipe)
             Recipe.saveToList(recipes: recipes)
         }
+        navigationController?.popViewController(animated: true)
+        
+        return false
     }
     
     func discardRecipe() {
@@ -60,7 +71,9 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
     }
     
     var recipes: [Recipe] = []
+    var duplicateFound = false
     var isViewFromRecipeList: Bool?
+    var recipeFromList: Recipe?
     var meal: Meal?
     var recipeTitle: String?
     var ingredients = [Ingredient]() {
@@ -303,6 +316,10 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
                 Recipe.deleteDraft()
             }
             return
+        }
+        
+        if recipe == recipeFromList {
+            Recipe.deleteDraft()
         }
     }
     

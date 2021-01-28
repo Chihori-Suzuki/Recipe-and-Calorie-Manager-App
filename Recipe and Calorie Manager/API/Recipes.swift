@@ -27,7 +27,7 @@ struct Recipe: Codable, Equatable {
     var ingredients: [Ingredient]
     
     static func == (lhs: Recipe, rhs: Recipe) -> Bool {
-        return lhs.title == rhs.title && lhs.meal == rhs.meal && lhs.ingredients == rhs.ingredients
+        return lhs.title.lowercased() == rhs.title.lowercased() && lhs.meal == rhs.meal && lhs.ingredients == rhs.ingredients
     }
     private static let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
     
