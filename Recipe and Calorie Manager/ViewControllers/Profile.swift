@@ -10,4 +10,13 @@ import Foundation
 struct Profile {
     var palameter: String
     var value: String
+    static var bmr = 0.0
+}
+
+enum ActivityType: String, CaseIterable {
+    case sedentary = "Sedentary"
+    case lightlyActive = "Lightly Active"
+    case moderatelyActive = "Moderately Active"
+    case veryActive = "Very Active"
+    case extraActive = "Extra Active"
 }

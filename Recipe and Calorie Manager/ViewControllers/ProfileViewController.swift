@@ -160,8 +160,8 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         return dp
     }()
     
-    let activityItems = ["item1", "item2", "item3"]
-
+    let activityItems = ActivityType.allCases
+    
     
     // StackView Field
     let mainSV: UIStackView = {
@@ -427,11 +427,11 @@ extension ProfileViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return activityItems[row]
+        return activityItems[row].rawValue
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        activeText.text = activityItems[row]
+        activeText.text = activityItems[row].rawValue
         UIView.animate(withDuration: 0.3) {
             pickerView.isHidden = true
         }
