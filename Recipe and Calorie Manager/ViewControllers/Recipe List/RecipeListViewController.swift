@@ -17,9 +17,10 @@ class RecipeListViewController: UIViewController, UITableViewDelegate,UITableVie
     let category = Meal.allCases
     
     lazy var myTable: UITableView = {
-        let table = UITableView(frame: view.frame, style: .grouped)
+        let table = UITableView(frame: view.frame, style: .insetGrouped)
         table.translatesAutoresizingMaskIntoConstraints = false
         table.register(UITableViewCell.self, forCellReuseIdentifier: cellId)
+        table.backgroundColor = UIColor.Theme1.white
         table.delegate = self
         table.dataSource = self
         return table
@@ -29,11 +30,15 @@ class RecipeListViewController: UIViewController, UITableViewDelegate,UITableVie
         if let recipeList = RecipeFinal.loadFromList() {
             self.recipeList = recipeList
         }
+        
+        let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.Theme1.blue, NSAttributedString.Key.font: UIFont(name: "ArialRoundedMTBold", size: 30)!]
+        navigationController?.navigationBar.largeTitleTextAttributes = textAttributes
+        navigationController?.navigationBar.prefersLargeTitles = true
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .green
+        view.backgroundColor = UIColor.Theme1.white
         title = "Recipe List"
         navigationController?.navigationBar.prefersLargeTitles = true
         setupTableView()
@@ -59,9 +64,14 @@ class RecipeListViewController: UIViewController, UITableViewDelegate,UITableVie
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
         meal = category[indexPath.row]
         cell.textLabel?.text = meal.rawValue
-        cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 30)
-        cell.layer.cornerRadius = 10
-        cell.layer.borderWidth = 0.5
+        cell.textLabel?.font = UIFont(name: "ArialRoundedMTBold", size: 26)
+        cell.textLabel?.textColor = UIColor.Theme1.brown
+        cell.backgroundColor = UIColor.Theme1.white
+        let chevronImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 22, height: 22))
+        chevronImageView.image = UIImage(named: "right-chevron")
+        chevronImageView.image = chevronImageView.image?.withRenderingMode(.alwaysTemplate)
+        chevronImageView.tintColor = UIColor.Theme1.green
+        cell.accessoryView = chevronImageView
         cell.accessoryType = .disclosureIndicator
         return cell
     }
@@ -75,6 +85,6 @@ class RecipeListViewController: UIViewController, UITableViewDelegate,UITableVie
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 40.0
+        return 45.0
     }
 }

@@ -149,7 +149,7 @@ class AddRecipeViewController: UIViewController {
             navigationController?.pushViewController(draftVC, animated: false)
         } else {
         
-        let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.Theme1.blue, NSAttributedString.Key.font: UIFont(name: "ArialRoundedMTBold", size: 35)!]
+        let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.Theme1.blue, NSAttributedString.Key.font: UIFont(name: "ArialRoundedMTBold", size: 30)!]
         navigationController?.navigationBar.largeTitleTextAttributes = textAttributes
         navigationController?.navigationBar.prefersLargeTitles = true
         }
@@ -163,14 +163,6 @@ class AddRecipeViewController: UIViewController {
         
         setupLayout()
     }
-    
-//    override func viewDidLayoutSubviews() {
-//        let bottomLine = CALayer()
-//        bottomLine.frame = CGRect(x: 0, y: recipeTextField.frame.height - 2, width: recipeTextField.frame.width, height: 1.8)
-//        bottomLine.backgroundColor = UIColor.Theme1.yellow.cgColor
-//        recipeTextField.borderStyle = .none
-//        recipeTextField.layer.addSublayer(bottomLine)
-//    }
     
     override func viewWillDisappear(_ animated: Bool) {
         recipeTextField.text?.removeAll()

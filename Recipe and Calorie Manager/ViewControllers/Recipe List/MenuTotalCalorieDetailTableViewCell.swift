@@ -13,9 +13,10 @@ class MenuTotalCalorieDetailTableViewCell: UITableViewCell {
     let recipeTitleLabel: UILabel = {
         let recipeTitle = UILabel()
         recipeTitle.numberOfLines = 0
-        recipeTitle.clipsToBounds = true
         recipeTitle.textAlignment = .left
-        recipeTitle.font = UIFont.boldSystemFont(ofSize: 20)
+        recipeTitle.setMargins()
+        recipeTitle.font = UIFont(name: "ArialRoundedMTBold", size: 21)
+        recipeTitle.textColor = UIColor.Theme1.brown
         return recipeTitle
     }()
     
@@ -23,28 +24,27 @@ class MenuTotalCalorieDetailTableViewCell: UITableViewCell {
     let totalCalorieLabel: UILabel = {
         let totalCalorie = UILabel()
         totalCalorie.numberOfLines = 0
-        totalCalorie.clipsToBounds = true
-        totalCalorie.textAlignment = .right
-        totalCalorie.font = UIFont.boldSystemFont(ofSize: 20)
+        totalCalorie.textAlignment = .center
+        totalCalorie.setMargins()
+        totalCalorie.font = UIFont(name: "ArialRoundedMTBold", size: 16)
+        totalCalorie.textColor = UIColor.Theme1.orange
         return totalCalorie
     }()
     
     lazy var hStackView: UIStackView = {
-        let horizontalStack = UIStackView(arrangedSubviews: [recipeTitleLabel, UIView(),totalCalorieLabel])
+        let horizontalStack = UIStackView(arrangedSubviews: [recipeTitleLabel, totalCalorieLabel])
         horizontalStack.translatesAutoresizingMaskIntoConstraints = false
-        horizontalStack.clipsToBounds = false
         horizontalStack.axis = .horizontal
-        horizontalStack.alignment = .leading
-        horizontalStack.distribution = .fillProportionally
+        horizontalStack.alignment = .bottom
+        horizontalStack.distribution = .fill
         horizontalStack.spacing = 0
-        horizontalStack.layer.cornerRadius = 10
-        horizontalStack.layer.borderWidth = 1
         return horizontalStack
     }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.contentView.addSubview(hStackView)
+//        contentView.heightAnchor.constraint(equalTo: hStackView.heightAnchor, multiplier: 1).isActive = true
         setupHorizontalStackView()
     }
     
