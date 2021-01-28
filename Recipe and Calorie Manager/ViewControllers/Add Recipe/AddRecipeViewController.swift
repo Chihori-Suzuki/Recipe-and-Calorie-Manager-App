@@ -139,7 +139,7 @@ class AddRecipeViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         
-        if let savedRecipe = RecipeFinal.loadFromDraft() {
+        if let savedRecipe = Recipe.loadFromDraft() {
             print(savedRecipe)
             let draftVC = AddIngredientsViewController()
             draftVC.recipeTitle = savedRecipe.title

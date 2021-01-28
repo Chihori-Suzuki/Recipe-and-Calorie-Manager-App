@@ -12,11 +12,11 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
     func save() {
         navigationController?.popViewController(animated: true)
         
-        RecipeFinal.deleteDraft()
+        Recipe.deleteDraft()
         if let recipe = recipe {
             recipes.append(recipe)
             print(recipes)
-            RecipeFinal.saveToList(recipes: recipes)
+            Recipe.saveToList(recipes: recipes)
         }
     }
     
@@ -27,15 +27,15 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
             }
         }
         guard let _ = isViewFromRecipeList else {
-            RecipeFinal.deleteDraft()
+            Recipe.deleteDraft()
             return
         }
     }
     
     var selectedRowForEdit: IndexPath?
-    var recipe: RecipeFinal? {
+    var recipe: Recipe? {
         didSet {
-            RecipeFinal.saveToDraft(recipe: recipe!)
+            Recipe.saveToDraft(recipe: recipe!)
         }
     }
     
@@ -59,13 +59,13 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
         }
     }
     
-    var recipes: [RecipeFinal] = []
+    var recipes: [Recipe] = []
     var isViewFromRecipeList: Bool?
     var meal: Meal?
     var recipeTitle: String?
     var ingredients = [Ingredient]() {
         didSet {
-            recipe = RecipeFinal(title: recipeTitle!, meal: meal!, ingredients: ingredients)
+            recipe = Recipe(title: recipeTitle!, meal: meal!, ingredients: ingredients)
             guard let _ = isViewFromRecipeList else {
             ingredients.count == 0 ? (navigationItem.rightBarButtonItem?.isEnabled = true) : (navigationItem.rightBarButtonItem?.isEnabled = false)
                 return
@@ -270,12 +270,12 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonTapped))
         navigationItem.rightBarButtonItem?.tintColor = UIColor.Theme1.blue
         
-        if let savedList = RecipeFinal.loadFromList() {
+        if let savedList = Recipe.loadFromList() {
             recipes = savedList
         }
         
         guard let _ = isViewFromRecipeList else {
-            if let recipe = RecipeFinal.loadFromDraft() {
+            if let recipe = Recipe.loadFromDraft() {
                 caloriesTotalCountLabel.text = String(format: "%.2f", recipe.ingredients.map { $0.nutrition.calories }.reduce(0){ $0 + $1 })
                 carbsTotalCountLabel.text = String(format: "%.2f g", recipe.ingredients.map { $0.nutrition.carbohydrates }.reduce(0){ $0 + $1 })
                 proteinTotalCountLabel.text = String(format: "%.2f g", recipe.ingredients.map { $0.nutrition.protein }.reduce(0){ $0 + $1 })
@@ -299,8 +299,8 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
         navigationController?.popViewController(animated: true)
         
         guard let _ = isViewFromRecipeList else {
-            if let _ = RecipeFinal.loadFromDraft() {
-                RecipeFinal.deleteDraft()
+            if let _ = Recipe.loadFromDraft() {
+                Recipe.deleteDraft()
             }
             return
         }

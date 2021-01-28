@@ -15,7 +15,6 @@ protocol SaveRecipeTableViewCellDelegate: class {
 class SaveRecipeTableViewCell: UITableViewCell {
     
     static let identifier = "saveRecipe"
-//    var newRecipe: RecipeFinal?
     var mealType: Meal?
     weak var delegate: SaveRecipeTableViewCellDelegate?
     

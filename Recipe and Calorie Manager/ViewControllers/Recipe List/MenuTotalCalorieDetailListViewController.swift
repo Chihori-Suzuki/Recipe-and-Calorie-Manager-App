@@ -14,12 +14,12 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
     // set large title on navigation bar
     var mealTitle: String?
     // make variable to fill data from file
-    var recipeList: [RecipeFinal] = []
+    var recipeList: [Recipe] = []
     // make empty array to classify meal type after fetching data from file
-    var breakfastMeals: [RecipeFinal] = []
-    var lunchMeals: [RecipeFinal] = []
-    var dinnerMeals: [RecipeFinal] = []
-    var snackMeals: [RecipeFinal] = []
+    var breakfastMeals: [Recipe] = []
+    var lunchMeals: [Recipe] = []
+    var dinnerMeals: [Recipe] = []
+    var snackMeals: [Recipe] = []
     
     lazy var doneBtn: UIBarButtonItem =  {
         let done = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneEditing))
@@ -42,7 +42,7 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
     }()
     
     override func viewWillAppear(_ animated: Bool) {
-        if let recipeList = RecipeFinal.loadFromList() {
+        if let recipeList = Recipe.loadFromList() {
             self.recipeList = recipeList
             breakfastMeals = self.recipeList.filter {$0.meal == .breakfast}
             lunchMeals = self.recipeList.filter {$0.meal == .lunch}
@@ -147,7 +147,7 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
         if editingStyle == .delete {
             guard let selectedCategory = selectedCategory else { return }
             
-            var recipe: RecipeFinal!
+            var recipe: Recipe!
             switch selectedCategory {
             case .breakfast:
                 recipe = breakfastMeals[indexPath.row]
@@ -168,7 +168,7 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
             // update recipeList
             recipeList = recipeList.filter {$0 != recipe}
             // save recipeList to file
-            RecipeFinal.saveToList(recipes: recipeList)
+            Recipe.saveToList(recipes: recipeList)
         }
     }
     
@@ -176,7 +176,7 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
         
         guard let selectedCategory = selectedCategory else { return }
         
-        var recipe: RecipeFinal!
+        var recipe: Recipe!
         
         switch selectedCategory {
         case .breakfast:
