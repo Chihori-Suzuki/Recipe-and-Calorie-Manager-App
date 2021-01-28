@@ -9,6 +9,9 @@ import UIKit
 
 class MainTabBarController: UITabBarController {
 
+    // UserDefaults
+    let defaults = UserDefaults.standard
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         let recipeListVC = RecipeListViewController()
@@ -16,12 +19,16 @@ class MainTabBarController: UITabBarController {
         // make a viewController for addRecipe screen
         let addRecipeVC = AddRecipeViewController()
         addRecipeVC.tabBarItem = UITabBarItem(tabBarSystemItem: .search, tag: 1)
+
         // make a viewController for profile screen
-        
-//        let profileVC = ProfileViewController()
-//        let profileVC = EditProfileViewController()
-        let profileVC = showProfileViewController()
+        var profileVC: UIViewController
+        if defaults.object(forKey: "Name") != nil {
+            profileVC = showProfileViewController()
+        } else {
+            profileVC = ProfileViewController()
+        }
         profileVC.tabBarItem = UITabBarItem(tabBarSystemItem: .contacts, tag: 2)
+        
         // make a viewController for recipe list screen
         let viewControllers = [recipeListVC, addRecipeVC, profileVC]
         self.viewControllers = viewControllers.map { UINavigationController(rootViewController: $0) }

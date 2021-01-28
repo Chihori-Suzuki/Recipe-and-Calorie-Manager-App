@@ -191,64 +191,62 @@ class showProfileViewController: UIViewController, EditProfileDelegate {
         // UserDefaults
         let defaults = UserDefaults.standard
         let savedName = defaults.object(forKey: "Name") as? String ?? String()
-        var savedBirth = defaults.object(forKey: "Birthday") as? Date ?? Date()
+        let savedBirth = defaults.object(forKey: "Birthday") as? Date ?? Date()
         let savedGender = defaults.object(forKey: "Gender") as? String ?? String()
         let savedWeight = defaults.double(forKey: "weight")
         let savedHeight = defaults.double(forKey: "height")
         let savedActivity = defaults.object(forKey: "ActivityType") as? String ?? String()
         
+        let now = NSDate()
+        let calendar : NSCalendar = NSCalendar.current as NSCalendar
+        let ageComponents = calendar.components(.year, from: savedBirth, to: now as Date, options: [])
+        let age = ageComponents.year!
+        
         nameLabel.text = savedName
-//        personalData.append(Profile(palameter: "Name", value: savedName))
-        personalData.append(Profile(palameter: "Age", value: "28"))
+        personalData.append(Profile(palameter: "Age", value: "\(age)"))
         personalData.append(Profile(palameter: "Gender", value: savedGender))
         personalData.append(Profile(palameter: "Weight", value: "\(savedWeight)"))
         personalData.append(Profile(palameter: "height", value: "\(savedHeight)"))
         personalData.append(Profile(palameter: "ActivityType", value: savedActivity))
+        
+        let bmi = savedWeight / savedHeight * savedHeight
+        bmiValLabel.text = String(bmi)
         
         
     }
     
     @objc func didTapEditBtn(){
         let editVC = EditProfileViewController()
-//        editVC.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(dismissSelf))
-//        let navVC = UINavigationController(rootViewController: editVC)
-//        navVC.modalPresentationStyle = .fullScreen
         editVC.delegate = self
         present(editVC, animated: true)
-
-//        present(navVC, animated: true)
     }
     
     @objc func dismissSelf() {
         dismiss(animated: true, completion: nil)
     }
     
-    
     func saveProfile() {
         // UserDefaults
         let defaults = UserDefaults.standard
         let savedName = defaults.object(forKey: "Name") as? String ?? String()
-        var savedBirth = defaults.object(forKey: "Birthday") as? Date ?? Date()
+        let savedBirth = defaults.object(forKey: "Birthday") as? Date ?? Date()
         let savedGender = defaults.object(forKey: "Gender") as? String ?? String()
         let savedWeight = defaults.double(forKey: "weight")
         let savedHeight = defaults.double(forKey: "height")
         let savedActivity = defaults.object(forKey: "ActivityType") as? String ?? String()
         
-//        var birthdate = DateComponents(year: 1994, month: 10, day: 1)
-        var age: Int
-        let calendar = Calendar.current
-        let now = calendar.dateComponents([.year, .month, .day], from: Date())
-//        let ageComponents = calendar.dateComponents([.year], from: savedBirth, to: now)
-//        age = ageComponents.year!
+        let now = NSDate()
+        let calendar : NSCalendar = NSCalendar.current as NSCalendar
+        let ageComponents = calendar.components(.year, from: savedBirth, to: now as Date, options: [])
+        let age = ageComponents.year!
         
         nameLabel.text = savedName
-        personalData.append(Profile(palameter: "Age", value: "28"))
+        personalData.append(Profile(palameter: "Age", value: "\(age)"))
         personalData.append(Profile(palameter: "Gender", value: savedGender))
         personalData.append(Profile(palameter: "Weight", value: "\(savedWeight)"))
         personalData.append(Profile(palameter: "height", value: "\(savedHeight)"))
         personalData.append(Profile(palameter: "ActivityType", value: savedActivity))
     }
-    
     
 }
 
