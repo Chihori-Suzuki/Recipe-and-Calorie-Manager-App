@@ -22,6 +22,11 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
         recipes.append(newRecipe)
         Recipe.saveToList(recipes: recipes)
         
+        if let tabItem = tabBarController?.tabBar.items {
+            Recipe.newRecipeCount += 1
+            tabItem[0].badgeValue = String(Recipe.newRecipeCount)
+        }
+        
         navigationController?.popViewController(animated: true)
         return false
     }
@@ -63,6 +68,7 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
             Recipe.saveToDraft(recipe: recipe!)
         }
     }
+    
     var selectedRowForEdit: IndexPath?
     var recipes: [Recipe] = []
     var duplicateFound = false
