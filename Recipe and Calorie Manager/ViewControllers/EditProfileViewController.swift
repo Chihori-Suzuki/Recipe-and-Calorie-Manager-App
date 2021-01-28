@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol EditProfileDelegate: class {
+    func saveProfile()
+}
+
 class EditProfileViewController: UIViewController, UITextFieldDelegate {
 
     // ScrollView
@@ -176,6 +180,8 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         return button
     }()
     
+    weak var delegate: EditProfileDelegate?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -269,27 +275,26 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         
     }
     func setProfile() {
+        
         nameTxt.text = defaults.object(forKey: "Name") as? String ?? String()
         weightTxt.text = "\(defaults.double(forKey: "weight"))"
         heightTxt.text = "\(defaults.double(forKey: "height"))"
         activeText.text = defaults.object(forKey: "ActivityType") as? String ?? String()
         
-        
     }
     
     @objc func editProfile() {
+        
         guard let weight = Double(weightTxt.text!), let height = Double(heightTxt.text!) else { return }
         
         defaults.set(nameTxt.text, forKey: "Name")
         defaults.set(weight, forKey: "weight")
         defaults.set(height, forKey: "height")
         defaults.set(activeText.text, forKey: "ActivityType")
-        
+        delegate?.saveProfile()
         dismiss(animated: true, completion: nil)
         
     }
-    
-    
     
     // scrollView
     @objc func dismissKeyboard(_ sender: UITapGestureRecognizer) {

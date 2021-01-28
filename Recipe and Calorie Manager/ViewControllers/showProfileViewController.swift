@@ -7,8 +7,7 @@
 
 import UIKit
 
-class showProfileViewController: UIViewController {
-
+class showProfileViewController: UIViewController, EditProfileDelegate {
     
     // ScrollView
     let scrollView: UIScrollView = {
@@ -214,7 +213,7 @@ class showProfileViewController: UIViewController {
 //        editVC.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(dismissSelf))
 //        let navVC = UINavigationController(rootViewController: editVC)
 //        navVC.modalPresentationStyle = .fullScreen
-
+        editVC.delegate = self
         present(editVC, animated: true)
 
 //        present(navVC, animated: true)
@@ -224,9 +223,32 @@ class showProfileViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        print("AIJI")
+    
+    func saveProfile() {
+        // UserDefaults
+        let defaults = UserDefaults.standard
+        let savedName = defaults.object(forKey: "Name") as? String ?? String()
+        var savedBirth = defaults.object(forKey: "Birthday") as? Date ?? Date()
+        let savedGender = defaults.object(forKey: "Gender") as? String ?? String()
+        let savedWeight = defaults.double(forKey: "weight")
+        let savedHeight = defaults.double(forKey: "height")
+        let savedActivity = defaults.object(forKey: "ActivityType") as? String ?? String()
+        
+//        var birthdate = DateComponents(year: 1994, month: 10, day: 1)
+        var age: Int
+        let calendar = Calendar.current
+        let now = calendar.dateComponents([.year, .month, .day], from: Date())
+//        let ageComponents = calendar.dateComponents([.year], from: savedBirth, to: now)
+//        age = ageComponents.year!
+        
+        nameLabel.text = savedName
+        personalData.append(Profile(palameter: "Age", value: "28"))
+        personalData.append(Profile(palameter: "Gender", value: savedGender))
+        personalData.append(Profile(palameter: "Weight", value: "\(savedWeight)"))
+        personalData.append(Profile(palameter: "height", value: "\(savedHeight)"))
+        personalData.append(Profile(palameter: "ActivityType", value: savedActivity))
     }
+    
     
 }
 
