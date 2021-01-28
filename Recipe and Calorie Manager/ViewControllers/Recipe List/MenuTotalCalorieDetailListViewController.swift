@@ -48,6 +48,9 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
             lunchMeals = self.recipeList.filter {$0.meal == .lunch}
             dinnerMeals = self.recipeList.filter {$0.meal == .dinner}
             snackMeals = self.recipeList.filter {$0.meal == .snack}
+            
+            let meals = recipeList.filter { $0.meal == selectedCategory }
+            meals.count > 0 ? (navigationItem.rightBarButtonItem = editBtn) : ( navigationItem.rightBarButtonItem = nil)
         }
         
         let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.Theme1.yellow, NSAttributedString.Key.font: UIFont(name: "ArialRoundedMTBold", size: 35)!]
@@ -61,7 +64,6 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
         title = mealTitle
         navigationController?.navigationBar.prefersLargeTitles = true
         setupTableView()
-        navigationItem.rightBarButtonItem = editBtn
         navigationController?.navigationBar.tintColor = UIColor.Theme1.blue
     }
     
