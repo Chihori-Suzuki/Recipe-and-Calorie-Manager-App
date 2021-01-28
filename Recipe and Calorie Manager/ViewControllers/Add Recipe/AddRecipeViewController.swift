@@ -9,7 +9,6 @@ import UIKit
 
 class AddRecipeViewController: UIViewController {
     
-    var isDraft = true
     lazy var recipeTextField: UITextField = {
         let tf = UITextField()
         tf.placeholder = "Chicken Adobo       "
@@ -22,14 +21,14 @@ class AddRecipeViewController: UIViewController {
         return tf
     }()
     
-    private var meals = ["breakfast", "lunch", "dinner", "snack"]
+    private var meals = Meal.allCases
     private var breakfastButton = UIButton()
-    private var snacksButton = UIButton()
+    private var snackButton = UIButton()
     private var lunchButton = UIButton()
     private var dinnerButton = UIButton()
     
     private var mealButtons: [UIButton] {
-        let arr = [breakfastButton, lunchButton, dinnerButton, snacksButton]
+        let arr = [breakfastButton, lunchButton, dinnerButton, snackButton]
         return arr
     }
     
@@ -65,8 +64,8 @@ class AddRecipeViewController: UIViewController {
     }
     
     fileprivate func arrangeHStackViews(with buttons: [UIButton], and labels: [UILabel]) -> UIStackView {
-        let hSVButtonLabels1 = UIStackView()
-        let hSVButtonLabels2 = UIStackView()
+        let hStackViewButtons = UIStackView()
+        let hStackViewLabels = UIStackView()
         for (index, _) in buttons.enumerated(){
             let sv = UIStackView(arrangedSubviews: [buttons[index], labels[index]])
             sv.axis = .vertical
@@ -74,20 +73,20 @@ class AddRecipeViewController: UIViewController {
             sv.widthAnchor.constraint(equalToConstant: 110).isActive = true
             sv.alignment = .center
             sv.spacing = 2
-            index > 1 ? hSVButtonLabels2.addArrangedSubview(sv) : hSVButtonLabels1.addArrangedSubview(sv)
+            index > 1 ? hStackViewLabels.addArrangedSubview(sv) : hStackViewButtons.addArrangedSubview(sv)
         }
         
-        hSVButtonLabels1.axis = .horizontal
-        hSVButtonLabels1.alignment = .center
-        hSVButtonLabels1.distribution = .fill
-        hSVButtonLabels1.spacing = 30
+        hStackViewButtons.axis = .horizontal
+        hStackViewButtons.alignment = .center
+        hStackViewButtons.distribution = .fill
+        hStackViewButtons.spacing = 30
         
-        hSVButtonLabels2.axis = .horizontal
-        hSVButtonLabels2.alignment = .center
-        hSVButtonLabels2.distribution = .fill
-        hSVButtonLabels2.spacing = 30
+        hStackViewLabels.axis = .horizontal
+        hStackViewLabels.alignment = .center
+        hStackViewLabels.distribution = .fill
+        hStackViewLabels.spacing = 30
         
-        let sv = UIStackView(arrangedSubviews: [hSVButtonLabels1, hSVButtonLabels2])
+        let sv = UIStackView(arrangedSubviews: [hStackViewButtons, hStackViewLabels])
         sv.axis = .vertical
         sv.distribution = .fill
         sv.alignment = .center
@@ -106,8 +105,8 @@ class AddRecipeViewController: UIViewController {
         guard let image = sender.currentImage else { return }
         var selectedMeal: Meal?
         for meal in meals {
-            if image == UIImage(named: meal) {
-                selectedMeal = Meal(rawValue: meal)
+            if image == UIImage(named: meal.rawValue) {
+                selectedMeal = meal
             }
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
@@ -119,17 +118,17 @@ class AddRecipeViewController: UIViewController {
     }
 
     fileprivate func setupLayout() {
-        breakfastButton = makeButtons(with: "breakfast")
-        lunchButton = makeButtons(with: "lunch")
-        snacksButton = makeButtons(with: "snack")
-        dinnerButton = makeButtons(with: "dinner")
+        breakfastButton = makeButtons(with: Meal.breakfast.rawValue)
+        lunchButton = makeButtons(with: Meal.lunch.rawValue)
+        snackButton = makeButtons(with: Meal.snack.rawValue)
+        dinnerButton = makeButtons(with: Meal.dinner.rawValue)
         
         var mealLabels = [UILabel]()
         for meal in meals {
-            let label = makeMealLabel(with: meal)
+            let label = makeMealLabel(with: meal.rawValue)
             mealLabels.append(label)
         }
-        let vMealStackView = arrangeHStackViews(with: [breakfastButton, lunchButton, dinnerButton, snacksButton], and: mealLabels)
+        let vMealStackView = arrangeHStackViews(with: [breakfastButton, lunchButton, snackButton, dinnerButton], and: mealLabels)
         vStackView.addArrangedSubview(recipeTextField)
         
         vStackView.addArrangedSubview(vMealStackView)
@@ -149,7 +148,7 @@ class AddRecipeViewController: UIViewController {
             navigationController?.pushViewController(draftVC, animated: false)
         } else {
         
-        let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.Theme1.blue, NSAttributedString.Key.font: UIFont(name: "ArialRoundedMTBold", size: 35)!]
+        let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.Theme1.blue, NSAttributedString.Key.font: UIFont(name: "ArialRoundedMTBold", size: 30)!]
         navigationController?.navigationBar.largeTitleTextAttributes = textAttributes
         navigationController?.navigationBar.prefersLargeTitles = true
         }
@@ -163,14 +162,6 @@ class AddRecipeViewController: UIViewController {
         
         setupLayout()
     }
-    
-//    override func viewDidLayoutSubviews() {
-//        let bottomLine = CALayer()
-//        bottomLine.frame = CGRect(x: 0, y: recipeTextField.frame.height - 2, width: recipeTextField.frame.width, height: 1.8)
-//        bottomLine.backgroundColor = UIColor.Theme1.yellow.cgColor
-//        recipeTextField.borderStyle = .none
-//        recipeTextField.layer.addSublayer(bottomLine)
-//    }
     
     override func viewWillDisappear(_ animated: Bool) {
         recipeTextField.text?.removeAll()

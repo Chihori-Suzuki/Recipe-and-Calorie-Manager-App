@@ -13,9 +13,10 @@ class MenuTotalCalorieDetailTableViewCell: UITableViewCell {
     let recipeTitleLabel: UILabel = {
         let recipeTitle = UILabel()
         recipeTitle.numberOfLines = 0
-        recipeTitle.clipsToBounds = true
         recipeTitle.textAlignment = .left
-        recipeTitle.font = UIFont.boldSystemFont(ofSize: 20)
+        recipeTitle.setMargins()
+        recipeTitle.font = UIFont(name: "ArialRoundedMTBold", size: 22)
+        recipeTitle.textColor = UIColor.Theme1.black
         return recipeTitle
     }()
     
@@ -23,22 +24,20 @@ class MenuTotalCalorieDetailTableViewCell: UITableViewCell {
     let totalCalorieLabel: UILabel = {
         let totalCalorie = UILabel()
         totalCalorie.numberOfLines = 0
-        totalCalorie.clipsToBounds = true
-        totalCalorie.textAlignment = .right
-        totalCalorie.font = UIFont.boldSystemFont(ofSize: 20)
+        totalCalorie.textAlignment = .natural
+        totalCalorie.setMargins()
+        totalCalorie.font = UIFont(name: "ArialRoundedMTBold", size: 17)
+        totalCalorie.textColor = UIColor.Theme1.brown
         return totalCalorie
     }()
     
     lazy var hStackView: UIStackView = {
-        let horizontalStack = UIStackView(arrangedSubviews: [recipeTitleLabel, UIView(),totalCalorieLabel])
+        let horizontalStack = UIStackView(arrangedSubviews: [recipeTitleLabel, totalCalorieLabel])
         horizontalStack.translatesAutoresizingMaskIntoConstraints = false
-        horizontalStack.clipsToBounds = false
         horizontalStack.axis = .horizontal
-        horizontalStack.alignment = .leading
-        horizontalStack.distribution = .fillProportionally
+        horizontalStack.alignment = .center
+        horizontalStack.distribution = .fill
         horizontalStack.spacing = 0
-        horizontalStack.layer.cornerRadius = 10
-        horizontalStack.layer.borderWidth = 1
         return horizontalStack
     }()
     

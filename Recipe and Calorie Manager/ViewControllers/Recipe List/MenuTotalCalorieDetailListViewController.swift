@@ -35,6 +35,7 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
         let table = UITableView(frame: view.frame, style: .grouped)
         table.translatesAutoresizingMaskIntoConstraints = false
         table.register(MenuTotalCalorieDetailTableViewCell.self, forCellReuseIdentifier: MenuTotalCalorieDetailTableViewCell.identifier)
+        table.backgroundColor = UIColor.Theme1.white
         table.delegate = self
         table.dataSource = self
         return table
@@ -48,15 +49,20 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
             dinnerMeals = self.recipeList.filter {$0.meal == .dinner}
             snackMeals = self.recipeList.filter {$0.meal == .snack}
         }
+        
+        let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.Theme1.yellow, NSAttributedString.Key.font: UIFont(name: "ArialRoundedMTBold", size: 30)!]
+        navigationController?.navigationBar.largeTitleTextAttributes = textAttributes
+        navigationController?.navigationBar.prefersLargeTitles = true
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor.Theme1.white
         title = mealTitle
         navigationController?.navigationBar.prefersLargeTitles = true
         setupTableView()
         navigationItem.rightBarButtonItem = editBtn
+        navigationController?.navigationBar.tintColor = UIColor.Theme1.blue
     }
     
     @objc func editTableViewCell() {
@@ -119,12 +125,20 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
             totalCalories = snackMeals[indexPath.row].ingredients.map { $0.nutrition.calories }.reduce(0) { $0 + $1 }
         }
         cell.update(cellTitle, totalCalories)
+        
+        cell.backgroundColor = UIColor.Theme1.white
+        let chevronImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 22, height: 22))
+        chevronImageView.image = UIImage(named: "right-chevron")
+        chevronImageView.image = chevronImageView.image?.withRenderingMode(.alwaysTemplate)
+        chevronImageView.tintColor = UIColor.Theme1.green
+        cell.accessoryView = chevronImageView
         cell.accessoryType = .disclosureIndicator
+        
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 50.0
+        return 55.0
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -146,7 +160,9 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
                 recipe = snackMeals[indexPath.row]
                 snackMeals = snackMeals.filter {$0 != recipe}
             }
-            myTable.deleteRows(at: [indexPath], with: .fade)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { [self] in
+                myTable.deleteRows(at: [indexPath], with: .left)
+            }
             // update recipeList
             recipeList = recipeList.filter {$0 != recipe}
             // save recipeList to file
@@ -155,6 +171,7 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
         guard let selectedCategory = selectedCategory else { return }
         
         var recipe: RecipeFinal!
@@ -178,5 +195,6 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
         clickedMeal.recipe = recipe
         
         navigationController?.pushViewController(clickedMeal, animated: true)
+        tableView.deselectRow(at: indexPath, animated: false)
     }
 }
