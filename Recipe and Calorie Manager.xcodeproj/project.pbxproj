@@ -15,7 +15,6 @@
 		2E792D4425BFAC9100515D76 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E792D4325BFAC9000515D76 /* Profile.swift */; };
 		526B350225B6430700BAE8D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 526B350125B6430700BAE8D9 /* AppDelegate.swift */; };
 		526B350425B6430700BAE8D9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 526B350325B6430700BAE8D9 /* SceneDelegate.swift */; };
-		526B350625B6430700BAE8D9 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 526B350525B6430700BAE8D9 /* WelcomeViewController.swift */; };
 		526B350925B6430700BAE8D9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 526B350725B6430700BAE8D9 /* Main.storyboard */; };
 		526B350B25B6430E00BAE8D9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 526B350A25B6430E00BAE8D9 /* Assets.xcassets */; };
 		526B350E25B6430E00BAE8D9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 526B350C25B6430E00BAE8D9 /* LaunchScreen.storyboard */; };
@@ -49,7 +48,6 @@
 		526B34FE25B6430700BAE8D9 /* Recipe and Calorie Manager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Recipe and Calorie Manager.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		526B350125B6430700BAE8D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		526B350325B6430700BAE8D9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		526B350525B6430700BAE8D9 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 		526B350825B6430700BAE8D9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		526B350A25B6430E00BAE8D9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		526B350D25B6430E00BAE8D9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -163,7 +161,6 @@
 				2E792D3C25BF6D7000515D76 /* EditProfileViewController.swift */,
 				2E792D4325BFAC9000515D76 /* Profile.swift */,
 				FAA2FBF325BDE4C500CD300F /* Recipe List */,
-				526B350525B6430700BAE8D9 /* WelcomeViewController.swift */,
 				52FF472725BB8E8F00B3888F /* Add Recipe */,
 			);
 			path = ViewControllers;
@@ -254,7 +251,6 @@
 			files = (
 				2E792D3D25BF6D7000515D76 /* EditProfileViewController.swift in Sources */,
 				2E792C5125BB7DB100515D76 /* RecipeAndCalorieManagerModel.xcdatamodeld in Sources */,
-				526B350625B6430700BAE8D9 /* WelcomeViewController.swift in Sources */,
 				FAAA842F25BF361800DFFBEB /* RecipeListViewController.swift in Sources */,
 				FAA2FBF525BDE4FA00CD300F /* MenuTotalCalorieDetailTableViewCell.swift in Sources */,
 				FAAA843225BF362300DFFBEB /* MenuTotalCalorieDetailListViewController.swift in Sources */,
