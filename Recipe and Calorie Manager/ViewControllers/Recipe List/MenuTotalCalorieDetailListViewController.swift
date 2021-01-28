@@ -138,7 +138,7 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 50.0
+        return 55.0
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -160,7 +160,9 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
                 recipe = snackMeals[indexPath.row]
                 snackMeals = snackMeals.filter {$0 != recipe}
             }
-            myTable.deleteRows(at: [indexPath], with: .fade)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { [self] in
+                myTable.deleteRows(at: [indexPath], with: .left)
+            }
             // update recipeList
             recipeList = recipeList.filter {$0 != recipe}
             // save recipeList to file

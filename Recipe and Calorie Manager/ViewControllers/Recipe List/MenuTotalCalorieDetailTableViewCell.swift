@@ -16,7 +16,7 @@ class MenuTotalCalorieDetailTableViewCell: UITableViewCell {
         recipeTitle.textAlignment = .left
         recipeTitle.setMargins()
         recipeTitle.font = UIFont(name: "ArialRoundedMTBold", size: 21)
-        recipeTitle.textColor = UIColor.Theme1.brown
+        recipeTitle.textColor = UIColor.Theme1.black
         return recipeTitle
     }()
     
@@ -27,7 +27,7 @@ class MenuTotalCalorieDetailTableViewCell: UITableViewCell {
         totalCalorie.textAlignment = .center
         totalCalorie.setMargins()
         totalCalorie.font = UIFont(name: "ArialRoundedMTBold", size: 16)
-        totalCalorie.textColor = UIColor.Theme1.orange
+        totalCalorie.textColor = UIColor.Theme1.brown
         return totalCalorie
     }()
     
@@ -35,7 +35,7 @@ class MenuTotalCalorieDetailTableViewCell: UITableViewCell {
         let horizontalStack = UIStackView(arrangedSubviews: [recipeTitleLabel, totalCalorieLabel])
         horizontalStack.translatesAutoresizingMaskIntoConstraints = false
         horizontalStack.axis = .horizontal
-        horizontalStack.alignment = .bottom
+        horizontalStack.alignment = .center
         horizontalStack.distribution = .fill
         horizontalStack.spacing = 0
         return horizontalStack
@@ -44,7 +44,6 @@ class MenuTotalCalorieDetailTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.contentView.addSubview(hStackView)
-//        contentView.heightAnchor.constraint(equalTo: hStackView.heightAnchor, multiplier: 1).isActive = true
         setupHorizontalStackView()
     }
     
