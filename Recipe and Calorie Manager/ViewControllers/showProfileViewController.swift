@@ -210,7 +210,7 @@ class showProfileViewController: UIViewController, EditProfileDelegate {
         cfSV.alignment = .fill
         cfSV.spacing = 10
         
-        tableView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.4).isActive = true
+        tableView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.3).isActive = true
         
     }
     
@@ -236,8 +236,6 @@ class showProfileViewController: UIViewController, EditProfileDelegate {
         personalData.append(Profile(palameter: "height", value: "\(savedHeight)"))
         personalData.append(Profile(palameter: "ActivityType", value: savedActivity))
         caluculateBmiBmr()
-        
-        
         
     }
     
@@ -286,26 +284,56 @@ class showProfileViewController: UIViewController, EditProfileDelegate {
         let defaults = UserDefaults.standard
         let savedWeight = defaults.double(forKey: "weight")
         let savedHeight = defaults.double(forKey: "height")
+        let savedBirth = defaults.object(forKey: "Birthday") as? Date ?? Date()
         let savedGender = defaults.object(forKey: "Gender") as? String ?? String()
+        let savedActivity = defaults.object(forKey: "ActivityType") as? String ?? String()
+        print(savedActivity)
+        
+        let now = NSDate()
+        let calendar : NSCalendar = NSCalendar.current as NSCalendar
+        let ageComponents = calendar.components(.year, from: savedBirth, to: now as Date, options: [])
+        let age = Double(ageComponents.year!)
+        var bmr = 0.0
         
         /**
          For men: BMR = 10 x weight (kg) + 6.25 x height (cm) – 5 x age (years) + 5
          For women: BMR = 10 x weight (kg) + 6.25 x height (cm) – 5 x age (years) – 161
          */
         
-//        switch savedGender.lowercased() {
-//        case "male":
-//            <#code#>
-//        default:
-//            <#code#>
-//        }
+        /** Sedentary (little or no exercise) : Calorie-Calculation = BMR x 1.2
+         Lightly active (light exercise/sports 1-3 days/week) : Calorie-Calculation = BMR x 1.375
+         Moderately active (moderate exercise/sports 3-5 days/week) : Calorie-Calculation = BMR x 1.55
+         Very active (hard exercise/sports 6-7 days a week) : Calorie-Calculation = BMR x 1.725
+         If you are extra active (very hard exercise/sports & a physical job) : Calorie-Calculation = BMR x 1.9*/
         
+        switch savedGender.lowercased() {
+        case "male":
+            bmr = 10.0 * savedWeight + 6.25 * (savedHeight * 100) - 5.0 * age + 5.0
+        default:
+            bmr = 10.0 * savedWeight + 6.25 * (savedHeight * 100) - 5.0 * age - 161.0
+        }
         
+        let activity = ActivityType(rawValue: savedActivity)
+        
+        switch activity {
+        case .sedentary:
+            bmr *= 1.2
+        case .lightlyActive:
+            bmr *= 1.375
+        case .moderatelyActive:
+            bmr *= 1.55
+        case .veryActive:
+            bmr *= 1.725
+        case .extraActive:
+            bmr *= 1.9
+        case .none:
+            fatalError()
+        }
+        
+        bmrValLabel.text = String(Int(bmr)) + " Calories/Day"
+
         let bmi = savedWeight / (savedHeight * savedHeight)
         bmiValLabel.text =  String(format: "%.2f", bmi)
-//        print(defaults)
-//        print(bmi)
-        
         
         var classification = ""
         
@@ -329,11 +357,6 @@ class showProfileViewController: UIViewController, EditProfileDelegate {
     }
     
 }
-
-extension MainTabBarController: UITabBarControllerDelegate {
-      func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
-      return viewController != tabBarController.selectedViewController
-}}
 
 extension showProfileViewController: UITableViewDataSource, UITableViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {

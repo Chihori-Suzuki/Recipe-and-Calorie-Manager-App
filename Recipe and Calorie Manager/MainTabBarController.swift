@@ -13,6 +13,8 @@ class MainTabBarController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        delegate = self
+        
         let recipeListVC = RecipeListViewController()
         recipeListVC.tabBarItem = UITabBarItem(title: "Recipe List", image: UIImage(named: "recipeList_tabbar_icon"), tag: 0)
         // make a viewController for addRecipe screen
@@ -47,3 +49,9 @@ class MainTabBarController: UITabBarController {
 //        }
     }
 }
+
+extension MainTabBarController: UITabBarControllerDelegate {
+      func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+      return viewController != tabBarController.selectedViewController
+}}
+
