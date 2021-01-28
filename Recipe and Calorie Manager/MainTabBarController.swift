@@ -8,18 +8,16 @@
 import UIKit
 
 class MainTabBarController: UITabBarController {
-
     // UserDefaults
     let defaults = UserDefaults.standard
     
     override func viewDidLoad() {
         super.viewDidLoad()
         let recipeListVC = RecipeListViewController()
-        recipeListVC.tabBarItem = UITabBarItem(tabBarSystemItem: .bookmarks, tag: 0)
+        recipeListVC.tabBarItem = UITabBarItem(title: "Recipe List", image: UIImage(named: "recipeList_tabbar_icon"), tag: 0)
         // make a viewController for addRecipe screen
         let addRecipeVC = AddRecipeViewController()
-        addRecipeVC.tabBarItem = UITabBarItem(tabBarSystemItem: .search, tag: 1)
-
+        addRecipeVC.tabBarItem = UITabBarItem(title: "Add Recipe", image: UIImage(named: "addRecipe_tabbar_icon"), tag: 1)
         // make a viewController for profile screen
         var profileVC: UIViewController
         if defaults.object(forKey: "Name") != nil {
@@ -27,23 +25,25 @@ class MainTabBarController: UITabBarController {
         } else {
             profileVC = ProfileViewController()
         }
-        profileVC.tabBarItem = UITabBarItem(tabBarSystemItem: .contacts, tag: 2)
-        
+        profileVC.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(named: "profile_tabbar_icon"), tag: 2)
         // make a viewController for recipe list screen
         let viewControllers = [recipeListVC, addRecipeVC, profileVC]
         self.viewControllers = viewControllers.map { UINavigationController(rootViewController: $0) }
         self.selectedIndex = 1
+        
+//        if #available(iOS 13, *) {
+            // iOS 13:
+        let appearance = tabBar.standardAppearance
+        appearance.configureWithOpaqueBackground()
+        appearance.shadowImage = nil
+        appearance.shadowColor = UIColor.Theme1.white
+        tabBar.standardAppearance = appearance
+//        }
+//        else {
+            // iOS 12 and below:
+//            tabBar.shadowImage = UIImage()
+//            tabBar.backgroundImage = UIImage()
+//            appearance.shadowColor = UIColor.Theme1.white
+//        }
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
