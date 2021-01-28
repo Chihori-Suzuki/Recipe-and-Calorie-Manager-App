@@ -50,7 +50,7 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
             snackMeals = self.recipeList.filter {$0.meal == .snack}
         }
         
-        let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.Theme1.yellow, NSAttributedString.Key.font: UIFont(name: "ArialRoundedMTBold", size: 30)!]
+        let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.Theme1.yellow, NSAttributedString.Key.font: UIFont(name: "ArialRoundedMTBold", size: 35)!]
         navigationController?.navigationBar.largeTitleTextAttributes = textAttributes
         navigationController?.navigationBar.prefersLargeTitles = true
     }
@@ -77,10 +77,10 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
     
     func setupTableView() {
         view.addSubview(myTable)
-        myTable.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
-        myTable.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10).isActive = true
-        myTable.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10).isActive = true
-        myTable.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10).isActive = true
+        myTable.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
+        myTable.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
+        myTable.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20).isActive = true
+        myTable.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -5).isActive = true
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
