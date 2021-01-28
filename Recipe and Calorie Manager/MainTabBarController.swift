@@ -7,9 +7,13 @@
 
 import UIKit
 
-class MainTabBarController: UITabBarController {
+class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
     // UserDefaults
     let defaults = UserDefaults.standard
+    
+    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        return viewController != tabBarController.selectedViewController
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,11 +51,15 @@ class MainTabBarController: UITabBarController {
 //            tabBar.backgroundImage = UIImage()
 //            appearance.shadowColor = UIColor.Theme1.white
 //        }
+        
+        
     }
 }
 
-extension MainTabBarController: UITabBarControllerDelegate {
-      func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
-      return viewController != tabBarController.selectedViewController
-}}
+extension MainTabBarController {
+    override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
+        Recipe.newRecipeCount = 0
+        item.badgeValue = nil
+    }
+}
 
