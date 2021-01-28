@@ -330,6 +330,7 @@ class showProfileViewController: UIViewController, EditProfileDelegate {
             fatalError()
         }
         
+        Profile.bmr = bmr
         bmrValLabel.text = String(Int(bmr)) + " Calories/Day"
 
         let bmi = savedWeight / (savedHeight * savedHeight)
