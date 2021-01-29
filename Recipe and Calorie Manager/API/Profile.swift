@@ -12,7 +12,6 @@ struct Profile {
     var value: String
     static var bmr = 0.0
 }
-
 enum ActivityType: String, CaseIterable {
     case sedentary = "Sedentary"
     case lightlyActive = "Lightly Active"

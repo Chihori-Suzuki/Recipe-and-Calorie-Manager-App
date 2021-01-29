@@ -287,6 +287,7 @@ class showProfileViewController: UIViewController, EditProfileDelegate {
         let savedHeightUnit = UserDefaults.standard.double(forKey: "heightUnit")
         let heightUnit = Height(rawValue: savedHeightUnit)
         
+        let tempHeight = savedHeight
         weightUnit == Weight.pound ? (savedWeight = savedWeight / 2.20462) : nil
         heightUnit == Height.meter ? (savedHeight = savedHeight * 100) : nil
   
@@ -317,7 +318,7 @@ class showProfileViewController: UIViewController, EditProfileDelegate {
         bmrValLabel.text = String(Int(bmr)) + " Calories/Day"
         
 //      BMI = weight (kg) / (height * height (meters))
-        heightUnit == Height.centimeter ? (savedHeight = savedHeight / 100) : nil
+        savedHeight = savedHeight / 100
         let bmi = savedWeight / (savedHeight * savedHeight)
         bmiValLabel.text =  String(format: "%.2f", bmi)
         
