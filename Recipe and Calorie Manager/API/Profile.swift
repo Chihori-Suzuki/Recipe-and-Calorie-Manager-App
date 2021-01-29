@@ -11,6 +11,7 @@ struct Profile {
     var palameter: String
     var value: String
     static var bmr = 0.0
+    static var gender: Gender = .male
 }
 enum ActivityType: String, CaseIterable {
     case sedentary = "Sedentary"
@@ -26,4 +27,8 @@ enum Weight: Double {
 enum Height: Double {
     case centimeter
     case meter
+}
+enum Gender: String {
+    case male = "male"
+    case female = "female"
 }

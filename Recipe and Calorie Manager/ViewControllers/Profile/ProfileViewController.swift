@@ -118,6 +118,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         let tf = UITextField()
         tf.layer.cornerRadius = 8
         tf.textColor = UIColor.Theme1.brown
+        tf.isHidden = true
         tf.font = .systemFont(ofSize: 20)
         tf.addTarget(self, action: #selector(textFieldDidBeginEditing), for: .touchDown)
         tf.backgroundColor = .white
@@ -129,7 +130,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         return dp
     }()
     let genderSeg: UISegmentedControl = {
-        let items = ["male", "female"]
+        let items = [Gender.male.rawValue, Gender.female.rawValue]
         let tf = UISegmentedControl(items: items)
         tf.selectedSegmentIndex = 0
         tf.layer.cornerRadius = 12
@@ -156,7 +157,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     }()
     let activePick: UIPickerView = {
         let dp = UIPickerView()
-        dp.isHidden = true
+        dp.clipsToBounds = true
         return dp
     }()
     
@@ -241,7 +242,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         mainSV.addArrangedSubview(weightSV)
         mainSV.addArrangedSubview(heightSV)
         mainSV.addArrangedSubview(activeSV)
-        mainSV.addArrangedSubview(activePick)
+//        mainSV.addArrangedSubview(activePick)
         mainSV.addArrangedSubview(UIView())
         mainSV.addArrangedSubview(sv)
         mainSV.axis = .vertical
@@ -295,14 +296,17 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         heightSV.spacing = 10
         /* activitySV *********/
         activeSV.addArrangedSubview(activeLabel)
+        activeSV.addArrangedSubview(activePick)
         activeSV.addArrangedSubview(activeText)
         activeText.heightAnchor.constraint(equalToConstant: birthPick.bounds.size.height).isActive = true
         activeSV.axis = .horizontal
         activeSV.alignment = .fill
+        activeSV.distribution = .fill
         activeSV.spacing = 10
     }
     @objc func textFieldDidBeginEditing(_ textField: UITextField) {
         activePick.isHidden = false
+        activeText.isHidden = true
     }
     @objc func setActivityView() {
         guard let image = profileImage.image else { return }
@@ -397,6 +401,19 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     }
 }
 extension ProfileViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+    
+    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
+        var pickerLabel: UILabel? = (view as? UILabel)
+        if pickerLabel == nil {
+            pickerLabel = UILabel()
+            pickerLabel?.font = UIFont.systemFont(ofSize: 18)
+            pickerLabel?.textAlignment = .center
+        }
+        pickerLabel?.text = activityItems[row].rawValue
+        pickerLabel?.textColor = UIColor.Theme1.blue
+
+        return pickerLabel!
+    }
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
@@ -408,6 +425,7 @@ extension ProfileViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     }
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         activeText.text = activityItems[row].rawValue
+        activeText.isHidden.toggle()
         UIView.animate(withDuration: 0.3) {
             pickerView.isHidden = true
         }
