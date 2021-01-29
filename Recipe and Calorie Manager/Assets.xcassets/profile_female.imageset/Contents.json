@@ -1,12 +1,12 @@
 {
   "images" : [
     {
-      "filename" : "breakfast.png",
+      "filename" : "profile_female-1.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "breakfast-1.png",
+      "filename" : "profile_female.png",
       "idiom" : "universal",
       "scale" : "2x"
     },

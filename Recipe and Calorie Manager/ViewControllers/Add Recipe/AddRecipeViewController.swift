@@ -12,9 +12,10 @@ class AddRecipeViewController: UIViewController {
     lazy var recipeTextField: UITextField = {
         let tf = UITextField()
         tf.placeholder = "Chicken Adobo       "
-        tf.font = .systemFont(ofSize: 25)
+        tf.font = .systemFont(ofSize: 23)
         tf.becomeFirstResponder()
-        tf.borderStyle = .roundedRect
+        tf.layer.cornerRadius = 8
+        tf.widthAnchor.constraint(equalToConstant: 255).isActive = true
         tf.backgroundColor = .white
         tf.textColor = UIColor.Theme1.brown
         tf.addTarget(self, action: #selector(textEditingChanged(_:)), for: .editingChanged)
