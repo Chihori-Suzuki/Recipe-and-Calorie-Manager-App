@@ -11,8 +11,7 @@ import UIKit
 import CoreData
 
 class ProfileViewController: UIViewController, UITextFieldDelegate {
-    
-    // persistantContainer
+    // persistentContainer
     private static var persistentContainer: NSPersistentCloudKitContainer! = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
     // ScrollView
     let scrollView: UIScrollView = {
@@ -26,8 +25,8 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    let profileImage: UIImageView = {
-        let iv = UIImageView(image: UIImage(named: "profile.png"))
+    var profileImage: UIImageView = {
+        let iv = UIImageView(image: UIImage(named: "profile_male.png"))
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.contentMode = .scaleAspectFit
         iv.layer.masksToBounds = false
@@ -117,7 +116,6 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     }()
     let activeText: UITextField = {
         let tf = UITextField()
-        tf.translatesAutoresizingMaskIntoConstraints = false
         tf.layer.cornerRadius = 8
         tf.textColor = UIColor.Theme1.brown
         tf.font = .systemFont(ofSize: 20)
@@ -137,6 +135,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         tf.layer.cornerRadius = 12
         let font = UIFont.systemFont(ofSize: 20)
         tf.setTitleTextAttributes([NSAttributedString.Key.font: font, NSAttributedString.Key.foregroundColor: UIColor.Theme1.black], for: .normal)
+        tf.addTarget(self, action: #selector(genderChanged(_:)), for: .allEvents)
         return tf
     }()
     let weightSeg: UISegmentedControl = {
@@ -157,27 +156,26 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     }()
     let activePick: UIPickerView = {
         let dp = UIPickerView()
-        dp.translatesAutoresizingMaskIntoConstraints = false
         dp.isHidden = true
         return dp
     }()
     
     let activityItems = ActivityType.allCases
     // StackView Field
-    let mainSV: UIStackView = {
-        let sv = UIStackView()
-        sv.translatesAutoresizingMaskIntoConstraints = false
-        return sv
-    }()
     let nameSV = UIStackView()
     let birthSV = UIStackView()
     let weightSV = UIStackView()
     let heightSV = UIStackView()
     let activeSV = UIStackView()
+    let mainSV: UIStackView = {
+        let sv = UIStackView()
+        sv.translatesAutoresizingMaskIntoConstraints = false
+        return sv
+    }()
     // submitButton
     let saveBtn: UIButton = {
         let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
+//        button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Save", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.textAlignment = .center
@@ -191,12 +189,19 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         return button
     }()
     
+    @objc func genderChanged(_ sender: UISegmentedControl) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            switch sender.selectedSegmentIndex {
+            case 0: self.profileImage.image = UIImage(named: "profile_male.png")
+            default: self.profileImage.image = UIImage(named: "profile_female.png")
+            }
+        }
+    }
     override func viewWillAppear(_ animated: Bool) {
         let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.Theme1.blue, NSAttributedString.Key.font: UIFont(name: "ArialRoundedMTBold", size: 30)!]
         navigationController?.navigationBar.largeTitleTextAttributes = textAttributes
         navigationController?.navigationBar.prefersLargeTitles = true
     }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = #colorLiteral(red: 1, green: 0.9697935916, blue: 0.7963718291, alpha: 1)
@@ -213,15 +218,12 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         activeText.delegate = self
         scrollView.delegate = self
     }
-    
     func setSVConfig() {
-        
         /* scrollView **********/
         scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
         scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 18).isActive = true
         scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -18).isActive = true
         scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -15).isActive = true
-        
         /* mainSV **********/
         mainSV.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor).isActive = true
         mainSV.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor).isActive = true
@@ -254,9 +256,8 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         profileImage.topAnchor.constraint(equalTo: imageView.topAnchor, constant: 20).isActive = true
         profileImage.bottomAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 0).isActive = true
         profileImage.centerXAnchor.constraint(equalTo: imageView.centerXAnchor).isActive = true
-        pencilBtn.bottomAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: -15).isActive = true
-        pencilBtn.trailingAnchor.constraint(equalTo: profileImage.trailingAnchor, constant: -25).isActive = true
-        
+        pencilBtn.bottomAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: -3).isActive = true
+        pencilBtn.trailingAnchor.constraint(equalTo: profileImage.trailingAnchor, constant: -13).isActive = true
         /* nameSV **********/
         nameSV.addArrangedSubview(nameLabel)
         nameSV.addArrangedSubview(nameTxt)
@@ -264,7 +265,6 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         nameSV.axis = .horizontal
         nameSV.alignment = .fill
         nameSV.spacing = 10
-        
         /* birthSV **********/
         birthSV.addArrangedSubview(birthLabel)
         birthSV.addArrangedSubview(birthPick)
@@ -274,7 +274,6 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         birthSV.alignment = .fill
         birthSV.distribution = .fill
         birthSV.spacing = 8
-        
         /* weightSV *********/
         weightSV.addArrangedSubview(weightLabel)
         weightSV.addArrangedSubview(weightTxt)
@@ -285,7 +284,6 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         weightSV.axis = .horizontal
         weightSV.alignment = .fill
         weightSV.spacing = 8
-        
         /* heightSV *********/
         heightSV.addArrangedSubview(heightLabel)
         heightSV.addArrangedSubview(heightTxt)
@@ -295,7 +293,6 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         heightSV.axis = .horizontal
         heightSV.alignment = .fill
         heightSV.spacing = 10
-        
         /* activitySV *********/
         activeSV.addArrangedSubview(activeLabel)
         activeSV.addArrangedSubview(activeText)
@@ -303,46 +300,41 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         activeSV.axis = .horizontal
         activeSV.alignment = .fill
         activeSV.spacing = 10
-        
     }
-    
     @objc func textFieldDidBeginEditing(_ textField: UITextField) {
         activePick.isHidden = false
     }
-    
     @objc func setActivityView() {
         guard let image = profileImage.image else { return }
         let activitiController = UIActivityViewController(activityItems: [image], applicationActivities: nil)
         present(activitiController, animated: true, completion: nil)
     }
-    
-
     static func newPersion() -> Person {
         let context = persistentContainer.viewContext
         let person = NSEntityDescription.insertNewObject(forEntityName: "Person", into: context) as! Person
         return person
     }
-    
-    
     // saving Personal Data
     @objc func addNewPerson() {
         
         let dateFormater: DateFormatter = DateFormatter()
         dateFormater.dateStyle = .short
         dateFormater.timeStyle = .none
-//        dateFormater.dateFormat = "MM/dd/yyyy"
-        
         let stringFromDate: String = dateFormater.string(from: self.birthPick.date) as String
         let birthDate: Date = dateFormater.date(from: stringFromDate)!
         
-        guard let weight = Double(weightTxt.text!), let height = Double(heightTxt.text!) else { return }
-        
-        
+        guard let weight = Double(weightTxt.text!), let height = Double(heightTxt.text!) else {
+            let animation = CABasicAnimation(keyPath: "position")
+            animation.duration = 0.05
+            animation.repeatCount = 4
+            animation.autoreverses = true
+            animation.fromValue = NSValue(cgPoint: CGPoint(x: saveBtn.center.x - 12, y: saveBtn.center.y))
+            animation.toValue = NSValue(cgPoint: CGPoint(x: saveBtn.center.x + 12, y: saveBtn.center.y))
+            saveBtn.layer.add(animation, forKey: "position")
+            return
+        }
         // UserDefaults
         let defaults = UserDefaults.standard
-        print(defaults)
-        print(defaults.object(forKey: "Name") as? String ?? String())
-        
         defaults.set(nameTxt.text, forKey: "Name")
         defaults.set(birthDate, forKey: "Birthday")
         defaults.set(genderSeg.titleForSegment(at: genderSeg.selectedSegmentIndex), forKey: "Gender")
@@ -350,67 +342,61 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         defaults.set(height, forKey: "height")
         defaults.set(activeText.text, forKey: "ActivityType")
         
-        let showVC = showProfileViewController()
-        navigationController?.pushViewController(showVC, animated: true)
-        
-        
+        UIView.animate(withDuration: 0.10) {
+            self.saveBtn.transform = CGAffineTransform(scaleX: 0.6, y: 0.6)
+        } completion: { (_) in
+            UIView.animate(withDuration: 0.10) {
+                self.saveBtn.transform = CGAffineTransform.identity
+            }
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            let showVC = showProfileViewController()
+            self.navigationController?.pushViewController(showVC, animated: true)
+        }
     }
-    
-    
     static func save() {
         ProfileViewController.persistentContainer.saveContext()
     }
-    
     // scrollView
     @objc func dismissKeyboard(_ sender: UITapGestureRecognizer) {
-      view.endEditing(true)
+        view.endEditing(true)
     }
-    
     fileprivate func registerForKeyboardNotification() {
-      // 1. I want to listen to the keyboard showing / hiding
-      //    - "hey iOS, tell(notify) me when keyboard shows / hides"
-      NotificationCenter.default.addObserver(self, selector: #selector(keyboardWasShown(_:)), name: UIResponder.keyboardDidShowNotification, object: nil)
-      NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillBeHidden(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        // 1. I want to listen to the keyboard showing / hiding
+        //    - "hey iOS, tell(notify) me when keyboard shows / hides"
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWasShown(_:)), name: UIResponder.keyboardDidShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillBeHidden(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
-    
     @objc func keyboardWasShown(_ notification: NSNotification) {
-      // 2. When notified, I want to ask iOS the size(height) of the keyboard
-      guard let info = notification.userInfo, let keyboardFrameValue = info[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
-      
-      let keyboardFrame = keyboardFrameValue.cgRectValue
-      let keyboardHeight = keyboardFrame.size.height
-      
-      // 3. Tell scrollview to scroll up (height)
-      let insets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight + 60, right: 0)
-      scrollView.contentInset = insets
-      scrollView.scrollIndicatorInsets = insets
+        // 2. When notified, I want to ask iOS the size(height) of the keyboard
+        guard let info = notification.userInfo, let keyboardFrameValue = info[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
+        
+        let keyboardFrame = keyboardFrameValue.cgRectValue
+        let keyboardHeight = keyboardFrame.size.height
+        
+        // 3. Tell scrollview to scroll up (height)
+        let insets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight + 60, right: 0)
+        scrollView.contentInset = insets
+        scrollView.scrollIndicatorInsets = insets
     }
-
     @objc func keyboardWillBeHidden(_ notification: NSNotification) {
-      // 2. When notified, I want to ask iOS the size(height) of the keyboard
-      // 3. Tell scrollview to scroll down (height)
-      let insets = UIEdgeInsets.zero
-      scrollView.contentInset = insets
-      scrollView.scrollIndicatorInsets = insets
+        // 2. When notified, I want to ask iOS the size(height) of the keyboard
+        // 3. Tell scrollview to scroll down (height)
+        let insets = UIEdgeInsets.zero
+        scrollView.contentInset = insets
+        scrollView.scrollIndicatorInsets = insets
     }
-    
-    
 }
-
-
 extension ProfileViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
-    
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return activityItems.count
     }
-    
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return activityItems[row].rawValue
     }
-    
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         activeText.text = activityItems[row].rawValue
         UIView.animate(withDuration: 0.3) {
@@ -418,9 +404,8 @@ extension ProfileViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         }
     }
 }
-
 extension ProfileViewController: UIScrollViewDelegate {
-  func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-    return nil
-  }
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        return nil
+    }
 }

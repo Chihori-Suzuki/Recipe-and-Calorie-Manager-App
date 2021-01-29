@@ -27,7 +27,9 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
             tabItem[0].badgeValue = String(Recipe.newRecipeCount)
         }
         
-        navigationController?.popViewController(animated: true)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.navigationController?.popViewController(animated: true)
+        }
         return false
     }
     //SaveRecipeTableViewCellDelegate function
