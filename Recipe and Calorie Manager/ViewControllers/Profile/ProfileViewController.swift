@@ -14,14 +14,12 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     
     // persistantContainer
     private static var persistentContainer: NSPersistentCloudKitContainer! = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
-
     // ScrollView
     let scrollView: UIScrollView = {
         let sv = UIScrollView()
         sv.translatesAutoresizingMaskIntoConstraints = false
         return sv
     }()
-    
     // profileimage
     let imageView: UIView = {
         let view = UIView()
@@ -32,8 +30,11 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         let iv = UIImageView(image: UIImage(named: "profile.png"))
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.contentMode = .scaleAspectFit
-        iv.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        iv.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        iv.layer.masksToBounds = false
+        iv.layer.cornerRadius = iv.frame.height/2
+        iv.clipsToBounds = true
+        iv.widthAnchor.constraint(equalToConstant: 250).isActive = true
+        iv.heightAnchor.constraint(equalToConstant: 250).isActive = true
         return iv
     }()
     let pencilBtn: UIButton = {
@@ -41,116 +42,117 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(UIImage(systemName: "pencil"), for: .normal)
         button.backgroundColor = .white
-        button.layer.borderWidth = 0.5
+        button.widthAnchor.constraint(equalToConstant: 28).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 28).isActive = true
+        button.layer.borderWidth = 0.3
+        button.layer.cornerRadius = 5
         button.addTarget(self, action: #selector(setActivityView), for: .touchUpInside)
         return button
     }()
-    
-    // Label Field
+    //Labels
     let nameLabel: UILabel = {
         let lb = UILabel()
-        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.font = UIFont(name: "ArialRoundedMTBold", size: 21)
+        lb.textColor = UIColor.Theme1.black
         lb.setContentHuggingPriority(.required, for: .horizontal)
         lb.text = "Name"
         return lb
     }()
     let birthLabel: UILabel = {
         let lb = UILabel()
-        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.font = UIFont(name: "ArialRoundedMTBold", size: 21)
+        lb.textColor = UIColor.Theme1.black
         lb.setContentHuggingPriority(.required, for: .horizontal)
         lb.text = "Birthday"
         return lb
     }()
-    let genderLabel: UILabel = {
-        let lb = UILabel()
-        lb.translatesAutoresizingMaskIntoConstraints = false
-        lb.setContentHuggingPriority(.required, for: .horizontal)
-        lb.text = "Gender"
-        return lb
-    }()
     let weightLabel: UILabel = {
         let lb = UILabel()
-        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.font = UIFont(name: "ArialRoundedMTBold", size: 21)
+        lb.textColor = UIColor.Theme1.black
         lb.setContentHuggingPriority(.required, for: .horizontal)
         lb.text = "Weight"
         return lb
     }()
     let heightLabel: UILabel = {
         let lb = UILabel()
-        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.font = UIFont(name: "ArialRoundedMTBold", size: 21)
+        lb.textColor = UIColor.Theme1.black
         lb.setContentHuggingPriority(.required, for: .horizontal)
         lb.text = "Height"
         return lb
     }()
     let activeLabel: UILabel = {
         let lb = UILabel()
-        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.font = UIFont(name: "ArialRoundedMTBold", size: 21)
+        lb.textColor = UIColor.Theme1.black
         lb.setContentHuggingPriority(.required, for: .horizontal)
         lb.text = "Activity Type"
         return lb
     }()
-    
-    // Text,  Field
+    //Textfields
     let nameTxt: UITextField = {
         let tf = UITextField()
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.layer.borderWidth = 0.8
-        tf.layer.cornerRadius = 5
+        tf.textColor = UIColor.Theme1.brown
+        tf.font = .systemFont(ofSize: 20)
+        tf.layer.cornerRadius = 8
         tf.backgroundColor = .white
         return tf
     }()
-    
+    let weightTxt: UITextField = {
+        let tf = UITextField()
+        tf.textColor = UIColor.Theme1.brown
+        tf.layer.cornerRadius = 8
+        tf.font = .systemFont(ofSize: 20)
+        tf.backgroundColor = .white
+        return tf
+    }()
+    let heightTxt: UITextField = {
+        let tf = UITextField()
+        tf.layer.cornerRadius = 8
+        tf.textColor = UIColor.Theme1.brown
+        tf.font = .systemFont(ofSize: 20)
+        tf.backgroundColor = .white
+        return tf
+    }()
+    let activeText: UITextField = {
+        let tf = UITextField()
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        tf.layer.cornerRadius = 8
+        tf.textColor = UIColor.Theme1.brown
+        tf.font = .systemFont(ofSize: 20)
+        tf.addTarget(self, action: #selector(textFieldDidBeginEditing), for: .touchDown)
+        tf.backgroundColor = .white
+        return tf
+    }()
     let birthPick: UIDatePicker = {
         let dp = UIDatePicker()
         dp.datePickerMode = .date
-        dp.translatesAutoresizingMaskIntoConstraints = false
         return dp
     }()
     let genderSeg: UISegmentedControl = {
         let items = ["male", "female"]
         let tf = UISegmentedControl(items: items)
         tf.selectedSegmentIndex = 0
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        
-        return tf
-    }()
-    let weightTxt: UITextField = {
-        let tf = UITextField()
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.layer.borderWidth = 0.8
-        tf.layer.cornerRadius = 5
-        tf.backgroundColor = .white
+        tf.layer.cornerRadius = 12
+        let font = UIFont.systemFont(ofSize: 20)
+        tf.setTitleTextAttributes([NSAttributedString.Key.font: font, NSAttributedString.Key.foregroundColor: UIColor.Theme1.black], for: .normal)
         return tf
     }()
     let weightSeg: UISegmentedControl = {
         let items = ["kg", "lb"]
         let tf = UISegmentedControl(items: items)
         tf.selectedSegmentIndex = 0
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        return tf
-    }()
-    let heightTxt: UITextField = {
-        let tf = UITextField()
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.layer.borderWidth = 0.8
-        tf.layer.cornerRadius = 5
-        tf.backgroundColor = .white
+        let font = UIFont.systemFont(ofSize: 20)
+        tf.setTitleTextAttributes([NSAttributedString.Key.font: font, NSAttributedString.Key.foregroundColor: UIColor.Theme1.black], for: .normal)
         return tf
     }()
     let heightSeg: UISegmentedControl = {
         let items = ["cm"]
         let tf = UISegmentedControl(items: items)
         tf.selectedSegmentIndex = 0
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        return tf
-    }()
-    let activeText: UITextField = {
-        let tf = UITextField()
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.layer.borderWidth = 0.8
-        tf.layer.cornerRadius = 5
-        tf.addTarget(self, action: #selector(textFieldDidBeginEditing), for: .touchDown)
-        tf.backgroundColor = .white
+        let font = UIFont.systemFont(ofSize: 20)
+        tf.setTitleTextAttributes([NSAttributedString.Key.font: font, NSAttributedString.Key.foregroundColor: UIColor.Theme1.black], for: .normal)
         return tf
     }()
     let activePick: UIPickerView = {
@@ -161,114 +163,90 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     }()
     
     let activityItems = ActivityType.allCases
-    
-    
     // StackView Field
     let mainSV: UIStackView = {
         let sv = UIStackView()
         sv.translatesAutoresizingMaskIntoConstraints = false
         return sv
     }()
-    let nameSV: UIStackView = {
-        let sv = UIStackView()
-        sv.translatesAutoresizingMaskIntoConstraints = false
-        return sv
-    }()
-    let birthSV: UIStackView = {
-        let sv = UIStackView()
-        sv.translatesAutoresizingMaskIntoConstraints = false
-        return sv
-    }()
-    let genderSV: UIStackView = {
-        let sv = UIStackView()
-        sv.translatesAutoresizingMaskIntoConstraints = false
-        return sv
-    }()
-    let weightSV: UIStackView = {
-        let sv = UIStackView()
-        sv.translatesAutoresizingMaskIntoConstraints = false
-        return sv
-    }()
-    let heightSV: UIStackView = {
-        let sv = UIStackView()
-        sv.translatesAutoresizingMaskIntoConstraints = false
-        return sv
-    }()
-    let activeSV: UIStackView = {
-        let sv = UIStackView()
-        sv.translatesAutoresizingMaskIntoConstraints = false
-        return sv
-    }()
-    
+    let nameSV = UIStackView()
+    let birthSV = UIStackView()
+    let weightSV = UIStackView()
+    let heightSV = UIStackView()
+    let activeSV = UIStackView()
     // submitButton
     let saveBtn: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Save", for: .normal)
-        button.backgroundColor = .systemBlue
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.textAlignment = .center
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 25)
-        button.widthAnchor.constraint(equalToConstant: 80).isActive = true
-        button.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        button.widthAnchor.constraint(equalToConstant: 90).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 55).isActive = true
+        button.backgroundColor = UIColor.Theme1.green
         button.layer.cornerRadius = 8
         button.addTarget(self, action: #selector(addNewPerson), for: .touchUpInside)
-//        button.isEnabled = false
-        button.alpha = 0.5
+        button.alpha = 0.8
         return button
     }()
     
+    override func viewWillAppear(_ animated: Bool) {
+        let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.Theme1.blue, NSAttributedString.Key.font: UIFont(name: "ArialRoundedMTBold", size: 30)!]
+        navigationController?.navigationBar.largeTitleTextAttributes = textAttributes
+        navigationController?.navigationBar.prefersLargeTitles = true
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
-        
+        view.backgroundColor = #colorLiteral(red: 1, green: 0.9697935916, blue: 0.7963718291, alpha: 1)
         title = "Register Your Profile"
-        
         navigationController?.navigationBar.prefersLargeTitles = true
-
         view.addSubview(scrollView)
         scrollView.addSubview(mainSV)
         setSVConfig()
-        
-        activePick.delegate = self
-        activePick.dataSource = self
-        
-        activeText.delegate = self
-        
         registerForKeyboardNotification()
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard(_:)))
         view.addGestureRecognizer(gestureRecognizer)
-        
+        activePick.delegate = self
+        activePick.dataSource = self
+        activeText.delegate = self
         scrollView.delegate = self
-        
-
     }
     
     func setSVConfig() {
         
         /* scrollView **********/
-        scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-        scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
-        scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
-        scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
+        scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 18).isActive = true
+        scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -18).isActive = true
+        scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -15).isActive = true
         
         /* mainSV **********/
         mainSV.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor).isActive = true
-        mainSV.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -50).isActive = true
-        mainSV.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 50).isActive = true
+        mainSV.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor).isActive = true
+        mainSV.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor).isActive = true
         mainSV.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor).isActive = true
+        mainSV.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 1).isActive = true
         
+        let sv = UIStackView(arrangedSubviews: [UIView(), saveBtn, UIView()])
+        sv.axis = .horizontal
+        sv.distribution = .equalCentering
+        sv.alignment = .center
         mainSV.addArrangedSubview(imageView)
         mainSV.addArrangedSubview(nameSV)
         mainSV.addArrangedSubview(birthSV)
-        mainSV.addArrangedSubview(genderSV)
         mainSV.addArrangedSubview(weightSV)
         mainSV.addArrangedSubview(heightSV)
         mainSV.addArrangedSubview(activeSV)
         mainSV.addArrangedSubview(activePick)
-        mainSV.addArrangedSubview(saveBtn)
+        mainSV.addArrangedSubview(UIView())
+        mainSV.addArrangedSubview(UIView())
+        mainSV.addArrangedSubview(sv)
         mainSV.axis = .vertical
         mainSV.alignment = .fill
-        mainSV.distribution = .equalSpacing
-        mainSV.spacing = 30
+        mainSV.distribution = .fill
+        mainSV.spacing = 18
         
         /* imageView ********/
         imageView.addSubview(profileImage)
@@ -276,12 +254,13 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         profileImage.topAnchor.constraint(equalTo: imageView.topAnchor, constant: 20).isActive = true
         profileImage.bottomAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 0).isActive = true
         profileImage.centerXAnchor.constraint(equalTo: imageView.centerXAnchor).isActive = true
-        pencilBtn.bottomAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: 5).isActive = true
-        pencilBtn.trailingAnchor.constraint(equalTo: profileImage.trailingAnchor, constant: 5).isActive = true
+        pencilBtn.bottomAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: -15).isActive = true
+        pencilBtn.trailingAnchor.constraint(equalTo: profileImage.trailingAnchor, constant: -25).isActive = true
         
         /* nameSV **********/
         nameSV.addArrangedSubview(nameLabel)
         nameSV.addArrangedSubview(nameTxt)
+        nameTxt.heightAnchor.constraint(equalToConstant: birthPick.bounds.size.height).isActive = true
         nameSV.axis = .horizontal
         nameSV.alignment = .fill
         nameSV.spacing = 10
@@ -289,29 +268,30 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         /* birthSV **********/
         birthSV.addArrangedSubview(birthLabel)
         birthSV.addArrangedSubview(birthPick)
+        genderSeg.heightAnchor.constraint(equalToConstant: birthPick.bounds.size.height).isActive = true
+        birthSV.addArrangedSubview(genderSeg)
         birthSV.axis = .horizontal
         birthSV.alignment = .fill
-        birthSV.spacing = 10
-        
-        /* genderSV **********/
-        genderSV.addArrangedSubview(genderLabel)
-        genderSV.addArrangedSubview(genderSeg)
-        genderSV.axis = .horizontal
-        genderSV.alignment = .fill
-        genderSV.spacing = 10
+        birthSV.distribution = .fill
+        birthSV.spacing = 8
         
         /* weightSV *********/
         weightSV.addArrangedSubview(weightLabel)
         weightSV.addArrangedSubview(weightTxt)
         weightSV.addArrangedSubview(weightSeg)
+        weightTxt.heightAnchor.constraint(equalToConstant: birthPick.bounds.size.height).isActive = true
+        weightSeg.heightAnchor.constraint(equalToConstant: birthPick.bounds.size.height).isActive = true
+        weightSeg.widthAnchor.constraint(equalToConstant: genderSeg.bounds.size.width).isActive = true
         weightSV.axis = .horizontal
         weightSV.alignment = .fill
-        weightSV.spacing = 10
+        weightSV.spacing = 8
         
         /* heightSV *********/
         heightSV.addArrangedSubview(heightLabel)
         heightSV.addArrangedSubview(heightTxt)
         heightSV.addArrangedSubview(heightSeg)
+        heightTxt.heightAnchor.constraint(equalToConstant: birthPick.bounds.size.height).isActive = true
+        heightSeg.heightAnchor.constraint(equalToConstant: birthPick.bounds.size.height).isActive = true
         heightSV.axis = .horizontal
         heightSV.alignment = .fill
         heightSV.spacing = 10
@@ -319,6 +299,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         /* activitySV *********/
         activeSV.addArrangedSubview(activeLabel)
         activeSV.addArrangedSubview(activeText)
+        activeText.heightAnchor.constraint(equalToConstant: birthPick.bounds.size.height).isActive = true
         activeSV.axis = .horizontal
         activeSV.alignment = .fill
         activeSV.spacing = 10
@@ -394,13 +375,13 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     
     @objc func keyboardWasShown(_ notification: NSNotification) {
       // 2. When notified, I want to ask iOS the size(height) of the keyboard
-      guard let info = notification.userInfo, let keyboardFrameValue = info[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue else { return }
+      guard let info = notification.userInfo, let keyboardFrameValue = info[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
       
       let keyboardFrame = keyboardFrameValue.cgRectValue
       let keyboardHeight = keyboardFrame.size.height
       
       // 3. Tell scrollview to scroll up (height)
-      let insets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 100)
+      let insets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight + 60, right: 0)
       scrollView.contentInset = insets
       scrollView.scrollIndicatorInsets = insets
     }

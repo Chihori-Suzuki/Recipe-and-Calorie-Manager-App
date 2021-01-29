@@ -133,12 +133,18 @@ class showProfileViewController: UIViewController, EditProfileDelegate {
         return button
     }()
     
+    override func viewWillAppear(_ animated: Bool) {
+        let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.Theme1.blue, NSAttributedString.Key.font: UIFont(name: "ArialRoundedMTBold", size: 30)!]
+        navigationController?.navigationBar.largeTitleTextAttributes = textAttributes
+        navigationController?.navigationBar.prefersLargeTitles = true
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellId)
         tableView.dataSource = self
         tableView.delegate = self
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor.Theme1.white
         title = "Personal Profile"
         navigationController?.navigationBar.prefersLargeTitles = true
         
