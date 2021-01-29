@@ -20,8 +20,7 @@ class showProfileViewController: UIViewController, EditProfileDelegate {
         let savedGender = UserDefaults.standard.object(forKey: "Gender") as? String ?? String()
         let gender = Gender(rawValue: savedGender)
         let iv = UIImageView(image: UIImage(named: "profile_\(gender?.rawValue ?? "male")"))
-        iv.translatesAutoresizingMaskIntoConstraints = false
-        iv.contentMode = .scaleAspectFit
+        iv.contentMode = .scaleAspectFill
         iv.layer.masksToBounds = false
         iv.layer.cornerRadius = iv.frame.height/2
         iv.clipsToBounds = true
@@ -124,7 +123,7 @@ class showProfileViewController: UIViewController, EditProfileDelegate {
     }()
     // tableView
     let tableView: UITableView = {
-        let tv = UITableView(
+        let tv = UITableView()
         tv.translatesAutoresizingMaskIntoConstraints = false
         return tv
     }()
@@ -178,30 +177,6 @@ class showProfileViewController: UIViewController, EditProfileDelegate {
         mainSV.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 30).isActive = true
         mainSV.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor).isActive = true
         
-        mainSV.addArrangedSubview(headSV)
-        mainSV.addArrangedSubview(tableView)
-        mainSV.addArrangedSubview(editButton)
-        mainSV.axis = .vertical
-        mainSV.alignment = .fill
-        mainSV.distribution = .fill
-        mainSV.spacing = 50
-        /* headSV **********/
-        headSV.addArrangedSubview(profileImage)
-        headSV.addArrangedSubview(nameSV)
-        headSV.axis = .horizontal
-        headSV.alignment = .fill
-        headSV.distribution = .fill
-        headSV.spacing = 10
-        /* nameSV **********/
-        nameSV.addArrangedSubview(nameLabel)
-        nameSV.addArrangedSubview(bmrSV)
-        nameSV.addArrangedSubview(bmiSV)
-        nameSV.addArrangedSubview(cfSV)
-        nameSV.addArrangedSubview(idealWeightSV)
-        nameSV.axis = .vertical
-        nameSV.alignment = .fill
-        nameSV.distribution = .fillEqually
-        nameSV.spacing = 12
         /* bmrSV **********/
         bmrSV.addArrangedSubview(bmrLabel)
         bmrSV.addArrangedSubview(bmrValLabel)
@@ -214,19 +189,48 @@ class showProfileViewController: UIViewController, EditProfileDelegate {
         bmiSV.addArrangedSubview(bmiValLabel)
         bmiSV.axis = .horizontal
         bmiSV.alignment = .fill
+        bmiSV.distribution = .fill
         bmiSV.spacing = 10
         /* cfSV **********/
         cfSV.addArrangedSubview(cfLabel)
         cfSV.addArrangedSubview(cfValLabel)
         cfSV.axis = .horizontal
         cfSV.alignment = .fill
+        cfSV.distribution = .fill
         cfSV.spacing = 10
         /* idealWeightSV **********/
         idealWeightSV.addArrangedSubview(idealWeightLabel)
         idealWeightSV.addArrangedSubview(idealWeightValueLabel)
         idealWeightSV.axis = .horizontal
         idealWeightSV.alignment = .fill
+        idealWeightSV.distribution = .fill
         idealWeightSV.spacing = 0
+        /* nameSV **********/
+        nameSV.addArrangedSubview(nameLabel)
+        nameSV.addArrangedSubview(bmrSV)
+        nameSV.addArrangedSubview(bmiSV)
+        nameSV.addArrangedSubview(cfSV)
+        nameSV.addArrangedSubview(idealWeightSV)
+        nameSV.axis = .vertical
+        nameSV.alignment = .fill
+        nameSV.distribution = .fillProportionally
+        nameSV.spacing = 8
+        /* headSV **********/
+        headSV.addArrangedSubview(profileImage)
+        headSV.addArrangedSubview(nameSV)
+        headSV.axis = .horizontal
+        headSV.alignment = .fill
+        headSV.distribution = .fillProportionally
+        headSV.heightAnchor.constraint(equalToConstant: 140).isActive = true
+        headSV.spacing = 8
+        //mainSV
+        mainSV.addArrangedSubview(headSV)
+        mainSV.addArrangedSubview(tableView)
+        mainSV.addArrangedSubview(editButton)
+        mainSV.axis = .vertical
+        mainSV.alignment = .fill
+        mainSV.distribution = .fill
+        mainSV.spacing = 50
         
         tableView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.3).isActive = true
     }
