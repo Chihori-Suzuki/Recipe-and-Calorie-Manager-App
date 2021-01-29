@@ -20,3 +20,11 @@ enum ActivityType: String, CaseIterable {
     case veryActive = "Very Active"
     case extraActive = "Extra Active"
 }
+enum Weight: Double {
+    case pound
+    case kilogram
+}
+enum Height: Double {
+    case centimeter
+    case meter
+}

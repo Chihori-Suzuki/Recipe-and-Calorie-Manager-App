@@ -147,7 +147,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         return tf
     }()
     let heightSeg: UISegmentedControl = {
-        let items = ["cm"]
+        let items = ["cm", "m"]
         let tf = UISegmentedControl(items: items)
         tf.selectedSegmentIndex = 0
         let font = UIFont.systemFont(ofSize: 20)
@@ -243,7 +243,6 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         mainSV.addArrangedSubview(activeSV)
         mainSV.addArrangedSubview(activePick)
         mainSV.addArrangedSubview(UIView())
-        mainSV.addArrangedSubview(UIView())
         mainSV.addArrangedSubview(sv)
         mainSV.axis = .vertical
         mainSV.alignment = .fill
@@ -290,6 +289,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         heightSV.addArrangedSubview(heightSeg)
         heightTxt.heightAnchor.constraint(equalToConstant: birthPick.bounds.size.height).isActive = true
         heightSeg.heightAnchor.constraint(equalToConstant: birthPick.bounds.size.height).isActive = true
+        heightSeg.widthAnchor.constraint(equalToConstant: genderSeg.bounds.size.width).isActive = true
         heightSV.axis = .horizontal
         heightSV.alignment = .fill
         heightSV.spacing = 10
@@ -338,9 +338,18 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         defaults.set(nameTxt.text, forKey: "Name")
         defaults.set(birthDate, forKey: "Birthday")
         defaults.set(genderSeg.titleForSegment(at: genderSeg.selectedSegmentIndex), forKey: "Gender")
+        defaults.set(activeText.text, forKey: "ActivityType")
         defaults.set(weight, forKey: "weight")
         defaults.set(height, forKey: "height")
-        defaults.set(activeText.text, forKey: "ActivityType")
+        
+        switch weightSeg.selectedSegmentIndex {
+        case 0: defaults.set(Weight.kilogram.rawValue, forKey: "weightUnit")
+        default: defaults.set(Weight.pound.rawValue, forKey: "weightUnit")
+        }
+        switch heightSeg.selectedSegmentIndex {
+        case 0: defaults.set(Height.centimeter.rawValue, forKey: "heightUnit")
+        default: defaults.set(Height.meter.rawValue, forKey: "heightUnit")
+        }
         
         UIView.animate(withDuration: 0.10) {
             self.saveBtn.transform = CGAffineTransform(scaleX: 0.6, y: 0.6)
