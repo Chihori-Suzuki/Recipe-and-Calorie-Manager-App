@@ -195,6 +195,10 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         navigationController?.navigationBar.prefersLargeTitles = true
     }
     
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        return false
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.Theme1.white
@@ -345,7 +349,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
     
     @objc func editProfile() {
         
-        guard let weight = Double(weightTxt.text!), let height = Double(heightTxt.text!) else {
+        guard let weight = Double(weightTxt.text!), let height = Double(heightTxt.text!), let text = activeText.text, text.count > 0 else {
             let animation = CABasicAnimation(keyPath: "position")
             animation.duration = 0.05
             animation.repeatCount = 4

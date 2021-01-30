@@ -152,6 +152,13 @@ class showProfileViewController: UIViewController, EditProfileDelegate {
         let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.Theme1.blue, NSAttributedString.Key.font: UIFont(name: "ArialRoundedMTBold", size: 30)!]
         navigationController?.navigationBar.largeTitleTextAttributes = textAttributes
         navigationController?.navigationBar.prefersLargeTitles = true
+        
+        let appearance = tabBarController?.tabBar.standardAppearance
+       appearance?.shadowImage = nil
+       appearance?.shadowColor = nil
+       appearance?.backgroundColor = UIColor.Theme1.white
+       guard let style = appearance else { return }
+       tabBarController?.tabBar.standardAppearance = style
     }
     override func viewDidLoad() {
         super.viewDidLoad()
