@@ -203,7 +203,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = #colorLiteral(red: 1, green: 0.9697935916, blue: 0.7963718291, alpha: 1)
-        title = "Register Your Profile"
+        navigationItem.title = "Register Your Profile"
         navigationController?.navigationBar.prefersLargeTitles = true
         view.addSubview(scrollView)
         scrollView.addSubview(mainSV)

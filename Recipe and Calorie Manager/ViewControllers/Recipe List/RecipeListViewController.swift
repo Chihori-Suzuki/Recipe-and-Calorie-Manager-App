@@ -39,7 +39,7 @@ class RecipeListViewController: UIViewController, UITableViewDelegate,UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.Theme1.white
-        title = "Recipe List"
+        navigationItem.title = "Recipe List"
         navigationController?.navigationBar.prefersLargeTitles = true
         setupTableView()
     }

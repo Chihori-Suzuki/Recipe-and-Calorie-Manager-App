@@ -199,7 +199,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         view.backgroundColor = UIColor.Theme1.white
         
-        title = "Register Your Profile"
+        navigationItem.title = "Register Your Profile"
         
         navigationController?.navigationBar.prefersLargeTitles = true
 

@@ -153,7 +153,7 @@ class AddRecipeViewController: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Add New Recipe"
+        navigationItem.title = "Add New Recipe"
         navigationItem.hidesBackButton = true
         view.backgroundColor = UIColor.Theme1.white
         
