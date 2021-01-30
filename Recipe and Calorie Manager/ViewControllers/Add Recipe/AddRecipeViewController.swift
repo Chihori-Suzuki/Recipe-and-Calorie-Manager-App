@@ -18,7 +18,6 @@ class AddRecipeViewController: UIViewController {
         tf.widthAnchor.constraint(equalToConstant: 255).isActive = true
         tf.backgroundColor = .white
         tf.textColor = UIColor.Theme1.brown
-        tf.addTarget(self, action: #selector(textEditingChanged(_:)), for: .editingChanged)
         return tf
     }()
     
@@ -47,8 +46,6 @@ class AddRecipeViewController: UIViewController {
         let btn = UIButton()
         btn.setImage(UIImage(named: image), for: .normal)
         btn.imageView?.contentMode = .scaleAspectFit
-        btn.isEnabled = false
-        btn.alpha = 0.5
         btn.addTarget(self, action: #selector(mealSelected(_:)), for: .touchUpInside)
         return btn
     }
@@ -80,12 +77,12 @@ class AddRecipeViewController: UIViewController {
         hStackViewButtons.axis = .horizontal
         hStackViewButtons.alignment = .center
         hStackViewButtons.distribution = .fill
-        hStackViewButtons.spacing = 30
+        hStackViewButtons.spacing = 20
         
         hStackViewLabels.axis = .horizontal
         hStackViewLabels.alignment = .center
         hStackViewLabels.distribution = .fill
-        hStackViewLabels.spacing = 30
+        hStackViewLabels.spacing = 20
         
         let sv = UIStackView(arrangedSubviews: [hStackViewButtons, hStackViewLabels])
         sv.axis = .vertical
@@ -102,6 +99,16 @@ class AddRecipeViewController: UIViewController {
             UIView.animate(withDuration: 0.10) {
                 sender.transform = CGAffineTransform.identity
             }
+        }
+        guard let text = recipeTextField.text, text.count > 3 else {
+            let animation = CABasicAnimation(keyPath: "position")
+            animation.duration = 0.05
+            animation.repeatCount = 4
+            animation.autoreverses = true
+            animation.fromValue = NSValue(cgPoint: CGPoint(x: sender.center.x - 12, y: sender.center.y))
+            animation.toValue = NSValue(cgPoint: CGPoint(x: sender.center.x + 12, y: sender.center.y))
+            sender.layer.add(animation, forKey: "position")
+            return
         }
         guard let image = sender.currentImage else { return }
         var selectedMeal: Meal?
@@ -166,29 +173,11 @@ class AddRecipeViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         recipeTextField.text?.removeAll()
-        for button in mealButtons {
-            button.alpha = 0.5
-            button.isEnabled = false
-        }
     }
     
     @objc func addNewRecipe() {
         let newRecipeVC = AddIngredientsViewController()
         newRecipeVC.recipeTitle = recipeTextField.text
         navigationController?.pushViewController(newRecipeVC, animated: true)
-    }
-    
-    @objc func textEditingChanged(_ sender: UITextField) {
-        guard let text = sender.text, text.count > 3 else {
-            for button in mealButtons {
-                button.alpha = 0.5
-                button.isEnabled = false
-            }
-            return
-        }
-        for button in mealButtons {
-            button.alpha = 1.0
-            button.isEnabled = true
-        }
     }
 }
