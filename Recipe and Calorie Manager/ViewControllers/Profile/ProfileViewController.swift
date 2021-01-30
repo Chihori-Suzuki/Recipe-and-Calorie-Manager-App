@@ -11,8 +11,6 @@ import UIKit
 import CoreData
 
 class ProfileViewController: UIViewController, UITextFieldDelegate {
-    // persistentContainer
-    private static var persistentContainer: NSPersistentCloudKitContainer! = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer
     // ScrollView
     let scrollView: UIScrollView = {
         let sv = UIScrollView()
@@ -45,7 +43,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         button.heightAnchor.constraint(equalToConstant: 28).isActive = true
         button.layer.borderWidth = 0.3
         button.layer.cornerRadius = 5
-        button.addTarget(self, action: #selector(setActivityView), for: .touchUpInside)
+        button.addTarget(self, action: #selector(selectPicture), for: .touchUpInside)
         return button
     }()
     //Labels
@@ -313,11 +311,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         let activitiController = UIActivityViewController(activityItems: [image], applicationActivities: nil)
         present(activitiController, animated: true, completion: nil)
     }
-    static func newPersion() -> Person {
-        let context = persistentContainer.viewContext
-        let person = NSEntityDescription.insertNewObject(forEntityName: "Person", into: context) as! Person
-        return person
-    }
+
     // saving Personal Data
     @objc func addNewPerson() {
         
@@ -339,6 +333,24 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         }
         // UserDefaults
         let defaults = UserDefaults.standard
+        
+        // 1/28------------------------------------------------------------------------------
+        
+        if let data = profileImage.image?.pngData() {
+            //Create URL
+            let document = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            let url = document.appendingPathComponent("profile.png")
+            do{
+                try data.write(to: url)
+                defaults.set(url, forKey: "Image")
+                
+            } catch {
+                print("error")
+            }
+        }
+        
+        // 1/28----
+        
         defaults.set(nameTxt.text, forKey: "Name")
         defaults.set(birthDate, forKey: "Birthday")
         defaults.set(genderSeg.titleForSegment(at: genderSeg.selectedSegmentIndex), forKey: "Gender")
@@ -367,9 +379,27 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
             self.navigationController?.pushViewController(showVC, animated: true)
         }
     }
-    static func save() {
-        ProfileViewController.persistentContainer.saveContext()
-    }
+
+    
+    // Access to Camera roll --------------------------------------------------------
+    @objc func selectPicture(_ sender: UIButton) {
+            // カメラロールが利用可能か？
+            if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
+                // 写真を選ぶビュー
+                let pickerView = UIImagePickerController()
+                // 写真の選択元をカメラロールにする
+                // 「.camera」にすればカメラを起動できる
+                pickerView.sourceType = .photoLibrary
+                // デリゲート
+                pickerView.delegate = self
+                // ビューに表示
+                self.present(pickerView, animated: true)
+            }
+        }
+
+    // 1/28 ------------------------------------------------------------------------------
+    
+    
     // scrollView
     @objc func dismissKeyboard(_ sender: UITapGestureRecognizer) {
         view.endEditing(true)
@@ -436,3 +466,23 @@ extension ProfileViewController: UIScrollViewDelegate {
         return nil
     }
 }
+
+// 1/28 ------------------------------------------------------------------------------
+extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    // 写真を選んだ後に呼ばれる処理
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        // 選択した写真を取得する
+        let image = info[.originalImage] as! UIImage
+        // ビューに表示する
+        profileImage.image = image
+        
+
+        // 写真を選ぶビューを引っ込める
+        self.dismiss(animated: true)
+    }
+    
+
+     
+     
+}
+// 1/28 ------------------------------------------------------------------------------

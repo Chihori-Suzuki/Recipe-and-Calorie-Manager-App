@@ -248,6 +248,7 @@ class showProfileViewController: UIViewController, EditProfileDelegate {
     func setPersonalData(){
         // UserDefaults
         let defaults = UserDefaults.standard
+        let savedImageURL = defaults.object(forKey: "Image") as? String ?? String()
         let savedName = defaults.object(forKey: "Name") as? String ?? String()
         let savedBirth = defaults.object(forKey: "Birthday") as? Date ?? Date()
         let savedGender = defaults.object(forKey: "Gender") as? String ?? String()
@@ -259,7 +260,9 @@ class showProfileViewController: UIViewController, EditProfileDelegate {
         let calendar : NSCalendar = NSCalendar.current as NSCalendar
         let ageComponents = calendar.components(.year, from: savedBirth, to: now as Date, options: [])
         let age = ageComponents.year!
+        let savedImage = UIImage(contentsOfFile: savedImageURL)
         
+        profileImage.image = savedImage
         nameLabel.text = savedName
         personalData.append(Profile(parameter: "Age", value: "\(age)"))
         personalData.append(Profile(parameter: "Gender", value: savedGender))
