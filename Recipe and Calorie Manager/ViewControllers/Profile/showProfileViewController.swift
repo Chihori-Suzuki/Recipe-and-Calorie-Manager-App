@@ -245,6 +245,20 @@ class showProfileViewController: UIViewController, EditProfileDelegate {
         tableView.layer.cornerRadius = 12
         tableView.separatorStyle = .none
     }
+    
+    // get image by url
+    func getImageByUrl(url: String) -> UIImage{
+        let url = URL(string: url)
+        do {
+            let data = try Data(contentsOf: url!)
+            return UIImage(data: data)!
+        } catch let err {
+            print("Error : \(err.localizedDescription)")
+        }
+        return UIImage()
+    }
+    
+
     func setPersonalData(){
         // UserDefaults
         let defaults = UserDefaults.standard
@@ -260,8 +274,10 @@ class showProfileViewController: UIViewController, EditProfileDelegate {
         let calendar : NSCalendar = NSCalendar.current as NSCalendar
         let ageComponents = calendar.components(.year, from: savedBirth, to: now as Date, options: [])
         let age = ageComponents.year!
-        let savedImage = UIImage(contentsOfFile: savedImageURL)
         
+//        print(savedImageURL)
+//        let savedImagee = UIImage(contentsOfFile: savedImageURL)
+        let savedImage: UIImage = getImageByUrl(url: savedImageURL)
         profileImage.image = savedImage
         nameLabel.text = savedName
         personalData.append(Profile(parameter: "Age", value: "\(age)"))
