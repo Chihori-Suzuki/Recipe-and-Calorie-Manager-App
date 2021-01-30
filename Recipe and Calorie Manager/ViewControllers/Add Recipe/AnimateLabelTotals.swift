@@ -9,7 +9,6 @@ import UIKit
 enum CountingMethod {
     case easeInOut, easeIn, easeOut, linear
 }
-
 enum AnimationDuration {
     case laborious, plodding, strolling, brisk, noAnimation
 
@@ -23,7 +22,6 @@ enum AnimationDuration {
         }
     }
 }
-
 enum DecimalPoints {
     case zero, one, two, ridiculous
 
@@ -36,7 +34,6 @@ enum DecimalPoints {
         }
     }
 }
-
 final class AnimatedLabelTotals: UILabel {
     typealias OptionalCallback = (() -> Void)
     typealias OptionalFormatBlock = (() -> String)
@@ -51,7 +48,6 @@ final class AnimatedLabelTotals: UILabel {
         if progress >= totalTime { return destinationValue }
         return startingValue + (update(t: Float(progress / totalTime)) * (destinationValue - startingValue))
     }
-
     private var rate: Float = 0
     private var startingValue: Float = 0
     private var destinationValue: Float = 0
@@ -72,37 +68,30 @@ final class AnimatedLabelTotals: UILabel {
             completion?()
             return
         }
-
         easingRate = 3.0
         progress = 0.0
         totalTime = duration.value
         lastUpdate = Date.timeIntervalSinceReferenceDate
         rate = 3.0
-
         addDisplayLink()
     }
-
     func countFromCurrent(to: Float, duration: AnimationDuration = .strolling) {
         count(from: currentValue, to: to, duration: duration)
     }
-
     func countFromZero(to: Float, duration: AnimationDuration = .strolling) {
         count(from: 0, to: to, duration: duration)
     }
-
     func stop() {
         timer?.invalidate()
         timer = nil
         progress = totalTime
         completion?()
     }
-
     private func addDisplayLink() {
         timer = CADisplayLink(target: self, selector: #selector(self.updateValue(timer:)))
         timer?.add(to: .main, forMode: .default)
         timer?.add(to: .main, forMode: .tracking)
     }
-
     private func update(t: Float) -> Float {
         var t = t
 
@@ -120,7 +109,6 @@ final class AnimatedLabelTotals: UILabel {
             return 1.0-powf((1.0-t), rate);
         }
     }
-
     @objc private func updateValue(timer: Timer) {
         let now: TimeInterval = Date.timeIntervalSinceReferenceDate
         progress += now - lastUpdate
@@ -139,9 +127,7 @@ final class AnimatedLabelTotals: UILabel {
     private func setTextValue(value: Float) {
         text = String(format: customFormatBlock?() ?? decimalPoints.format, value) + " g"
     }
-
 }
-
 final class AnimatedLabelTotalsCal: UILabel {
     typealias OptionalCallback = (() -> Void)
     typealias OptionalFormatBlock = (() -> String)
@@ -156,7 +142,6 @@ final class AnimatedLabelTotalsCal: UILabel {
         if progress >= totalTime { return destinationValue }
         return startingValue + (update(t: Float(progress / totalTime)) * (destinationValue - startingValue))
     }
-
     private var rate: Float = 0
     private var startingValue: Float = 0
     private var destinationValue: Float = 0
@@ -177,7 +162,6 @@ final class AnimatedLabelTotalsCal: UILabel {
             completion?()
             return
         }
-
         easingRate = 3.0
         progress = 0.0
         totalTime = duration.value
@@ -186,28 +170,23 @@ final class AnimatedLabelTotalsCal: UILabel {
 
         addDisplayLink()
     }
-
     func countFromCurrent(to: Float, duration: AnimationDuration = .strolling) {
         count(from: currentValue, to: to, duration: duration)
     }
-
     func countFromZero(to: Float, duration: AnimationDuration = .strolling) {
         count(from: 0, to: to, duration: duration)
     }
-
     func stop() {
         timer?.invalidate()
         timer = nil
         progress = totalTime
         completion?()
     }
-
     private func addDisplayLink() {
         timer = CADisplayLink(target: self, selector: #selector(self.updateValue(timer:)))
         timer?.add(to: .main, forMode: .default)
         timer?.add(to: .main, forMode: .tracking)
     }
-
     private func update(t: Float) -> Float {
         var t = t
 
@@ -225,7 +204,6 @@ final class AnimatedLabelTotalsCal: UILabel {
             return 1.0-powf((1.0-t), rate);
         }
     }
-
     @objc private func updateValue(timer: Timer) {
         let now: TimeInterval = Date.timeIntervalSinceReferenceDate
         progress += now - lastUpdate
@@ -236,14 +214,10 @@ final class AnimatedLabelTotalsCal: UILabel {
             self.timer = nil
             progress = totalTime
         }
-
         setTextValue(value: currentValue)
         if progress == totalTime { completion?() }
     }
-
     private func setTextValue(value: Float) {
         text = String(format: customFormatBlock?() ?? decimalPoints.format, value)
     }
-
 }
-

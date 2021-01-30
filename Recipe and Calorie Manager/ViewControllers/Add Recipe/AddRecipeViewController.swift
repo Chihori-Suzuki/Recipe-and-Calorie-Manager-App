@@ -8,7 +8,6 @@
 import UIKit
 
 class AddRecipeViewController: UIViewController {
-    
     lazy var recipeTextField: UITextField = {
         let tf = UITextField()
         tf.placeholder = "Chicken Adobo       "
@@ -20,7 +19,6 @@ class AddRecipeViewController: UIViewController {
         tf.textColor = UIColor.Theme1.brown
         return tf
     }()
-    
     private var meals = Meal.allCases
     private var breakfastButton = UIButton()
     private var snackButton = UIButton()
@@ -31,7 +29,6 @@ class AddRecipeViewController: UIViewController {
         let arr = [breakfastButton, lunchButton, dinnerButton, snackButton]
         return arr
     }
-    
     let vStackView: UIStackView = {
         let sv = UIStackView()
         sv.translatesAutoresizingMaskIntoConstraints = false
@@ -41,7 +38,6 @@ class AddRecipeViewController: UIViewController {
         sv.spacing = 40
         return sv
     }()
-    
     fileprivate func makeButtons(with image: String) -> UIButton {
         let btn = UIButton()
         btn.setImage(UIImage(named: image), for: .normal)
@@ -49,7 +45,6 @@ class AddRecipeViewController: UIViewController {
         btn.addTarget(self, action: #selector(mealSelected(_:)), for: .touchUpInside)
         return btn
     }
-    
     func makeMealLabel(with string: String) -> UILabel {
         let label = UILabel()
         label.text = string
@@ -60,7 +55,6 @@ class AddRecipeViewController: UIViewController {
         label.alpha = 0.80
         return label
     }
-    
     fileprivate func arrangeHStackViews(with buttons: [UIButton], and labels: [UILabel]) -> UIStackView {
         let hStackViewButtons = UIStackView()
         let hStackViewLabels = UIStackView()
@@ -73,7 +67,6 @@ class AddRecipeViewController: UIViewController {
             sv.spacing = 2
             index > 1 ? hStackViewLabels.addArrangedSubview(sv) : hStackViewButtons.addArrangedSubview(sv)
         }
-        
         hStackViewButtons.axis = .horizontal
         hStackViewButtons.alignment = .center
         hStackViewButtons.distribution = .fill
@@ -91,7 +84,6 @@ class AddRecipeViewController: UIViewController {
         sv.spacing = 25
         return sv
     }
-    
     @objc func mealSelected(_ sender: UIButton) {
         UIView.animate(withDuration: 0.10) {
             sender.transform = CGAffineTransform(scaleX: 0.6, y: 0.6)
@@ -124,7 +116,6 @@ class AddRecipeViewController: UIViewController {
             self.navigationController?.pushViewController(newRecipeVC, animated: true)
         }
     }
-
     fileprivate func setupLayout() {
         breakfastButton = makeButtons(with: Meal.breakfast.rawValue)
         lunchButton = makeButtons(with: Meal.lunch.rawValue)
@@ -144,7 +135,6 @@ class AddRecipeViewController: UIViewController {
         vStackView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor).isActive = true
         vStackView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
     }
-    
     override func viewWillAppear(_ animated: Bool) {
         
         if let savedRecipe = Recipe.loadFromDraft() {
@@ -161,7 +151,6 @@ class AddRecipeViewController: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         }
     }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Add New Recipe"
@@ -170,14 +159,7 @@ class AddRecipeViewController: UIViewController {
         
         setupLayout()
     }
-    
     override func viewWillDisappear(_ animated: Bool) {
         recipeTextField.text?.removeAll()
-    }
-    
-    @objc func addNewRecipe() {
-        let newRecipeVC = AddIngredientsViewController()
-        newRecipeVC.recipeTitle = recipeTextField.text
-        navigationController?.pushViewController(newRecipeVC, animated: true)
     }
 }

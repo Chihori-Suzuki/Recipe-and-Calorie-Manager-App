@@ -45,14 +45,14 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
         // make a viewController for recipe list screen
         let viewControllers = [recipeListVC, addRecipeVC, profileVC]
         self.viewControllers = viewControllers.map { UINavigationController(rootViewController: $0) }
-        tabBar.tintColor = .black
         self.selectedIndex = 1
         
+        tabBar.tintColor = UIColor.Theme1.black
         let appearance = tabBar.standardAppearance
-        appearance.configureWithOpaqueBackground()
         appearance.shadowImage = nil
-        appearance.shadowColor = UIColor.Theme1.white
-        tabBar.standardAppearance = appearance
+        appearance.shadowColor = nil
+        appearance.backgroundColor = UIColor.Theme1.white
+        tabBar.standardAppearance = appearance;
     }
 }
 

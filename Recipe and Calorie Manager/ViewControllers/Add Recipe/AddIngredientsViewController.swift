@@ -70,7 +70,6 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
             Recipe.saveToDraft(recipe: recipe!)
         }
     }
-    
     var selectedRowForEdit: IndexPath?
     var recipes: [Recipe] = []
     var duplicateFound = false
@@ -286,12 +285,7 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
     }
     @objc func cancelButtonTapped() {
         navigationController?.popViewController(animated: true)
-        
-        guard let _ = isViewFromRecipeList else {
-            if let _ = Recipe.loadFromDraft() { Recipe.deleteDraft() }
-            return
-        }
-        if recipe == recipeFromList { Recipe.deleteDraft() }
+        if let _ = Recipe.loadFromDraft() { Recipe.deleteDraft() }
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -334,7 +328,6 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
     fileprivate func updateTableView(with serving: String, and ingredient: Dataset) {
         DispatchQueue.main.async { [self] in
             if ingredient.items.count > 0 {
-                
                 ingredients.insert(Ingredient(serving: serving, nutrition: ingredient.items[0]), at: 0)
                 UIView.animate(withDuration: 0.9) {
                     totalsStackViews.isHidden ? totalsStackViews.isHidden.toggle() : nil

@@ -11,19 +11,15 @@ protocol EditIngredientVCDelegate: class {
     func edit(_ ingredient: Ingredient)
     func delete(_ ingredient: Ingredient)
 }
-
 class EditIngredientViewController: UIViewController, saveIngredientButtonTapped {
-    
     func saveButtonTapped() {
         delegate?.edit(ingredient!)
         dismiss(animated: true, completion: nil)
     }
-    
     func discardButtonTapped() {
         delegate?.delete(ingredient!)
         dismiss(animated: true, completion: nil)
     }
-    
     var meal: Meal?
     var ingredient: Ingredient?
     weak var delegate: EditIngredientVCDelegate?
@@ -43,7 +39,6 @@ class EditIngredientViewController: UIViewController, saveIngredientButtonTapped
         tf.addTarget(self, action: #selector(textEditingChanged(_:)), for: .editingChanged)
         return tf
     }()
-    
     let updateButton: UIButton = {
        let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -56,7 +51,6 @@ class EditIngredientViewController: UIViewController, saveIngredientButtonTapped
         button.alpha = 0.5
     return button
     }()
-    
     let updateLabel: UILabel = {
         let label = UILabel()
         label.text = "update"
@@ -68,7 +62,6 @@ class EditIngredientViewController: UIViewController, saveIngredientButtonTapped
         label.font = UIFont.boldSystemFont(ofSize: 20)
         return label
     }()
-    
     lazy var vStackView: UIStackView = {
         let sv = UIStackView(arrangedSubviews: [updateButton, updateLabel])
         sv.axis = .vertical
@@ -77,7 +70,6 @@ class EditIngredientViewController: UIViewController, saveIngredientButtonTapped
         sv.spacing = 0
         return sv
     }()
-    
     lazy var hStackView: UIStackView = {
         let sv = UIStackView(arrangedSubviews: [ingredientTextField, vStackView])
         sv.translatesAutoresizingMaskIntoConstraints = false
@@ -87,14 +79,12 @@ class EditIngredientViewController: UIViewController, saveIngredientButtonTapped
         sv.spacing = 15
         return sv
     }()
-    
     lazy var tableView: UITableView = {
         let tv = UITableView(frame: view.frame, style: .insetGrouped)
         tv.backgroundColor = UIColor.Theme1.white
         tv.translatesAutoresizingMaskIntoConstraints = false
         return tv
     }()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.Theme1.white
@@ -118,7 +108,6 @@ class EditIngredientViewController: UIViewController, saveIngredientButtonTapped
         tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0).isActive = true
         tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
     }
-    
     @objc func updateIngredient(_ sender: UIButton) {
         UIView.animate(withDuration: 0.10) {
             self.updateButton.transform = CGAffineTransform(scaleX: 0.6, y: 0.6)
@@ -178,7 +167,6 @@ class EditIngredientViewController: UIViewController, saveIngredientButtonTapped
         }
     }
 }
-
 extension EditIngredientViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
