@@ -48,7 +48,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         button.heightAnchor.constraint(equalToConstant: 28).isActive = true
         button.layer.borderWidth = 0.3
         button.layer.cornerRadius = 5
-//        button.addTarget(self, action: #selector(setActivityView), for: .touchUpInside)
+        button.addTarget(self, action: #selector(selectPicture), for: .touchUpInside)
         return button
     }()
     // UserDefaults
@@ -297,13 +297,45 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         activeSV.spacing = 10
         
     }
+    
     func setProfile() {
         
+        // let savedImagee = UIImage(contentsOfFile: savedImageURL)
+        
+        // set the image user chose
+        if let data = profileImage.image?.pngData() {
+            //Create URL of the place picture is saved
+            let document = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            let url = document.appendingPathComponent("profile.png")
+            let urlString = url.absoluteString
+            
+            do{
+                try data.write(to: url)
+                defaults.set(urlString, forKey: "Image")
+                
+            } catch {
+                print("error")
+            }
+        }
         nameTxt.text = defaults.object(forKey: "Name") as? String ?? String()
         weightTxt.text = "\(defaults.double(forKey: "weight"))"
         heightTxt.text = "\(defaults.double(forKey: "height"))"
         activeText.text = defaults.object(forKey: "ActivityType") as? String ?? String()
         
+    }
+    
+    // Access to Camera roll
+    @objc func selectPicture(_ sender: UIButton) {
+            // if it's available to access photo library
+            if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
+                // photo library view
+                let pickerView = UIImagePickerController()
+                // set the place for photo library (camera -> .camera)
+                pickerView.sourceType = .photoLibrary
+                pickerView.delegate = self
+                // show the view
+                self.present(pickerView, animated: true)
+            }
     }
     
     @objc func textFieldDidBeginEditing(_ textField: UITextField) {
@@ -419,4 +451,19 @@ extension EditProfileViewController: UIScrollViewDelegate {
   func viewForZooming(in scrollView: UIScrollView) -> UIView? {
     return nil
   }
+}
+
+// 1/28 ------------------------------------------------------------------------------
+extension EditProfileViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    // 写真を選んだ後に呼ばれる処理
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        // 選択した写真を取得する
+        let image = info[.originalImage] as! UIImage
+        // ビューに表示する
+        profileImage.image = image
+        
+
+        // 写真を選ぶビューを引っ込める
+        self.dismiss(animated: true)
+    }
 }

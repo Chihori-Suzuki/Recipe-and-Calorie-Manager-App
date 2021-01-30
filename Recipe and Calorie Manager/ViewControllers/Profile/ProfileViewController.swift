@@ -333,30 +333,32 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         }
         // UserDefaults
         let defaults = UserDefaults.standard
-        
-        // 1/28------------------------------------------------------------------------------
-        
-        if let data = profileImage.image?.pngData() {
-            //Create URL
-            let document = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-            let url = document.appendingPathComponent("profile.png")
-            do{
-                try data.write(to: url)
-                defaults.set(url, forKey: "Image")
-                
-            } catch {
-                print("error")
-            }
-        }
-        
-        // 1/28----
-        
+     
+        // set the data for userDefault
+//----------------------------------
+//        defaults.set(urlString, forKey: "Image")
         defaults.set(nameTxt.text, forKey: "Name")
         defaults.set(birthDate, forKey: "Birthday")
         defaults.set(genderSeg.titleForSegment(at: genderSeg.selectedSegmentIndex), forKey: "Gender")
         defaults.set(activeText.text, forKey: "ActivityType")
         defaults.set(weight, forKey: "weight")
         defaults.set(height, forKey: "height")
+        
+        // set the image user chose
+        if let data = profileImage.image?.pngData() {
+            //Create URL of the place picture is saved
+            let document = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            let url = document.appendingPathComponent("profile.png")
+            let urlString = url.absoluteString
+            
+            do{
+                try data.write(to: url)
+                defaults.set(urlString, forKey: "Image")
+                
+            } catch {
+                print("error")
+            }
+        }
         
         switch weightSeg.selectedSegmentIndex {
         case 0: defaults.set(Weight.kilogram.rawValue, forKey: "weightUnit")
@@ -381,25 +383,20 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     }
 
     
-    // Access to Camera roll --------------------------------------------------------
+    // Access to Camera roll 
     @objc func selectPicture(_ sender: UIButton) {
-            // カメラロールが利用可能か？
+            // if it's available to access photo library
             if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
-                // 写真を選ぶビュー
+                // photo library view
                 let pickerView = UIImagePickerController()
-                // 写真の選択元をカメラロールにする
-                // 「.camera」にすればカメラを起動できる
+                // set the place for photo library (camera -> .camera)
                 pickerView.sourceType = .photoLibrary
-                // デリゲート
                 pickerView.delegate = self
-                // ビューに表示
+                // show the view
                 self.present(pickerView, animated: true)
             }
         }
 
-    // 1/28 ------------------------------------------------------------------------------
-    
-    
     // scrollView
     @objc func dismissKeyboard(_ sender: UITapGestureRecognizer) {
         view.endEditing(true)
@@ -480,9 +477,5 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
         // 写真を選ぶビューを引っ込める
         self.dismiss(animated: true)
     }
-    
-
-     
-     
 }
 // 1/28 ------------------------------------------------------------------------------
