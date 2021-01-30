@@ -22,6 +22,15 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
         recipes.append(newRecipe)
         Recipe.saveToList(recipes: recipes)
         
+        if let meal = meal {
+            switch meal {
+            case .breakfast: Recipe.newBreakfastCount += 1
+            case .lunch: Recipe.newLunchCount += 1
+            case .dinner: Recipe.newDinnerCount += 1
+            case .snack: Recipe.newSnackCount += 1
+            }
+        }
+        
         if let tabItem = tabBarController?.tabBar.items {
             Recipe.newRecipeCount += 1
             tabItem[0].badgeValue = String(Recipe.newRecipeCount)

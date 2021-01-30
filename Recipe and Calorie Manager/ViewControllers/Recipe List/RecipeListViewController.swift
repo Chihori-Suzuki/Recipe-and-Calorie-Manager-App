@@ -34,6 +34,8 @@ class RecipeListViewController: UIViewController, UITableViewDelegate,UITableVie
         let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.Theme1.blue, NSAttributedString.Key.font: UIFont(name: "ArialRoundedMTBold", size: 30)!]
         navigationController?.navigationBar.largeTitleTextAttributes = textAttributes
         navigationController?.navigationBar.prefersLargeTitles = true
+        
+        myTable.reloadData()
     }
     
     override func viewDidLoad() {
@@ -61,11 +63,24 @@ class RecipeListViewController: UIViewController, UITableViewDelegate,UITableVie
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
+//        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
+        let cell = UITableViewCell(style: .value1, reuseIdentifier: cellId)
         meal = category[indexPath.row]
         cell.textLabel?.text = meal.rawValue
         cell.textLabel?.font = UIFont(name: "ArialRoundedMTBold", size: 26)
         cell.textLabel?.textColor = UIColor.Theme1.brown
+        switch meal {
+        case .breakfast:
+            Recipe.newBreakfastCount > 0 ? (cell.detailTextLabel?.text = String(Recipe.newBreakfastCount)) : nil
+        case .dinner:
+            Recipe.newDinnerCount > 0 ? (cell.detailTextLabel?.text = String(Recipe.newDinnerCount)) : nil
+        case .lunch:
+            Recipe.newLunchCount > 0 ? (cell.detailTextLabel?.text = String(Recipe.newLunchCount)) : nil
+        case .snack:
+            Recipe.newSnackCount > 0 ? (cell.detailTextLabel?.text = String(Recipe.newSnackCount)) : nil
+        case .none: cell.detailTextLabel?.text = ""
+        }
+        cell.detailTextLabel?.textColor = UIColor.Theme1.orange
         cell.backgroundColor = UIColor.Theme1.white
         let chevronImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 22, height: 22))
         chevronImageView.image = UIImage(named: "right-chevron")
@@ -82,6 +97,13 @@ class RecipeListViewController: UIViewController, UITableViewDelegate,UITableVie
         clickedCategory.mealTitle = category[indexPath.row].rawValue
         clickedCategory.selectedCategory = category[indexPath.row]
         navigationController?.pushViewController(clickedCategory, animated: true)
+        
+        switch category[indexPath.row] {
+        case .breakfast: Recipe.newBreakfastCount = 0
+        case .lunch: Recipe.newLunchCount = 0
+        case .dinner: Recipe.newDinnerCount = 0
+        case .snack: Recipe.newSnackCount = 0
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

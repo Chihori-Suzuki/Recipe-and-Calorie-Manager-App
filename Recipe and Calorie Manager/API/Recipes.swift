@@ -27,6 +27,10 @@ struct Recipe: Codable, Equatable {
     var ingredients: [Ingredient]
     
     static var newRecipeCount = 0
+    static var newBreakfastCount = 0
+    static var newLunchCount = 0
+    static var newSnackCount = 0
+    static var newDinnerCount = 0
     
     static func == (lhs: Recipe, rhs: Recipe) -> Bool {
         return lhs.title.lowercased() == rhs.title.lowercased() && lhs.meal == rhs.meal && lhs.ingredients == rhs.ingredients
