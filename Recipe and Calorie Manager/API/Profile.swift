@@ -8,7 +8,7 @@
 import Foundation
 
 struct Profile {
-    var palameter: String
+    var parameter: String
     var value: String
     static var bmr = 0.0
     static var gender: Gender = .male
