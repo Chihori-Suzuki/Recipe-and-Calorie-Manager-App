@@ -166,7 +166,7 @@ class showProfileViewController: UIViewController, EditProfileDelegate {
         tableView.dataSource = self
         tableView.delegate = self
         view.backgroundColor = UIColor.Theme1.white
-        title = "Personal Profile"
+        navigationItem.title = "Personal Profile"
         navigationController?.navigationBar.prefersLargeTitles = true
         
         view.addSubview(scrollView)
