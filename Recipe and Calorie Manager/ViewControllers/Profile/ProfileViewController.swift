@@ -121,7 +121,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         tf.isHidden = true
         tf.font = .systemFont(ofSize: 20)
         tf.addTarget(self, action: #selector(textFieldDidBeginEditing), for: .touchDown)
-        tf.backgroundColor = .white
+        tf.backgroundColor = #colorLiteral(red: 1, green: 0.9697935916, blue: 0.7963718291, alpha: 1)
         return tf
     }()
     let birthPick: UIDatePicker = {
@@ -176,7 +176,6 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     // submitButton
     let saveBtn: UIButton = {
         let button = UIButton()
-//        button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Save", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.textAlignment = .center
@@ -298,6 +297,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         activeSV.addArrangedSubview(activeLabel)
         activeSV.addArrangedSubview(activePick)
         activeSV.addArrangedSubview(activeText)
+        activeSV.heightAnchor.constraint(equalToConstant: 55).isActive = true
         activeText.heightAnchor.constraint(equalToConstant: birthPick.bounds.size.height).isActive = true
         activeSV.axis = .horizontal
         activeSV.alignment = .fill

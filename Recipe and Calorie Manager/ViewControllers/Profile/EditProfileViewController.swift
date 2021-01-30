@@ -12,87 +12,94 @@ protocol EditProfileDelegate: class {
 }
 
 class EditProfileViewController: UIViewController, UITextFieldDelegate {
-
     // ScrollView
     let scrollView: UIScrollView = {
         let sv = UIScrollView()
         sv.translatesAutoresizingMaskIntoConstraints = false
         return sv
     }()
-    
     // profileimage
     let imageView: UIView = {
         let view = UIView()
+        view.heightAnchor.constraint(equalToConstant: 250).isActive = true
+        view.backgroundColor = .cyan
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     let profileImage: UIImageView = {
-        let iv = UIImageView(image: UIImage(named: "profile.png"))
-        iv.translatesAutoresizingMaskIntoConstraints = false
+        let savedGender = UserDefaults.standard.object(forKey: "Gender") as? String ?? String()
+        let gender = Gender(rawValue: savedGender)
+        let iv = UIImageView(image: UIImage(named: "profile_\(gender?.rawValue ?? "male")"))
         iv.contentMode = .scaleAspectFit
-        iv.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        iv.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        iv.layer.masksToBounds = false
+        iv.layer.cornerRadius = iv.frame.height/2
+        iv.clipsToBounds = true
+        iv.widthAnchor.constraint(equalToConstant: 250).isActive = true
+        iv.heightAnchor.constraint(equalToConstant: 250).isActive = true
+        iv.translatesAutoresizingMaskIntoConstraints = true
         return iv
     }()
-    
     let pencilBtn: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(UIImage(systemName: "pencil"), for: .normal)
         button.backgroundColor = .white
-        button.layer.borderWidth = 0.5
+        button.widthAnchor.constraint(equalToConstant: 28).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 28).isActive = true
+        button.layer.borderWidth = 0.3
+        button.layer.cornerRadius = 5
 //        button.addTarget(self, action: #selector(setActivityView), for: .touchUpInside)
         return button
     }()
-    
     // UserDefaults
     let defaults = UserDefaults.standard
-    
     // Label Field
     let nameLabel: UILabel = {
         let lb = UILabel()
-        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.font = UIFont(name: "ArialRoundedMTBold", size: 21)
+        lb.textColor = UIColor.Theme1.black
         lb.setContentHuggingPriority(.required, for: .horizontal)
         lb.text = "Name"
         return lb
     }()
     let weightLabel: UILabel = {
         let lb = UILabel()
-        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.font = UIFont(name: "ArialRoundedMTBold", size: 21)
+        lb.textColor = UIColor.Theme1.black
         lb.setContentHuggingPriority(.required, for: .horizontal)
         lb.text = "Weight"
         return lb
     }()
     let heightLabel: UILabel = {
         let lb = UILabel()
-        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.font = UIFont(name: "ArialRoundedMTBold", size: 21)
+        lb.textColor = UIColor.Theme1.black
         lb.setContentHuggingPriority(.required, for: .horizontal)
         lb.text = "Height"
         return lb
     }()
     let activeLabel: UILabel = {
         let lb = UILabel()
-        lb.translatesAutoresizingMaskIntoConstraints = false
+        lb.font = UIFont(name: "ArialRoundedMTBold", size: 21)
+        lb.textColor = UIColor.Theme1.black
         lb.setContentHuggingPriority(.required, for: .horizontal)
         lb.text = "Activity Type"
         return lb
     }()
-    
     // Text,  Field
     let nameTxt: UITextField = {
         let tf = UITextField()
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.layer.borderWidth = 0.8
-        tf.layer.cornerRadius = 5
+        tf.textColor = UIColor.Theme1.brown
+        tf.font = .systemFont(ofSize: 20)
+        tf.layer.cornerRadius = 8
         tf.backgroundColor = .white
         return tf
     }()
-    
     let weightTxt: UITextField = {
         let tf = UITextField()
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.layer.borderWidth = 0.8
-        tf.layer.cornerRadius = 5
+        tf.textColor = UIColor.Theme1.brown
+        tf.font = .systemFont(ofSize: 20)
+        tf.layer.cornerRadius = 8
         tf.backgroundColor = .white
         return tf
     }()
@@ -100,31 +107,34 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         let items = ["kg", "lb"]
         let tf = UISegmentedControl(items: items)
         tf.selectedSegmentIndex = 0
-        tf.translatesAutoresizingMaskIntoConstraints = false
+        let font = UIFont.systemFont(ofSize: 20)
+        tf.setTitleTextAttributes([NSAttributedString.Key.font: font, NSAttributedString.Key.foregroundColor: UIColor.Theme1.black], for: .normal)
         return tf
     }()
     let heightTxt: UITextField = {
         let tf = UITextField()
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.layer.borderWidth = 0.8
-        tf.layer.cornerRadius = 5
+        tf.textColor = UIColor.Theme1.brown
+        tf.font = .systemFont(ofSize: 20)
+        tf.layer.cornerRadius = 8
         tf.backgroundColor = .white
         return tf
     }()
     let heightSeg: UISegmentedControl = {
-        let items = ["cm"]
+        let items = ["cm", "m"]
         let tf = UISegmentedControl(items: items)
         tf.selectedSegmentIndex = 0
-        tf.translatesAutoresizingMaskIntoConstraints = false
+        tf.layer.cornerRadius = 12
+        let font = UIFont.systemFont(ofSize: 20)
+        tf.setTitleTextAttributes([NSAttributedString.Key.font: font, NSAttributedString.Key.foregroundColor: UIColor.Theme1.black], for: .normal)
         return tf
     }()
     let activeText: UITextField = {
         let tf = UITextField()
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        tf.layer.borderWidth = 0.8
-        tf.layer.cornerRadius = 5
-//        tf.addTarget(self, action: #selector(textFieldDidBeginEditing), for: .touchDown)
-        tf.backgroundColor = .white
+        tf.textColor = UIColor.Theme1.brown
+        tf.font = .systemFont(ofSize: 20)
+        tf.layer.cornerRadius = 8
+        tf.addTarget(self, action: #selector(textFieldDidBeginEditing), for: .touchDown)
+        tf.backgroundColor = UIColor.Theme1.white
         return tf
     }()
     let activePick: UIPickerView = {
@@ -134,9 +144,8 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         return dp
     }()
     
-    let activityItems = ["item1", "item2", "item3"]
+    let activityItems = ActivityType.allCases
 
-    
     // StackView Field
     let mainSV: UIStackView = {
         let sv = UIStackView()
@@ -163,23 +172,21 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         sv.translatesAutoresizingMaskIntoConstraints = false
         return sv
     }()
-    
-    // submitButton
+    //submit button
     let submitBtn: UIButton = {
         let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Submit", for: .normal)
-        button.backgroundColor = .systemBlue
+        button.setTitle("Save", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.textAlignment = .center
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 25)
-        button.widthAnchor.constraint(equalToConstant: 80).isActive = true
-        button.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        button.widthAnchor.constraint(equalToConstant: 90).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 55).isActive = true
+        button.backgroundColor = UIColor.Theme1.green
         button.layer.cornerRadius = 8
         button.addTarget(self, action: #selector(editProfile), for: .touchUpInside)
-//        button.isEnabled = false
-        button.alpha = 0.5
+        button.alpha = 0.8
         return button
     }()
-    
     weak var delegate: EditProfileDelegate?
     
     override func viewWillAppear(_ animated: Bool) {
@@ -217,41 +224,46 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
     func setSVConfig() {
         
         /* scrollView **********/
-        scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30).isActive = true
         scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
         scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
         scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
         
         /* mainSV **********/
         mainSV.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor).isActive = true
-        mainSV.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -50).isActive = true
-        mainSV.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 50).isActive = true
+        mainSV.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -18).isActive = true
+        mainSV.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant:  18).isActive = true
         mainSV.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor).isActive = true
-        
+        mainSV.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 1).isActive = true
+
         mainSV.addArrangedSubview(imageView)
         mainSV.addArrangedSubview(nameSV)
         mainSV.addArrangedSubview(weightSV)
         mainSV.addArrangedSubview(heightSV)
         mainSV.addArrangedSubview(activeSV)
-        mainSV.addArrangedSubview(activePick)
-        mainSV.addArrangedSubview(submitBtn)
+        
+        let sv = UIStackView(arrangedSubviews: [UIView(), submitBtn, UIView()])
+        sv.axis = .horizontal
+        sv.distribution = .equalCentering
+        sv.alignment = .center
+        mainSV.addArrangedSubview(sv)
         mainSV.axis = .vertical
         mainSV.alignment = .fill
-        mainSV.distribution = .equalSpacing
-        mainSV.spacing = 30
+        mainSV.distribution = .fill
+        mainSV.spacing = 18
         
         /* imageView ********/
         imageView.addSubview(profileImage)
         imageView.addSubview(pencilBtn)
-        profileImage.topAnchor.constraint(equalTo: imageView.topAnchor, constant: 20).isActive = true
-        profileImage.bottomAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 0).isActive = true
-        profileImage.centerXAnchor.constraint(equalTo: imageView.centerXAnchor).isActive = true
+        profileImage.topAnchor.constraint(equalTo: imageView.topAnchor, constant: 10).isActive = true
+        profileImage.bottomAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 10).isActive = true
+//        profileImage.centerXAnchor.constraint(equalTo: imageView.centerXAnchor).isActive = true
         pencilBtn.bottomAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: 5).isActive = true
         pencilBtn.trailingAnchor.constraint(equalTo: profileImage.trailingAnchor, constant: 5).isActive = true
-        
         /* nameSV **********/
         nameSV.addArrangedSubview(nameLabel)
         nameSV.addArrangedSubview(nameTxt)
+        nameTxt.heightAnchor.constraint(equalToConstant: heightSeg.bounds.size.height).isActive = true
         nameSV.axis = .horizontal
         nameSV.alignment = .fill
         nameSV.spacing = 10
@@ -260,6 +272,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         weightSV.addArrangedSubview(weightLabel)
         weightSV.addArrangedSubview(weightTxt)
         weightSV.addArrangedSubview(weightSeg)
+        weightSeg.widthAnchor.constraint(equalToConstant: heightSeg.bounds.size.width).isActive = true
         weightSV.axis = .horizontal
         weightSV.alignment = .fill
         weightSV.spacing = 10
@@ -274,8 +287,12 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         
         /* activitySV *********/
         activeSV.addArrangedSubview(activeLabel)
+        activeSV.addArrangedSubview(activePick)
         activeSV.addArrangedSubview(activeText)
+        activeText.heightAnchor.constraint(equalToConstant: heightSeg.bounds.size.height).isActive = true
+        activeSV.heightAnchor.constraint(equalToConstant: 55).isActive = true
         activeSV.axis = .horizontal
+        activeSV.distribution = .fill
         activeSV.alignment = .fill
         activeSV.spacing = 10
         
@@ -289,17 +306,49 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         
     }
     
+    @objc func textFieldDidBeginEditing(_ textField: UITextField) {
+        activePick.isHidden = false
+        activeText.isHidden = true
+    }
+    
     @objc func editProfile() {
         
-        guard let weight = Double(weightTxt.text!), let height = Double(heightTxt.text!) else { return }
+        guard let weight = Double(weightTxt.text!), let height = Double(heightTxt.text!) else {
+            let animation = CABasicAnimation(keyPath: "position")
+            animation.duration = 0.05
+            animation.repeatCount = 4
+            animation.autoreverses = true
+            animation.fromValue = NSValue(cgPoint: CGPoint(x: submitBtn.center.x - 12, y: submitBtn.center.y))
+            animation.toValue = NSValue(cgPoint: CGPoint(x: submitBtn.center.x + 12, y: submitBtn.center.y))
+            submitBtn.layer.add(animation, forKey: "position")
+            return
+        }
         
         defaults.set(nameTxt.text, forKey: "Name")
         defaults.set(weight, forKey: "weight")
         defaults.set(height, forKey: "height")
         defaults.set(activeText.text, forKey: "ActivityType")
-        delegate?.saveProfile()
-        dismiss(animated: true, completion: nil)
         
+        switch weightSeg.selectedSegmentIndex {
+        case 0: defaults.set(Weight.kilogram.rawValue, forKey: "weightUnit")
+        default: defaults.set(Weight.pound.rawValue, forKey: "weightUnit")
+        }
+        switch heightSeg.selectedSegmentIndex {
+        case 0: defaults.set(Height.centimeter.rawValue, forKey: "heightUnit")
+        default: defaults.set(Height.meter.rawValue, forKey: "heightUnit")
+        }
+        UIView.animate(withDuration: 0.10) {
+            self.submitBtn.transform = CGAffineTransform(scaleX: 0.6, y: 0.6)
+        } completion: { (_) in
+            UIView.animate(withDuration: 0.10) {
+                self.submitBtn.transform = CGAffineTransform.identity
+            }
+        }
+        delegate?.saveProfile()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.dismiss(animated: true, completion: nil)
+        }
     }
     
     // scrollView
@@ -334,32 +383,38 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
       scrollView.contentInset = insets
       scrollView.scrollIndicatorInsets = insets
     }
-    
-    
-
 }
 
 extension EditProfileViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
+        var pickerLabel: UILabel? = (view as? UILabel)
+        if pickerLabel == nil {
+            pickerLabel = UILabel()
+            pickerLabel?.font = UIFont.systemFont(ofSize: 18)
+            pickerLabel?.textAlignment = .center
+        }
+        pickerLabel?.text = activityItems[row].rawValue
+        pickerLabel?.textColor = UIColor.Theme1.blue
+
+        return pickerLabel!
+    }
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
-    
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return activityItems.count
     }
-    
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return activityItems[row]
+        return activityItems[row].rawValue
     }
-    
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        activeText.text = activityItems[row]
+        activeText.text = activityItems[row].rawValue
+        activeText.isHidden.toggle()
         UIView.animate(withDuration: 0.3) {
             pickerView.isHidden = true
         }
     }
 }
-
 extension EditProfileViewController: UIScrollViewDelegate {
   func viewForZooming(in scrollView: UIScrollView) -> UIView? {
     return nil

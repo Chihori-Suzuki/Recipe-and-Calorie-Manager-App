@@ -91,6 +91,7 @@ class showProfileViewController: UIViewController, EditProfileDelegate {
     let bmiValLabel: UILabel = {
         let lb = UILabel()
         lb.textColor = UIColor.Theme1.green
+        lb.setContentHuggingPriority(.required, for: .horizontal)
         return lb
     }()
     let cfLabel: UILabel = {
@@ -98,12 +99,13 @@ class showProfileViewController: UIViewController, EditProfileDelegate {
         lb.font = UIFont(name: "ArialRoundedMTBold", size: 17)
         lb.textColor = UIColor.Theme1.black
         lb.adjustsFontSizeToFitWidth = true
-        lb.text = "Classification"
+        lb.text = "Type"
         return lb
     }()
     let cfValLabel: UILabel = {
         let lb = UILabel()
         lb.textColor = UIColor.Theme1.green
+        lb.textAlignment = .right
         return lb
     }()
     let idealWeightLabel: UILabel = {
@@ -125,23 +127,25 @@ class showProfileViewController: UIViewController, EditProfileDelegate {
     let tableView: UITableView = {
         let tv = UITableView()
         tv.translatesAutoresizingMaskIntoConstraints = false
+        tv.layer.cornerRadius = 16
+        tv.clipsToBounds = true
         return tv
     }()
     let cellId = "cellId"
     var sectionTitle: [String] = ["Statistics"]
     var personalData = [Profile]()
-    // editButton
     let editButton: UIButton = {
         let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Edit Profile", for: .normal)
-        button.backgroundColor = .systemBlue
+        button.setTitle("Edit", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.textAlignment = .center
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 25)
-        button.widthAnchor.constraint(equalToConstant: 80).isActive = true
-        button.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        button.widthAnchor.constraint(equalToConstant: 90).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 55).isActive = true
+        button.backgroundColor = UIColor.Theme1.green
         button.layer.cornerRadius = 8
         button.addTarget(self, action: #selector(didTapEditBtn), for: .touchUpInside)
-        button.alpha = 0.5
+        button.alpha = 0.8
         return button
     }()
     override func viewWillAppear(_ animated: Bool) {
@@ -223,16 +227,23 @@ class showProfileViewController: UIViewController, EditProfileDelegate {
         headSV.distribution = .fillProportionally
         headSV.heightAnchor.constraint(equalToConstant: 140).isActive = true
         headSV.spacing = 8
+        let sv = UIStackView(arrangedSubviews: [UIView(), editButton, UIView()])
+        sv.axis = .horizontal
+        sv.distribution = .equalCentering
+        sv.alignment = .center
         //mainSV
         mainSV.addArrangedSubview(headSV)
         mainSV.addArrangedSubview(tableView)
-        mainSV.addArrangedSubview(editButton)
+        mainSV.addArrangedSubview(sv)
         mainSV.axis = .vertical
         mainSV.alignment = .fill
         mainSV.distribution = .fill
         mainSV.spacing = 50
         
-        tableView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.3).isActive = true
+        tableView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.31).isActive = true
+        tableView.backgroundColor = UIColor.Theme1.white
+        tableView.layer.cornerRadius = 12
+        tableView.separatorStyle = .none
     }
     func setPersonalData(){
         // UserDefaults
@@ -250,11 +261,11 @@ class showProfileViewController: UIViewController, EditProfileDelegate {
         let age = ageComponents.year!
         
         nameLabel.text = savedName
-        personalData.append(Profile(palameter: "Age", value: "\(age)"))
-        personalData.append(Profile(palameter: "Gender", value: savedGender))
-        personalData.append(Profile(palameter: "Weight", value: "\(savedWeight)"))
-        personalData.append(Profile(palameter: "height", value: "\(savedHeight)"))
-        personalData.append(Profile(palameter: "ActivityType", value: savedActivity))
+        personalData.append(Profile(parameter: "Age", value: "\(age)"))
+        personalData.append(Profile(parameter: "Gender", value: savedGender))
+        personalData.append(Profile(parameter: "Weight", value: "\(savedWeight)"))
+        personalData.append(Profile(parameter: "Height", value: "\(savedHeight)"))
+        personalData.append(Profile(parameter: "Activity Type", value: savedActivity))
         calculateBmiBmr()
         calculateIdealWeight()
     }
@@ -315,9 +326,18 @@ class showProfileViewController: UIViewController, EditProfileDelegate {
     }
     
     @objc func didTapEditBtn(){
-        let editVC = EditProfileViewController()
-        editVC.delegate = self
-        present(editVC, animated: true)
+        UIView.animate(withDuration: 0.10) {
+            self.editButton.transform = CGAffineTransform(scaleX: 0.6, y: 0.6)
+        } completion: { (_) in
+            UIView.animate(withDuration: 0.10) {
+                self.editButton.transform = CGAffineTransform.identity
+            }
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            let editVC = EditProfileViewController()
+            editVC.delegate = self
+            self.present(editVC, animated: true)
+        }
     }
     @objc func dismissSelf() {
         dismiss(animated: true, completion: nil)
@@ -343,11 +363,11 @@ class showProfileViewController: UIViewController, EditProfileDelegate {
         calculateBmiBmr()
         calculateIdealWeight()
         
-        personalData.append(Profile(palameter: "Age", value: "\(age)"))
-        personalData.append(Profile(palameter: "Gender", value: savedGender))
-        personalData.append(Profile(palameter: "Weight", value: "\(savedWeight)"))
-        personalData.append(Profile(palameter: "height", value: "\(savedHeight)"))
-        personalData.append(Profile(palameter: "ActivityType", value: savedActivity))
+        personalData.append(Profile(parameter: "Age", value: "\(age)"))
+        personalData.append(Profile(parameter: "Gender", value: savedGender))
+        personalData.append(Profile(parameter: "Weight", value: "\(savedWeight)"))
+        personalData.append(Profile(parameter: "Height", value: "\(savedHeight)"))
+        personalData.append(Profile(parameter: "Activity Type", value: savedActivity))
         
         tableView.reloadData()
     }
@@ -444,11 +464,39 @@ extension showProfileViewController: UITableViewDataSource, UITableViewDelegate 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 //        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
         let cell = UITableViewCell(style: .value1, reuseIdentifier: cellId)
-        cell.textLabel?.text = personalData[indexPath.row].palameter
+        cell.textLabel?.text = personalData[indexPath.row].parameter
         cell.detailTextLabel?.text = personalData[indexPath.row].value
+        cell.backgroundColor = #colorLiteral(red: 1, green: 0.9697935916, blue: 0.7963718291, alpha: 1)
+        cell.textLabel?.textColor = UIColor.Theme1.black
+        cell.detailTextLabel?.textColor = UIColor.Theme1.black
+        cell.textLabel?.font = UIFont.systemFont(ofSize: 19, weight: .regular)
+        cell.detailTextLabel?.font = UIFont.systemFont(ofSize: 18, weight: .light)
+        cell.selectionStyle = .none
+        
         return cell
     }
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return sectionTitle[section]
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 45
+    }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 35
+    }
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let myLabel = UILabel()
+        myLabel.frame = CGRect(x: .zero, y: .zero, width: tableView.frame.width, height: 35)
+        myLabel.font = UIFont.boldSystemFont(ofSize: 22)
+        myLabel.text = self.tableView(tableView, titleForHeaderInSection: section)
+        myLabel.textColor = UIColor.Theme1.blue
+        myLabel.layer.cornerRadius = 12
+        
+        let headerView = UIView()
+        headerView.addSubview(myLabel)
+        myLabel.contentMode = .scaleAspectFit
+        
+        return headerView
     }
 }
