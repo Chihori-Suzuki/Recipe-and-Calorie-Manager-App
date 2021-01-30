@@ -30,10 +30,10 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
         delegate = self
         
         let recipeListVC = RecipeListViewController()
-        recipeListVC.tabBarItem = UITabBarItem(title: "Recipe List", image: UIImage(named: "recipeList_tabbar_icon"), tag: 0)
+        recipeListVC.tabBarItem = UITabBarItem(title: "Recipe List", image: recipeListIcon, tag: 0)
         // make a viewController for addRecipe screen
         let addRecipeVC = AddRecipeViewController()
-        addRecipeVC.tabBarItem = UITabBarItem(title: "Add Recipe", image: UIImage(named: "addRecipe_tabbar_icon"), tag: 1)
+        addRecipeVC.tabBarItem = UITabBarItem(title: "Add Recipe", image: addRecipeIcon, tag: 1)
         // make a viewController for profile screen
         var profileVC: UIViewController
         if defaults.object(forKey: "Name") != nil {
@@ -41,7 +41,7 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
         } else {
             profileVC = ProfileViewController()
         }
-        profileVC.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(named: "profile_tabbar_icon"), tag: 2)
+        profileVC.tabBarItem = UITabBarItem(title: "Profile", image: profileIcon ,tag: 2)
         // make a viewController for recipe list screen
         let viewControllers = [recipeListVC, addRecipeVC, profileVC]
         self.viewControllers = viewControllers.map { UINavigationController(rootViewController: $0) }
