@@ -25,19 +25,16 @@ class RecipeListViewController: UIViewController, UITableViewDelegate,UITableVie
         table.dataSource = self
         return table
     }()
-    
     override func viewWillAppear(_ animated: Bool) {
         if let recipeList = Recipe.loadFromList() {
             self.recipeList = recipeList
         }
-        
         let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.Theme1.blue, NSAttributedString.Key.font: UIFont(name: "ArialRoundedMTBold", size: 30)!]
         navigationController?.navigationBar.largeTitleTextAttributes = textAttributes
         navigationController?.navigationBar.prefersLargeTitles = true
         
         myTable.reloadData()
     }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.Theme1.white
@@ -45,7 +42,6 @@ class RecipeListViewController: UIViewController, UITableViewDelegate,UITableVie
         navigationController?.navigationBar.prefersLargeTitles = true
         setupTableView()
     }
-    
     func setupTableView() {
         view.addSubview(myTable)
         myTable.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
@@ -53,17 +49,13 @@ class RecipeListViewController: UIViewController, UITableViewDelegate,UITableVie
         myTable.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
         myTable.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
     }
-    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return Meal.allCases.count
     }
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
         let cell = UITableViewCell(style: .value1, reuseIdentifier: cellId)
         meal = category[indexPath.row]
         cell.textLabel?.text = meal.rawValue
@@ -90,7 +82,6 @@ class RecipeListViewController: UIViewController, UITableViewDelegate,UITableVie
         cell.accessoryType = .disclosureIndicator
         return cell
     }
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let clickedCategory = MenuTotalCalorieDetailListViewController()
@@ -105,8 +96,7 @@ class RecipeListViewController: UIViewController, UITableViewDelegate,UITableVie
         case .snack: Recipe.newSnackCount = 0
         }
     }
-    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 45.0
+        return 55.0
     }
 }

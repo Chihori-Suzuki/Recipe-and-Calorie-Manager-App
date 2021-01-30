@@ -124,7 +124,7 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
         tf.placeholder = "1 tbsp canola oil"
         tf.font = .systemFont(ofSize: 25)
         tf.widthAnchor.constraint(equalToConstant: 270).isActive = true
-        tf.heightAnchor.constraint(equalToConstant: 50).isActive = true
+//        tf.heightAnchor.constraint(equalToConstant: 50).isActive = true
         tf.becomeFirstResponder()
         tf.layer.borderWidth = 0.8
         tf.layer.borderColor = UIColor.Theme1.black.cgColor

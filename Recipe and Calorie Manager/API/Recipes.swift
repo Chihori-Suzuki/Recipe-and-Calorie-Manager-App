@@ -79,7 +79,7 @@ struct Recipe: Codable, Equatable {
       do {
         let decoder = PropertyListDecoder()
         let decodedRecipes = try decoder.decode([Recipe].self, from: recipeData)
-        
+
         return decodedRecipes
       } catch {
         print("Error decoding recipe: \(error)")

@@ -25,12 +25,10 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
         let done = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneEditing))
         return done
     }()
-    
     lazy var editBtn: UIBarButtonItem = {
         let edit = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editTableViewCell))
         return edit
     }()
-    
     lazy var myTable: UITableView = {
         let table = UITableView(frame: view.frame, style: .grouped)
         table.translatesAutoresizingMaskIntoConstraints = false
@@ -40,7 +38,6 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
         table.dataSource = self
         return table
     }()
-    
     override func viewWillAppear(_ animated: Bool) {
         
         if let recipeList = Recipe.loadFromList() {
@@ -60,7 +57,6 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
         navigationController?.navigationBar.largeTitleTextAttributes = textAttributes
         navigationController?.navigationBar.prefersLargeTitles = true
     }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.Theme1.white
@@ -69,17 +65,14 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
         setupTableView()
         navigationController?.navigationBar.tintColor = UIColor.Theme1.blue
     }
-    
     @objc func editTableViewCell() {
         myTable.setEditing(true, animated: true)
         navigationItem.rightBarButtonItem = doneBtn
     }
-    
     @objc func doneEditing() {
         myTable.setEditing(false, animated: true)
         navigationItem.rightBarButtonItem = editBtn
     }
-    
     func setupTableView() {
         view.addSubview(myTable)
         myTable.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
@@ -87,11 +80,9 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
         myTable.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20).isActive = true
         myTable.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -5).isActive = true
     }
-    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let selectCategory = selectedCategory else { return 0 }
         
@@ -106,7 +97,6 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
             return snackMeals.count
         }
     }
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: MenuTotalCalorieDetailTableViewCell.identifier, for: indexPath) as! MenuTotalCalorieDetailTableViewCell
         
@@ -141,11 +131,9 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
         
         return cell
     }
-    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 55.0
     }
-    
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             guard let selectedCategory = selectedCategory else { return }
@@ -174,7 +162,6 @@ class MenuTotalCalorieDetailListViewController: UIViewController, UITableViewDel
             Recipe.saveToList(recipes: recipeList)
         }
     }
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         guard let selectedCategory = selectedCategory else { return }

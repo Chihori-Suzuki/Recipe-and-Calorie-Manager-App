@@ -64,7 +64,7 @@ extension MainTabBarController {
         let appearance = tabBar.standardAppearance
         appearance.shadowImage = nil
         appearance.shadowColor = nil
-        if item.image == UIImage(named: "user") {
+        if item.image == UIImage(named: "user") && defaults.object(forKey: "Name") == nil {
             appearance.backgroundColor = #colorLiteral(red: 1, green: 0.9697935916, blue: 0.7963718291, alpha: 1)
         } else {
             appearance.backgroundColor = UIColor.Theme1.white

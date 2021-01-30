@@ -2,7 +2,7 @@
 //  AddRecipeViewController.swift
 //  Recipe and Calorie Manager
 //
-//  Created by Kazunobu Someya on 2021-01-19.
+//  Created by Gil Jetomo on 2021-01-19.
 //
 
 import UIKit
@@ -138,7 +138,6 @@ class AddRecipeViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         
         if let savedRecipe = Recipe.loadFromDraft() {
-            print(savedRecipe)
             let draftVC = AddIngredientsViewController()
             draftVC.recipeTitle = savedRecipe.title
             draftVC.meal = savedRecipe.meal
