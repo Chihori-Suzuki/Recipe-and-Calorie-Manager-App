@@ -10,9 +10,9 @@ import UIKit
 class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
     // UserDefaults
     let defaults = UserDefaults.standard
-    let recipeListIcon = UIImage(named: "recipeList_tabbar_icon")
-    let addRecipeIcon = UIImage(named: "addRecipe_tabbar_icon")
-    let profileIcon = UIImage(named: "profile_tabbar_icon")
+    let recipeListIcon = UIImage(named: "list")
+    let addRecipeIcon = UIImage(named: "add")
+    let profileIcon = UIImage(named: "user")
     private var bounceAnimation: CAKeyframeAnimation = {
         let bounceAnimation = CAKeyframeAnimation(keyPath: "transform.scale")
         bounceAnimation.values = [1.0, 1.4, 0.9, 1.02, 1.0]
@@ -30,10 +30,10 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
         delegate = self
         
         let recipeListVC = RecipeListViewController()
-        recipeListVC.tabBarItem = UITabBarItem(title: "Recipe List", image: recipeListIcon, tag: 0)
+        recipeListVC.tabBarItem = UITabBarItem(title: nil, image: recipeListIcon, tag: 0)
         // make a viewController for addRecipe screen
         let addRecipeVC = AddRecipeViewController()
-        addRecipeVC.tabBarItem = UITabBarItem(title: "Add Recipe", image: addRecipeIcon, tag: 1)
+        addRecipeVC.tabBarItem = UITabBarItem(title: nil, image: addRecipeIcon, tag: 1)
         // make a viewController for profile screen
         var profileVC: UIViewController
         if defaults.object(forKey: "Name") != nil {
@@ -41,17 +41,17 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate {
         } else {
             profileVC = ProfileViewController()
         }
-        profileVC.tabBarItem = UITabBarItem(title: "Profile", image: profileIcon ,tag: 2)
+        profileVC.tabBarItem = UITabBarItem(title: nil, image: profileIcon ,tag: 2)
         // make a viewController for recipe list screen
         let viewControllers = [recipeListVC, addRecipeVC, profileVC]
         self.viewControllers = viewControllers.map { UINavigationController(rootViewController: $0) }
-        tabBar.tintColor = .black
+        tabBar.tintColor = UIColor.Theme1.orange
         self.selectedIndex = 1
         
         let appearance = tabBar.standardAppearance
-        appearance.configureWithOpaqueBackground()
         appearance.shadowImage = nil
-        appearance.shadowColor = UIColor.Theme1.white
+        appearance.shadowColor = nil
+        appearance.backgroundColor = UIColor.Theme1.white
         tabBar.standardAppearance = appearance
     }
 }
@@ -60,11 +60,20 @@ extension MainTabBarController {
     override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
         Recipe.newRecipeCount = 0
         item.badgeValue = nil
-        
+    
+        let appearance = tabBar.standardAppearance
+        appearance.shadowImage = nil
+        appearance.shadowColor = nil
+        if item.image == UIImage(named: "user") && defaults.object(forKey: "Name") == nil {
+            appearance.backgroundColor = #colorLiteral(red: 1, green: 0.9697935916, blue: 0.7963718291, alpha: 1)
+        } else {
+            appearance.backgroundColor = UIColor.Theme1.white
+        }
+        tabBar.standardAppearance = appearance
         guard let idx = tabBar.items?.firstIndex(of: item), tabBar.subviews.count > idx + 1, let imageView = tabBar.subviews[idx + 1].subviews.compactMap({ $0 as? UIImageView }).first else {
             return
         }
         imageView.layer.add(bounceAnimation, forKey: nil)
-        tabBar.tintColor = .red
+        tabBar.tintColor = UIColor.Theme1.orange
     }
 }

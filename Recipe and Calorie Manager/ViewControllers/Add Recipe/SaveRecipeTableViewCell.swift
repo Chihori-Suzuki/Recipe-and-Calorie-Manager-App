@@ -11,16 +11,13 @@ protocol SaveRecipeTableViewCellDelegate: class {
     func save() -> Bool
     func discardRecipe()
 }
-
 class SaveRecipeTableViewCell: UITableViewCell {
-    
     static let identifier = "saveRecipe"
     var mealType: Meal?
     weak var delegate: SaveRecipeTableViewCellDelegate?
     
     lazy var saveButton: UIButton = {
         let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Save", for: .normal)
         button.setTitleColor(UIColor.Theme1.black, for: .normal)
         button.titleLabel?.textAlignment = .center
@@ -33,10 +30,8 @@ class SaveRecipeTableViewCell: UITableViewCell {
         button.isHidden = true
         return button
     }()
-    
     lazy var discardButton: UIButton = {
         let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Discard", for: .normal)
         button.setTitleColor(UIColor.Theme1.white, for: .normal)
         button.titleLabel?.textAlignment = .center
@@ -49,7 +44,6 @@ class SaveRecipeTableViewCell: UITableViewCell {
         button.isHidden = true
         return button
     }()
-    
     lazy var hStackView: UIStackView = {
         let sv = UIStackView(arrangedSubviews: [discardButton, UIView(), saveButton])
         sv.axis = .horizontal
@@ -59,7 +53,6 @@ class SaveRecipeTableViewCell: UITableViewCell {
         sv.translatesAutoresizingMaskIntoConstraints = false
         return sv
     }()
-    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         

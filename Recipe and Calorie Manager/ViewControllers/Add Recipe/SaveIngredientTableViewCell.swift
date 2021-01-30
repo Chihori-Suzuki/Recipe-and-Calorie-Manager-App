@@ -27,7 +27,7 @@ class SaveIngredientTableViewCell: UITableViewCell {
         button.titleLabel?.textAlignment = .center
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 22)
         button.widthAnchor.constraint(equalToConstant: 85).isActive = true
-        button.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 50).isActive = true
         button.backgroundColor = #colorLiteral(red: 0.6553853061, green: 0.8888800762, blue: 0.3222138089, alpha: 1)
         button.layer.cornerRadius = 8
         button.addTarget(self, action: #selector(saveIngredient(_:)), for: .touchUpInside)
@@ -42,7 +42,7 @@ class SaveIngredientTableViewCell: UITableViewCell {
         button.titleLabel?.textAlignment = .center
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 22)
         button.widthAnchor.constraint(equalToConstant: 85).isActive = true
-        button.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 50).isActive = true
         button.backgroundColor = UIColor.Theme1.orange
         button.layer.cornerRadius = 8
         button.addTarget(self, action: #selector(discardRecipe(_:)), for: .touchUpInside)

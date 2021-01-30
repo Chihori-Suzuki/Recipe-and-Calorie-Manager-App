@@ -22,6 +22,15 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
         recipes.append(newRecipe)
         Recipe.saveToList(recipes: recipes)
         
+        if let meal = meal {
+            switch meal {
+            case .breakfast: Recipe.newBreakfastCount += 1
+            case .lunch: Recipe.newLunchCount += 1
+            case .dinner: Recipe.newDinnerCount += 1
+            case .snack: Recipe.newSnackCount += 1
+            }
+        }
+        
         if let tabItem = tabBarController?.tabBar.items {
             Recipe.newRecipeCount += 1
             tabItem[0].badgeValue = String(Recipe.newRecipeCount)
@@ -70,7 +79,6 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
             Recipe.saveToDraft(recipe: recipe!)
         }
     }
-    
     var selectedRowForEdit: IndexPath?
     var recipes: [Recipe] = []
     var duplicateFound = false
@@ -116,7 +124,7 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
         tf.placeholder = "1 tbsp canola oil"
         tf.font = .systemFont(ofSize: 25)
         tf.widthAnchor.constraint(equalToConstant: 270).isActive = true
-        tf.heightAnchor.constraint(equalToConstant: 50).isActive = true
+//        tf.heightAnchor.constraint(equalToConstant: 50).isActive = true
         tf.becomeFirstResponder()
         tf.layer.borderWidth = 0.8
         tf.layer.borderColor = UIColor.Theme1.black.cgColor
@@ -286,12 +294,7 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
     }
     @objc func cancelButtonTapped() {
         navigationController?.popViewController(animated: true)
-        
-        guard let _ = isViewFromRecipeList else {
-            if let _ = Recipe.loadFromDraft() { Recipe.deleteDraft() }
-            return
-        }
-        if recipe == recipeFromList { Recipe.deleteDraft() }
+        if let _ = Recipe.loadFromDraft() { Recipe.deleteDraft() }
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -334,7 +337,6 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
     fileprivate func updateTableView(with serving: String, and ingredient: Dataset) {
         DispatchQueue.main.async { [self] in
             if ingredient.items.count > 0 {
-                
                 ingredients.insert(Ingredient(serving: serving, nutrition: ingredient.items[0]), at: 0)
                 UIView.animate(withDuration: 0.9) {
                     totalsStackViews.isHidden ? totalsStackViews.isHidden.toggle() : nil
