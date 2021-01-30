@@ -200,6 +200,9 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         navigationController?.navigationBar.largeTitleTextAttributes = textAttributes
         navigationController?.navigationBar.prefersLargeTitles = true
     }
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        return false
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = #colorLiteral(red: 1, green: 0.9697935916, blue: 0.7963718291, alpha: 1)
@@ -321,7 +324,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         let stringFromDate: String = dateFormater.string(from: self.birthPick.date) as String
         let birthDate: Date = dateFormater.date(from: stringFromDate)!
         
-        guard let weight = Double(weightTxt.text!), let height = Double(heightTxt.text!) else {
+        guard let weight = Double(weightTxt.text!), let height = Double(heightTxt.text!), let text = activeText.text, text.count > 0 else {
             let animation = CABasicAnimation(keyPath: "position")
             animation.duration = 0.05
             animation.repeatCount = 4
