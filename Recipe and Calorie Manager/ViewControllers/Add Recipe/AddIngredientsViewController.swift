@@ -307,6 +307,12 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
         title = recipeTitle
         setupStackViews()
         setupTableView()
+        
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard(_:)))
+        view.addGestureRecognizer(gestureRecognizer)
+    }
+    @objc func dismissKeyboard(_ sender: UITapGestureRecognizer) {
+        view.endEditing(true)
     }
     @objc func addNewIngredient() {
         UIView.animate(withDuration: 0.10) {

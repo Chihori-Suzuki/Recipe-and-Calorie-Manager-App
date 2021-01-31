@@ -10,15 +10,15 @@ import UIKit
 class AddRecipeViewController: UIViewController {
     lazy var recipeTextField: UITextField = {
         let tf = UITextField()
-        tf.placeholder = "Chicken Adobo       "
+        tf.placeholder = "Chicken Adobo"
         tf.font = .systemFont(ofSize: 23)
-        tf.becomeFirstResponder()
         tf.layer.cornerRadius = 8
         tf.widthAnchor.constraint(equalToConstant: 255).isActive = true
         tf.backgroundColor = .white
         tf.textColor = UIColor.Theme1.brown
         return tf
     }()
+    let scrollView = UIScrollView()
     private var meals = Meal.allCases
     private var breakfastButton = UIButton()
     private var snackButton = UIButton()
@@ -128,12 +128,28 @@ class AddRecipeViewController: UIViewController {
             mealLabels.append(label)
         }
         let vMealStackView = arrangeHStackViews(with: [breakfastButton, lunchButton, snackButton, dinnerButton], and: mealLabels)
-        vStackView.addArrangedSubview(recipeTextField)
         
+        vStackView.addArrangedSubview(UIView())
+        vStackView.addArrangedSubview(UIView())
+        vStackView.addArrangedSubview(UIView())
+        vStackView.addArrangedSubview(UIView())
+        vStackView.addArrangedSubview(recipeTextField)
         vStackView.addArrangedSubview(vMealStackView)
-        view.addSubview(vStackView)
-        vStackView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor).isActive = true
-        vStackView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
+        vStackView.addArrangedSubview(UIView())
+        
+        view.addSubview(scrollView)
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
+        scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -100).isActive = true
+        scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 18).isActive = true
+        scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -18).isActive = true
+        
+        scrollView.addSubview(vStackView)
+        vStackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 1).isActive = true
+        vStackView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor).isActive = true
+        vStackView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor).isActive = true
+        vStackView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor).isActive = true
+        vStackView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor).isActive = true
     }
     override func viewWillAppear(_ animated: Bool) {
         
@@ -144,10 +160,10 @@ class AddRecipeViewController: UIViewController {
             draftVC.ingredients = savedRecipe.ingredients
             navigationController?.pushViewController(draftVC, animated: false)
         } else {
-        
-        let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.Theme1.blue, NSAttributedString.Key.font: UIFont(name: "ArialRoundedMTBold", size: 30)!]
-        navigationController?.navigationBar.largeTitleTextAttributes = textAttributes
-        navigationController?.navigationBar.prefersLargeTitles = true
+            
+            let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.Theme1.blue, NSAttributedString.Key.font: UIFont(name: "ArialRoundedMTBold", size: 30)!]
+            navigationController?.navigationBar.largeTitleTextAttributes = textAttributes
+            navigationController?.navigationBar.prefersLargeTitles = true
         }
     }
     override func viewDidLoad() {
@@ -155,10 +171,35 @@ class AddRecipeViewController: UIViewController {
         navigationItem.title = "Add New Recipe"
         navigationItem.hidesBackButton = true
         view.backgroundColor = UIColor.Theme1.white
-        
         setupLayout()
+        
+        registerForKeyboardNotification()
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard(_:)))
+        view.addGestureRecognizer(gestureRecognizer)
     }
     override func viewWillDisappear(_ animated: Bool) {
         recipeTextField.text?.removeAll()
+    }
+    //scrollability
+    @objc func dismissKeyboard(_ sender: UITapGestureRecognizer) {
+        view.endEditing(true)
+    }
+    fileprivate func registerForKeyboardNotification() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWasShown(_:)), name: UIResponder.keyboardDidShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillBeHidden(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    @objc func keyboardWasShown(_ notification: NSNotification) {
+        guard let info = notification.userInfo, let keyboardFrameValue = info[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
+        
+        let keyboardFrame = keyboardFrameValue.cgRectValue
+        let keyboardHeight = keyboardFrame.size.height
+        let insets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight * 1.28, right: 0)
+        scrollView.contentInset = insets
+        scrollView.scrollIndicatorInsets = insets
+    }
+    @objc func keyboardWillBeHidden(_ notification: NSNotification) {
+        let insets = UIEdgeInsets.zero
+        scrollView.contentInset = insets
+        scrollView.scrollIndicatorInsets = insets
     }
 }
