@@ -22,7 +22,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
     let imageView: UIView = {
         let view = UIView()
         view.heightAnchor.constraint(equalToConstant: 250).isActive = true
-        view.backgroundColor = .cyan
+//        view.backgroundColor = .cyan
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -34,8 +34,8 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         iv.layer.masksToBounds = false
         iv.layer.cornerRadius = iv.frame.height/2
         iv.clipsToBounds = true
-        iv.widthAnchor.constraint(equalToConstant: 250).isActive = true
-        iv.heightAnchor.constraint(equalToConstant: 250).isActive = true
+        iv.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        iv.heightAnchor.constraint(equalToConstant: 50).isActive = true
         iv.translatesAutoresizingMaskIntoConstraints = true
         return iv
     }()
@@ -208,6 +208,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         navigationController?.navigationBar.prefersLargeTitles = true
 
         view.addSubview(scrollView)
+        scrollView.addSubview(imageView)
         scrollView.addSubview(mainSV)
         setSVConfig()
         setProfile()
@@ -227,29 +228,35 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
     
     func setSVConfig() {
         
+        let sv = UIStackView(arrangedSubviews: [UIView(), submitBtn, UIView()])
+        sv.axis = .horizontal
+        sv.distribution = .equalCentering
+        sv.alignment = .center
+        
         /* scrollView **********/
         scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30).isActive = true
         scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
         scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
         scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
         
+        /* imageView **********/
+        imageView.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
+        imageView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 1).isActive = true
+        imageView.heightAnchor.constraint(equalTo: scrollView.heightAnchor, multiplier: 0.3).isActive = true
+        
         /* mainSV **********/
-        mainSV.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor).isActive = true
+        mainSV.topAnchor.constraint(equalTo: imageView.bottomAnchor).isActive = true
         mainSV.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -18).isActive = true
         mainSV.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant:  18).isActive = true
         mainSV.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor).isActive = true
-        mainSV.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 1).isActive = true
+//        mainSV.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 1).isActive = true
 
-        mainSV.addArrangedSubview(imageView)
+//        mainSV.addArrangedSubview(imageView)
         mainSV.addArrangedSubview(nameSV)
         mainSV.addArrangedSubview(weightSV)
         mainSV.addArrangedSubview(heightSV)
         mainSV.addArrangedSubview(activeSV)
         
-        let sv = UIStackView(arrangedSubviews: [UIView(), submitBtn, UIView()])
-        sv.axis = .horizontal
-        sv.distribution = .equalCentering
-        sv.alignment = .center
         mainSV.addArrangedSubview(sv)
         mainSV.axis = .vertical
         mainSV.alignment = .fill
@@ -259,9 +266,11 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         /* imageView ********/
         imageView.addSubview(profileImage)
         imageView.addSubview(pencilBtn)
-        profileImage.topAnchor.constraint(equalTo: imageView.topAnchor, constant: 10).isActive = true
-        profileImage.bottomAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 10).isActive = true
-//        profileImage.centerXAnchor.constraint(equalTo: imageView.centerXAnchor).isActive = true
+//        profileImage.topAnchor.constraint(equalTo: imageView.topAnchor, constant: 10).isActive = true
+//        profileImage.bottomAnchor.constraint(equalTo: imageView.bottomAnchor, constant: -10).isActive = true
+        profileImage.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor).isActive = true
+        profileImage.centerYAnchor.constraint(equalTo: imageView.centerYAnchor).isActive = true
+        
         pencilBtn.bottomAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: 5).isActive = true
         pencilBtn.trailingAnchor.constraint(equalTo: profileImage.trailingAnchor, constant: 5).isActive = true
         /* nameSV **********/
