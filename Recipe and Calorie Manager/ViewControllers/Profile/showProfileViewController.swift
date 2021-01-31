@@ -225,7 +225,7 @@ class showProfileViewController: UIViewController, EditProfileDelegate {
         nameSV.axis = .vertical
         nameSV.alignment = .fill
         nameSV.distribution = .fillProportionally
-        nameSV.spacing = 8
+        nameSV.spacing = 5
         /* headSV **********/
         headSV.addArrangedSubview(profileImage)
         headSV.addArrangedSubview(nameSV)
