@@ -85,14 +85,7 @@ class EditIngredientViewController: UIViewController, saveIngredientButtonTapped
         tv.translatesAutoresizingMaskIntoConstraints = false
         return tv
     }()
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = UIColor.Theme1.white
-        
-        ingredientTextField.text = ingredient?.serving
-        if let meal = meal?.rawValue {
-            updateButton.setImage(UIImage(named: meal), for: .normal)
-        }
+    fileprivate func setupLayout() {
         view.addSubview(hStackView)
         hStackView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
         hStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20).isActive = true
@@ -107,6 +100,21 @@ class EditIngredientViewController: UIViewController, saveIngredientButtonTapped
         tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0).isActive = true
         tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0).isActive = true
         tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
+    }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = UIColor.Theme1.white
+        
+        ingredientTextField.text = ingredient?.serving
+        if let meal = meal?.rawValue {
+            updateButton.setImage(UIImage(named: meal), for: .normal)
+        }
+        setupLayout()
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard(_:)))
+        view.addGestureRecognizer(gestureRecognizer)
+    }
+    @objc func dismissKeyboard(_ sender: UITapGestureRecognizer) {
+        view.endEditing(true)
     }
     @objc func updateIngredient(_ sender: UIButton) {
         UIView.animate(withDuration: 0.10) {
