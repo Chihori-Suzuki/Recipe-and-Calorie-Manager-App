@@ -24,8 +24,8 @@ class showProfileViewController: UIViewController, EditProfileDelegate {
         iv.layer.masksToBounds = false
         iv.layer.cornerRadius = iv.frame.height/2
         iv.clipsToBounds = true
-        iv.widthAnchor.constraint(equalToConstant: 120).isActive = true
-        iv.heightAnchor.constraint(equalToConstant: 120).isActive = true
+        iv.widthAnchor.constraint(equalToConstant: 125).isActive = true
+        iv.heightAnchor.constraint(equalToConstant: 125).isActive = true
         return iv
     }()
     // stack View
@@ -184,8 +184,8 @@ class showProfileViewController: UIViewController, EditProfileDelegate {
         scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
         /* mainSV **********/
         mainSV.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor).isActive = true
-        mainSV.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -30).isActive = true
-        mainSV.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 30).isActive = true
+        mainSV.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20).isActive = true
+        mainSV.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20).isActive = true
         mainSV.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor).isActive = true
         
         /* bmrSV **********/
@@ -231,8 +231,8 @@ class showProfileViewController: UIViewController, EditProfileDelegate {
         headSV.addArrangedSubview(nameSV)
         headSV.axis = .horizontal
         headSV.alignment = .fill
-        headSV.distribution = .fillProportionally
-        headSV.heightAnchor.constraint(equalToConstant: 140).isActive = true
+        headSV.distribution = .fill
+//        headSV.heightAnchor.constraint(equalToConstant: 140).isActive = true
         headSV.spacing = 8
         let sv = UIStackView(arrangedSubviews: [UIView(), editButton, UIView()])
         sv.axis = .horizontal
