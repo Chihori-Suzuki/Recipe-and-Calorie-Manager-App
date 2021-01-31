@@ -303,29 +303,27 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
     }
     
     func setProfile() {
-        
-        // let savedImagee = UIImage(contentsOfFile: savedImageURL)
-        
         // set the image user chose
-        if let data = profileImage.image?.pngData() {
-            //Create URL of the place picture is saved
-            let document = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-            let url = document.appendingPathComponent("profile.png")
-            let urlString = url.absoluteString
-            
-            do{
-                try data.write(to: url)
-                defaults.set(urlString, forKey: "Image")
-                
-            } catch {
-                print("error")
-            }
-        }
+
+        let savedImageURL = defaults.object(forKey: "Image") as? String ?? String()
+        let savedImage: UIImage = getImageByUrl(url: savedImageURL)
+        profileImage.image = savedImage
         nameTxt.text = defaults.object(forKey: "Name") as? String ?? String()
         weightTxt.text = "\(defaults.double(forKey: "weight"))"
         heightTxt.text = "\(defaults.double(forKey: "height"))"
         activeText.text = defaults.object(forKey: "ActivityType") as? String ?? String()
         
+    }
+    // get image by url
+    func getImageByUrl(url: String) -> UIImage{
+        let url = URL(string: url)
+        do {
+            let data = try Data(contentsOf: url!)
+            return UIImage(data: data)!
+        } catch let err {
+            print("Error : \(err.localizedDescription)")
+        }
+        return UIImage()
     }
     
     // Access to Camera roll
@@ -358,6 +356,23 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
             animation.toValue = NSValue(cgPoint: CGPoint(x: submitBtn.center.x + 12, y: submitBtn.center.y))
             submitBtn.layer.add(animation, forKey: "position")
             return
+        }
+        
+        
+        // set the image user chose
+        if let data = profileImage.image?.pngData() {
+            //Create URL of the place picture is saved
+            let document = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            let url = document.appendingPathComponent("profile.png")
+            let urlString = url.absoluteString
+            
+            do{
+                try data.write(to: url)
+                defaults.set(urlString, forKey: "Image")
+                
+            } catch {
+                print("error")
+            }
         }
         
         defaults.set(nameTxt.text, forKey: "Name")
@@ -457,7 +472,6 @@ extension EditProfileViewController: UIScrollViewDelegate {
   }
 }
 
-// 1/28 ------------------------------------------------------------------------------
 extension EditProfileViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     // 写真を選んだ後に呼ばれる処理
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
@@ -466,7 +480,6 @@ extension EditProfileViewController: UIImagePickerControllerDelegate, UINavigati
         // ビューに表示する
         profileImage.image = image
         
-
         // 写真を選ぶビューを引っ込める
         self.dismiss(animated: true)
     }

@@ -282,8 +282,7 @@ class showProfileViewController: UIViewController, EditProfileDelegate {
         let ageComponents = calendar.components(.year, from: savedBirth, to: now as Date, options: [])
         let age = ageComponents.year!
         
-//        print(savedImageURL)
-//        let savedImagee = UIImage(contentsOfFile: savedImageURL)
+        print(savedImageURL)
         let savedImage: UIImage = getImageByUrl(url: savedImageURL)
         profileImage.image = savedImage
         nameLabel.text = savedName
@@ -371,6 +370,7 @@ class showProfileViewController: UIViewController, EditProfileDelegate {
     func saveProfile() {
         // UserDefaults
         let defaults = UserDefaults.standard
+        let savedImageURL = defaults.object(forKey: "Image") as? String ?? String()
         let savedName = defaults.object(forKey: "Name") as? String ?? String()
         let savedBirth = defaults.object(forKey: "Birthday") as? Date ?? Date()
         let savedGender = defaults.object(forKey: "Gender") as? String ?? String()
@@ -383,8 +383,11 @@ class showProfileViewController: UIViewController, EditProfileDelegate {
         let ageComponents = calendar.components(.year, from: savedBirth, to: now as Date, options: [])
         let age = ageComponents.year!
         
+        let savedImage: UIImage = getImageByUrl(url: savedImageURL)
+        
         personalData.removeAll()
         
+        profileImage.image = savedImage
         nameLabel.text = savedName
         calculateBmiBmr()
         calculateIdealWeight()
