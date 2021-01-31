@@ -338,8 +338,6 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         let defaults = UserDefaults.standard
      
         // set the data for userDefault
-//----------------------------------
-//        defaults.set(urlString, forKey: "Image")
         defaults.set(nameTxt.text, forKey: "Name")
         defaults.set(birthDate, forKey: "Birthday")
         defaults.set(genderSeg.titleForSegment(at: genderSeg.selectedSegmentIndex), forKey: "Gender")
