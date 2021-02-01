@@ -124,7 +124,7 @@ class EditProfileViewController: UIViewController, UITextFieldDelegate {
         tf.textColor = UIColor.Theme1.brown
         tf.font = .systemFont(ofSize: 20)
         tf.layer.cornerRadius = 8
-        tf.addTarget(self, action: #selector(textFieldDidBeginEditing), for: .touchDown)
+      //  tf.addTarget(self, action: #selector(textFieldDidBeginEditing), for: .touchDown)
         tf.backgroundColor = UIColor.Theme1.white
         return tf
     }()

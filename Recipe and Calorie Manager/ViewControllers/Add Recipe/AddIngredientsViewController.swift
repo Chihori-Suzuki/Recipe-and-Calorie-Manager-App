@@ -120,17 +120,14 @@ class AddIngredientsViewController: UIViewController, EditIngredientVCDelegate, 
     var fiberTotalCountLabel = AnimatedLabelTotals()
     let ingredientTextField: UITextField = {
         let tf = UITextField()
-        tf.borderStyle = .roundedRect
         tf.placeholder = "1 tbsp canola oil"
         tf.font = .systemFont(ofSize: 25)
         tf.widthAnchor.constraint(equalToConstant: 270).isActive = true
-//        tf.heightAnchor.constraint(equalToConstant: 50).isActive = true
         tf.becomeFirstResponder()
-        tf.layer.borderWidth = 0.8
         tf.layer.borderColor = UIColor.Theme1.black.cgColor
         tf.textColor = UIColor.Theme1.brown
         tf.backgroundColor = .white
-        tf.layer.cornerRadius = 8
+        tf.layer.cornerRadius = 12
         tf.addTarget(self, action: #selector(textEditingChanged(_:)), for: .editingChanged)
         return tf
     }()
