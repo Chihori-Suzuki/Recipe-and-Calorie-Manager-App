@@ -39,7 +39,7 @@ class NutritionFactsTableViewCell: UITableViewCell {
           ("Total Sugars", false, totalSugarLabel, UILabel()),
           ("Fiber", false, totalFiberLabel, UILabel()),
           ("Protein", true, totalProteinLabel, totalProteinDV),
-          ("Potassium", false, totalPotassiumLabel, totalPotassiumDV)]
+          ("Potassium", true, totalPotassiumLabel, totalPotassiumDV)]
     
     fileprivate func setupLayout() {
         let amountPerServingLabel = UILabel()

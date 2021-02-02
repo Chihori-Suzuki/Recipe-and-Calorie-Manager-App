@@ -410,7 +410,7 @@ extension AddIngredientsViewController: UITableViewDelegate, UITableViewDataSour
             let cell = tableView.dequeueReusableCell(withIdentifier: IngredientTableViewCell.identifier, for: indexPath) as! IngredientTableViewCell
             cell.update(with: ingredient)
             cell.layer.borderColor = UIColor.Theme1.black.cgColor
-            cell.layer.borderWidth = 0.5
+            cell.layer.borderWidth = 0.3
             cell.accessoryType = .detailButton
             cell.selectionStyle = .none
             return cell
