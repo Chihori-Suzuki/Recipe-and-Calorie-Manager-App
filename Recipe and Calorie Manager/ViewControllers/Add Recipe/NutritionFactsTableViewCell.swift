@@ -149,23 +149,23 @@ class NutritionFactsTableViewCell: UITableViewCell {
         
         let totalSodium = ingredients.map { $0.nutrition.sodium }.reduce(0){ $0 + $1 }
         totalSodiumLabel.text = String(format: "%.2f mg", totalSodium)
-        totalSodiumDV.text = (String(format: "%.2f", (totalSodium/DailyValue.totalFat.rawValue)*100)+" %")
+        totalSodiumDV.text = (String(format: "%.2f", (totalSodium/DailyValue.sodium.rawValue)*100)+" %")
 
         let totalCarbs = ingredients.map { $0.nutrition.carbohydrates }.reduce(0){ $0 + $1 }
         totalCarbsLabel.text = String(format: "%.2f g", totalCarbs)
-        totalCarbsDV.text = (String(format: "%.2f", (totalCarbs/DailyValue.totalFat.rawValue)*100)+" %")
+        totalCarbsDV.text = (String(format: "%.2f", (totalCarbs/DailyValue.totalCarbs.rawValue)*100)+" %")
 
         let totalProtein = ingredients.map { $0.nutrition.protein }.reduce(0){ $0 + $1 }
         totalProteinLabel.text = String(format: "%.2f g", totalProtein)
-        totalProteinDV.text = (String(format: "%.2f", (totalProtein/DailyValue.totalFat.rawValue)*100)+" %")
+        totalProteinDV.text = (String(format: "%.2f", (totalProtein/DailyValue.protein.rawValue)*100)+" %")
 
         let totalPotassium = ingredients.map { $0.nutrition.potassium }.reduce(0){ $0 + $1 }
         totalPotassiumLabel.text = String(format: "%.2f mg", totalPotassium)
-        totalPotassiumDV.text = (String(format: "%.2f", (totalPotassium/DailyValue.totalFat.rawValue)*100)+" %")
+        totalPotassiumDV.text = (String(format: "%.2f", (totalPotassium/DailyValue.potassium.rawValue)*100)+" %")
 
         let totalSatFat = ingredients.map { $0.nutrition.fat }.reduce(0){ $0 + $1 }
         totalSatFatLabel.text = String(format: "%.2f g", totalSatFat)
-        totalSatFatDV.text = (String(format: "%.2f", (totalSatFat/DailyValue.totalFat.rawValue)*100)+" %")
+        totalSatFatDV.text = (String(format: "%.2f", (totalSatFat/DailyValue.satFat.rawValue)*100)+" %")
         
         let totalServingSize = ingredients.map { $0.nutrition.serving }.reduce(0){ $0 + $1 }
         totalServingLabel.text = String(format: "%.2f g", totalServingSize)
