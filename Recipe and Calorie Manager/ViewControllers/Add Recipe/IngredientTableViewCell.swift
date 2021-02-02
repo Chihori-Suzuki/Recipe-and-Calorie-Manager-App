@@ -13,8 +13,9 @@ class IngredientTableViewCell: UITableViewCell {
     
     let ingredientLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 21)
+        label.font = UIFont.systemFont(ofSize: 18)
         label.numberOfLines = 0
+        label.adjustsFontSizeToFitWidth = true
         label.textColor = UIColor.Theme1.black
         return label
     }()
@@ -53,7 +54,8 @@ class IngredientTableViewCell: UITableViewCell {
         sv.translatesAutoresizingMaskIntoConstraints = false
         sv.axis = .horizontal
         sv.distribution = .fill
-        sv.alignment = .fill
+        sv.alignment = .center
+        sv.spacing = 0
         return sv
         
     }()
