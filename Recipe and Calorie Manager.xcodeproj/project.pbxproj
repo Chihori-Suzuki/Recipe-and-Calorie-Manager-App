@@ -61,6 +61,7 @@
 		FA0EB5D025B759950085BCE7 /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		FA0EB5D825B75F360085BCE7 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; wrapsLines = 1; };
 		FA0EB5DB25B75F5C0085BCE7 /* AddRecipeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddRecipeViewController.swift; sourceTree = "<group>"; };
+		FA43E6D625C9D9E000992612 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		FAA2FBF425BDE4FA00CD300F /* MenuTotalCalorieDetailTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuTotalCalorieDetailTableViewCell.swift; sourceTree = "<group>"; };
 		FAAA842E25BF361800DFFBEB /* RecipeListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipeListViewController.swift; sourceTree = "<group>"; };
 		FAAA843125BF362300DFFBEB /* MenuTotalCalorieDetailListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuTotalCalorieDetailListViewController.swift; sourceTree = "<group>"; };
@@ -105,6 +106,7 @@
 				526B350A25B6430E00BAE8D9 /* Assets.xcassets */,
 				526B350C25B6430E00BAE8D9 /* LaunchScreen.storyboard */,
 				526B350F25B6430E00BAE8D9 /* Info.plist */,
+				FA43E6D625C9D9E000992612 /* README.md */,
 			);
 			path = "Recipe and Calorie Manager";
 			sourceTree = "<group>";
