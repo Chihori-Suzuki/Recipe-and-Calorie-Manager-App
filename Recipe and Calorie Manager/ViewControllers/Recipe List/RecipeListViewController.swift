@@ -10,7 +10,27 @@ import UIKit
 
 class RecipeListViewController: UIViewController, UITableViewDelegate,UITableViewDataSource {
     
-    let meals: [String] = ["Breakfast","Lunch","Snacks","Dinner"]
+    
+    
+
+    // sample data
+    var ingredientNutrition = Nutrition(sugar: 1, fiber: 1, serving: 1, sodium: 1, name: "onion", potassium: 1, fat: 1, totalFat: 1, calories: 1, cholesterol: 1, protein: 1, carbohydrates: 1)
+    lazy var recipe1 = Recipe(title: "Breakfast Meal 1", ingredients: [(serving: "ingredient 1", nutrition: ingredientNutrition),
+                                                                                         (serving: "ingredient 2", nutrition: ingredientNutrition)])
+    lazy var recipe5 = Recipe(title: "Breakfast Meal 2", ingredients: [(serving: "ingredient 10", nutrition: ingredientNutrition)])
+    lazy var recipe2 = Recipe(title: "Lunch Meal 1", ingredients: [(serving: "ingredient 2", nutrition: ingredientNutrition)])
+    lazy var recipe3 = Recipe(title: "Dinner Meal 1", ingredients: [(serving: "ingredient 3", nutrition: ingredientNutrition)])
+    lazy var recipe4 = Recipe(title: "Snack Meal 1", ingredients: [(serving: "ingredient 4", nutrition: ingredientNutrition)])
+
+    lazy var breakfastMeals = RecipeList(category: .breakfast, recipes: [recipe1, recipe5])
+    lazy var lunchMeals = RecipeList(category: .lunch, recipes: [recipe2])
+    lazy var dinnerMeals = RecipeList(category: .dinner, recipes: [recipe3])
+    lazy var snackMeals = RecipeList(category: .snack, recipes: [recipe4])
+    lazy var catalog = Catalog(catalog: [breakfastMeals, lunchMeals, dinnerMeals, snackMeals])
+    
+    
+    
+    
     let cellId = "RecipeListCell"
     
     lazy var myTable: UITableView = {
@@ -43,12 +63,12 @@ class RecipeListViewController: UIViewController, UITableViewDelegate,UITableVie
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return meals.count
+        return catalog.catalog.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
-        let meal = meals[indexPath.row]
+        let meal = catalog.catalog[indexPath.row].category.rawValue
         cell.textLabel?.text = meal
         cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 30)
         cell.layer.cornerRadius = 10
@@ -57,8 +77,14 @@ class RecipeListViewController: UIViewController, UITableViewDelegate,UITableVie
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         let clickedMeal = MenuTotalCalorieDetailListViewController()
-        clickedMeal.mealTitle = meals[indexPath.row]
+        clickedMeal.mealTitle = catalog.catalog[indexPath.row].category.rawValue
+        clickedMeal.selectedCategory = indexPath.row
         navigationController?.pushViewController(clickedMeal, animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 40.0
     }
 }
