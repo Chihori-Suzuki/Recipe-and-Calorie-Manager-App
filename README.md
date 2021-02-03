@@ -51,6 +51,14 @@ https://calorieninjas.com/api
 
 
 ## Usage
+* Recipe List Screen
+![Recipe_List](https://user-images.githubusercontent.com/37167797/106679592-e0134080-6571-11eb-951c-730b5e52b3aa.gif)
+
+* Add New Recipe Screen
+![Add_New_Recipe](https://user-images.githubusercontent.com/37167797/106680524-a5120c80-6573-11eb-9f59-8cc8ab2dd250.gif)
+
+* Profile Screen
+
 
 ## Contribution 
 
